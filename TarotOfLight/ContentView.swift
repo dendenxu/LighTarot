@@ -6,6 +6,7 @@
 //  Copyright © 2020 xz. All rights reserved.
 //
 
+// FIXME: format stuff
 import SwiftUI
 import UIKit
 import SDWebImageSwiftUI
@@ -15,7 +16,29 @@ struct ContentView: View {
     @State var tideAnimating: Bool = true
     @State var weAreIn = Pages.mainPage
     @State var progress = 30.0
+    @State var nowDate: DateComponents = Calendar
+        .current
+        .dateComponents([
+                .year,
+                .month,
+                .day,
+                .hour,
+                .minute
+            ], from: Date())
 
+    var timer: Timer {
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            self.nowDate = Calendar
+                .current
+                .dateComponents([
+                        .year,
+                        .month,
+                        .day,
+                        .hour,
+                        .minute
+                    ], from: Date())
+        }
+    }
     let tideScale: CGFloat = 1.5
 
     func randomPositionAroundCircle(size: CGSize) -> CGSize {
@@ -27,11 +50,13 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-
+            // Background color: a small shade of grey, filling the whole screen
             Color(hex: 0xf2f2f2).edgesIgnoringSafeArea(.all)
-
+            // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
             GeometryReader { geometry in
-                WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"), isAnimating: self.$tideAnimating)
+                WebImage(
+                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
+                    isAnimating: self.$tideAnimating)
                     .resizable()
                     .playbackRate(1.0)
                     .aspectRatio(contentMode: .fit)
@@ -40,22 +65,76 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.all)
             }
 
-
+            // The main content of navigations, should be changed upon selecting differene pages
             VStack {
 
                 HStack {
                     VStack() {
-                        Image("buguang").renderingMode(.original).resizable().scaledToFit().frame(width: 120, height: 120, alignment: .center)
+                        Image("buguang")
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 120, height: 120, alignment: .center)
                         HStack(spacing: 0) {
-                            Image("power").renderingMode(.original).resizable().scaledToFit().frame(width: 20, height: 20).shadow(radius: 2)
+                            Image("power")
+                                .renderingMode(.original)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .shadow(radius: 2)
                             LittleProgressBar(value: $progress).offset(x: -10)
                         }.offset(x: 10, y: -30)
-                    }.padding()
-                    Text("Take your guess everyday")
+                    }
+                        .padding()
+                        .padding(.trailing, 20)
+
+
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20)
+                            .foregroundColor(.white)
+                            .frame(width: 100, height: 125)
+                            .shadow(radius: 10)
+                        VStack {
+                            Text("\(String(nowDate.year ?? 2000))年\(String(nowDate.month ?? 7))月")
+                                .onAppear(perform: {
+                                    _ = self.timer
+                                })
+                                .foregroundColor(Color(hex: 0xa8eb00))
+                                .font(.custom("Source Han Sans Heavy", size: 16))
+                                .offset(y: 10)
+                            // Don't create another timer here
+                            Text("\(String(nowDate.day ?? 10))")
+                                .foregroundColor(Color(hex: 0xe000c4))
+                                .font(.custom("Source Han Sans Heavy", size: 40))
+
+                            Text("日签")
+                                .foregroundColor(Color(hex: 0xe000c4))
+                                .font(.custom("Source Han Sans Heavy", size: 25))
+                                .background(GeometryReader { geometry in
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .strokeBorder(
+                                            style: StrokeStyle(
+                                                lineWidth: 2,
+                                                dash: [2]
+                                            )
+                                        )
+                                        .foregroundColor(Color(hex: 0xa8eb00))
+                                        .frame(width: geometry.size.width * 1.3)
+                                })
+                        }.offset(y: -10)
+                    }
+                        .padding()
+                        .offset(y: -5)
+                        .padding(.leading, 20)
+
                 }.padding(.top, 40)
 
                 ZStack {
-                    WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"), isAnimating: self.$tideAnimating)
+                    // Current we using one variable for both the plant and the tide
+                    // FIXME: change to two
+                    WebImage(
+                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"),
+                        isAnimating: self.$tideAnimating)
                         .resizable()
                         .playbackRate(1.0)
                         .scaledToFill()
@@ -74,30 +153,42 @@ struct ContentView: View {
                     }
                 }.offset(y: -20)
 
-                Text("在时间和光的交汇点").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
-                Text("遇见自己").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
+                // To use custom font, be sure to have already added them in info.plist
+                // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
+                // and: https://medium.com/better-programming/swiftui-basics-importing-custom-fonts-b6396d17424d
+                Text("在时间和光的交汇点")
+                    .font(.custom("Source Han Sans Heavy", size: 25))
+                    .foregroundColor(Color(hex: 0x38ed90))
+                Text("遇见自己")
+                    .font(.custom("Source Han Sans Heavy", size: 25))
+                    .foregroundColor(Color(hex: 0x38ed90))
             }.padding(.bottom, 200)
 
-
+            // The page selector, should remain if we're only navigating around different pages
+            // And it should go when the scene is completely changed
             PageSelector(weAreIn: $weAreIn).padding(.bottom, 50)
         }
     }
 }
 
-
+// A small progress bar, cool, right?
 struct LittleProgressBar: View {
     @Binding var value: Double
     var body: some View {
         ZStack(alignment: .leading) {
             Rectangle().frame(width: 100, height: 10)
-                .opacity(0.3)
+                .opacity(0.5)
                 .foregroundColor(Color(hex: 0xffffff))
             Rectangle().frame(width: CGFloat(self.value), height: 10)
                 .foregroundColor(Color(hex: 0xa8eb00))
-        }.cornerRadius(45.0).shadow(radius: 5).padding()
+        }
+            .cornerRadius(45.0)
+            .shadow(radius: 5)
+            .padding()
     }
 }
 
+// Some randomized shiny star with shiny animations
 struct ShinyStar: View {
     let offset: CGSize
     let scale: CGFloat
@@ -108,6 +199,8 @@ struct ShinyStar: View {
         .repeatForever(autoreverses: true)
         .delay(Double.random(in: 0..<1))
     var body: some View {
+        // Note that the declarative statement takes effect one by one
+        // For example we can add two rotation effect just by adding the offset before and after the offset change
         Image("star")
             .resizable()
             .scaledToFit()
@@ -126,6 +219,9 @@ struct ShinyStar: View {
     }
 }
 
+// Complex background, you know we should consider usingg ZStack in this situation
+// We've only created this so that we can hold scales as variables
+// Should be more configurable if it's to remain
 struct ComplexCircleBackground: View {
     let globalScale: CGFloat = 0.95
     let borderScale: CGFloat = 1.05
@@ -149,6 +245,9 @@ struct ComplexCircleBackground: View {
     }
 }
 
+// Using hex directly
+// NOT A GOOD PRACTICE
+// FIXME: consider adding colors to xcassets
 extension Color {
     init(hex: Int, alpha: Double = 1) {
         let components = (
@@ -166,6 +265,7 @@ extension Color {
     }
 }
 
+// Previewer
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
@@ -174,6 +274,7 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+// Page changer
 enum Pages: CustomStringConvertible {
     var description: String {
         switch self {
@@ -188,6 +289,7 @@ enum Pages: CustomStringConvertible {
     case minePage
 }
 
+// The page selector view with slightly tailored edge
 struct PageSelector: View {
     @Binding var weAreIn: Pages
     var body: some View {
@@ -195,10 +297,15 @@ struct PageSelector: View {
             PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.mainPage)
             PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.cardPage)
             PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.minePage)
-        }.padding().background(Color.white.opacity(0.3)).clipShape(RoundedRectangle(cornerRadius: 50))
+        }
+            .padding()
+            .background(Color.white.opacity(0.3))
+            .clipShape(RoundedRectangle(cornerRadius: 50))
     }
 }
 
+// Buttons in the page selector, using enum to avoid raw string
+// which could lead to typo that compiler cannot foresee
 struct PageSelectorButton: View {
     @Binding var weAreIn: Pages
     let whoWeAre: Pages
@@ -206,7 +313,12 @@ struct PageSelectorButton: View {
         Button(action: {
             self.weAreIn = self.whoWeAre
         }) {
-            Image(String(describing: whoWeAre) + ((weAreIn == whoWeAre) ? "Material" : "")).renderingMode(.original).resizable().scaledToFit().frame(height: 50).shadow(radius: 10)
+            Image(String(describing: whoWeAre) + ((weAreIn == whoWeAre) ? "Material" : ""))
+                .renderingMode(.original)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 50)
+                .shadow(radius: 10)
         }.padding(.horizontal, 20)
     }
 }
