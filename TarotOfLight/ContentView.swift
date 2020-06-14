@@ -89,43 +89,47 @@ struct ContentView: View {
                         .padding(.trailing, 20)
 
 
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(.white)
-                            .frame(width: 100, height: 125)
-                            .shadow(radius: 10)
-                        VStack {
-                            Text("\(String(nowDate.year ?? 2000))年\(String(nowDate.month ?? 7))月")
-                                .onAppear(perform: {
-                                    _ = self.timer
-                                })
-                                .foregroundColor(Color(hex: 0xa8eb00))
-                                .font(.custom("Source Han Sans Heavy", size: 16))
-                                .offset(y: 10)
-                            // Don't create another timer here
-                            Text("\(String(nowDate.day ?? 10))")
-                                .foregroundColor(Color(hex: 0xe000c4))
-                                .font(.custom("Source Han Sans Heavy", size: 40))
+                    Button(action: { }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(.white)
+                                .frame(width: 100, height: 125)
+                                .shadow(radius: 10)
+                            VStack {
+                                Text("\(String(nowDate.year ?? 2000))年\(String(nowDate.month ?? 7))月")
+                                    .onAppear(perform: {
+                                        _ = self.timer
+                                    })
+                                    .foregroundColor(Color(hex: 0xa8eb00))
+                                    .font(.custom("Source Han Sans Heavy", size: 16))
+                                    .offset(y: 10)
+                                // Don't create another timer here
+                                Text("\(String(nowDate.day ?? 10))")
+                                    .foregroundColor(Color(hex: 0xe000c4))
+                                    .font(.custom("Source Han Sans Heavy", size: 40))
 
-                            Text("日签")
-                                .foregroundColor(Color(hex: 0xe000c4))
-                                .font(.custom("Source Han Sans Heavy", size: 25))
-                                .background(GeometryReader { geometry in
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .strokeBorder(
-                                            style: StrokeStyle(
-                                                lineWidth: 2,
-                                                dash: [2]
+                                Text("日签")
+                                    .foregroundColor(Color(hex: 0xe000c4))
+                                    .font(.custom("Source Han Sans Heavy", size: 25))
+                                    .background(GeometryReader { geometry in
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .strokeBorder(
+                                                style: StrokeStyle(
+                                                    lineWidth: 2,
+                                                    dash: [2]
+                                                )
                                             )
-                                        )
-                                        .foregroundColor(Color(hex: 0xa8eb00))
-                                        .frame(width: geometry.size.width * 1.3)
-                                })
-                        }.offset(y: -10)
+                                            .foregroundColor(Color(hex: 0xa8eb00))
+                                            .frame(width: geometry.size.width * 1.3)
+                                    })
+                            }.offset(y: -10)
+                        }
+                            .padding()
+                            .offset(y: -5)
+                            .padding(.leading, 20)
+
                     }
-                        .padding()
-                        .offset(y: -5)
-                        .padding(.leading, 20)
+
 
                 }.padding(.top, 40)
 
