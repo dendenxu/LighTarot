@@ -12,15 +12,28 @@ import UIKit
 import SDWebImageSwiftUI
 
 struct CardPageContentView: View {
+    @Binding var plantFullAnimating: Bool
+
     var body: some View {
-        Color(.purple).edgesIgnoringSafeArea(.all)
+        // Why do we have to make it inside some stack for it to be loaded?
+        ZStack {
+            Color(hex: 0x6a0081).clipShape(RoundedRectangle(cornerRadius: 38))
+            WebImage(
+                url: URL(fileURLWithPath: Bundle.main.path(forResource: "plantfull", ofType: "gif") ?? "plantfull.gif"),
+                isAnimating: self.$plantFullAnimating)
+                .resizable()
+                .playbackRate(1.0)
+                .scaledToFit()
+                .clipShape(RoundedRectangle(cornerRadius: 38))
+
+        }
     }
 }
 
 
 struct MinePageContentView: View {
     var body: some View {
-        Color(.blue).edgesIgnoringSafeArea(.all)
+        Color(.blue).clipShape(RoundedRectangle(cornerRadius: 38))
     }
 }
 
@@ -61,18 +74,15 @@ struct MainPageContentView: View {
 
     var body: some View {
         ZStack {
-            GeometryReader { geometry in
-                WebImage(
-                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
-                    isAnimating: self.$tideAnimating)
-                    .resizable()
-                    .playbackRate(1.0)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: geometry.size.width * self.tideScale)
-                    .offset(x: -geometry.size.width * (self.tideScale-1) / 2, y: geometry.size.height * 7 / 9)
-                    .edgesIgnoringSafeArea(.all)
-                    .transition(fromBottomToTop)
-            }
+            WebImage(
+                url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
+                isAnimating: self.$tideAnimating)
+                .resizable()
+                .playbackRate(1.0)
+                .scaledToFit()
+                .frame(width: UIScreen.main.bounds.width * self.tideScale)
+                .offset(y: UIScreen.main.bounds.width * 7 / 9)
+
 
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
@@ -93,7 +103,7 @@ struct MainPageContentView: View {
                             LittleProgressBar(value: $progress).offset(x: -10)
                         }.offset(x: 10, y: -30)
                     }
-                        .padding()
+                        .padding(.bottom)
                         .padding(.trailing, 20)
 
 
@@ -142,7 +152,8 @@ struct MainPageContentView: View {
                     }
 
 
-                }.padding(.top, 40)
+                }.padding(.bottom)
+                    .offset(y: -10)
 
                 ZStack {
                     // Current we using one variable for both the plant and the tide
@@ -156,7 +167,6 @@ struct MainPageContentView: View {
                         .frame(width: 350, height: 350)
                         .background(ComplexCircleBackground())
                         .shadow(radius: 10)
-                        .transition(fromBottomToTop)
 
                     ForEach(0..<5) { number in
                         ShinyStar(
@@ -178,55 +188,100 @@ struct MainPageContentView: View {
                 Text("遇见自己")
                     .font(.custom("Source Han Sans Heavy", size: 25))
                     .foregroundColor(Color(hex: 0x38ed90))
-            }.padding(.bottom, 200)
+            }.padding(.bottom, 170)
+        }
+    }
+}
 
+extension AnyTransition {
+    static var fly: AnyTransition { get {
+        AnyTransition.modifier(active: FlyTransition(pct: 0), identity: FlyTransition(pct: 1))
+    }
+    }
+}
+
+struct FlyTransition: GeometryEffect {
+    var pct: Double
+
+    var animatableData: Double {
+        get { pct }
+        set { pct = newValue }
+    }
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+
+        let rotationPercent = pct
+        let a = CGFloat(Angle(degrees: 90 * (1 - rotationPercent)).radians)
+
+        var transform3d = CATransform3DIdentity;
+        transform3d.m34 = -1 / max(size.width, size.height)
+
+        transform3d = CATransform3DRotate(transform3d, a, 1, 0, 0)
+        transform3d = CATransform3DTranslate(transform3d, -size.width / 2.0, -size.height / 2.0, 0)
+
+        let affineTransform1 = ProjectionTransform(CGAffineTransform(translationX: size.width / 2.0, y: size.height / 2.0))
+        let affineTransform2 = ProjectionTransform(CGAffineTransform(scaleX: CGFloat(pct * 2), y: CGFloat(pct * 2)))
+
+        if pct <= 0.5 {
+            return ProjectionTransform(transform3d).concatenating(affineTransform2).concatenating(affineTransform1)
+        } else {
+            return ProjectionTransform(transform3d).concatenating(affineTransform1)
         }
     }
 }
 
 let fromBottomToTop = AnyTransition
-    .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .bottom))
-    .animation(.easeInOut(duration: 2))
+    .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top))
 
 struct ContentView: View {
     @State var weAreIn = Pages.mainPage
     @State var tideAnimating = true
+    @State var plantFullAnimating = true
 
 
     var body: some View {
         ZStack(alignment: .bottom) {
             // Background color: a small shade of grey, filling the whole screen
-            Color(hex: 0xf2f2f2).edgesIgnoringSafeArea(.all)
+            Color(hex: 0xf2f2f2)
             // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
 
             if (weAreIn == Pages.mainPage) {
                 MainPageContentView(tideAnimating: $tideAnimating)
-                    .transition(fromBottomToTop)
+                    .transition(.fly)
                     .onDisappear() {
                         print("MainPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
                         self.tideAnimating = false
+                        self.plantFullAnimating = true
                     }.onAppear() {
                         print("MainPageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
                 }
             } else if (weAreIn == Pages.cardPage) {
-                CardPageContentView()
-                    .transition(fromBottomToTop)
+                CardPageContentView(plantFullAnimating: $plantFullAnimating)
+                    .transition(.fly)
                     .onDisappear() {
                         print("CardPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
                         self.tideAnimating = true
+                        self.plantFullAnimating = false
                     }.onAppear() {
                         print("CardPageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
                 }
             } else if (weAreIn == Pages.minePage) {
                 MinePageContentView()
-                    .transition(fromBottomToTop)
+                    .transition(.fly)
+                    .onDisappear() {
+                        print("MinePageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
+                        self.tideAnimating = true
+                        self.plantFullAnimating = true
+                    }.onAppear() {
+                        print("MinePageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
+                }
             }
 
 
             // The page selector, should remain if we're only navigating around different pages
             // And it should go when the scene is completely changed
             PageSelector(weAreIn: $weAreIn).padding(.bottom, 50)
-        }
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 
@@ -370,7 +425,7 @@ struct PageSelectorButton: View {
     let whoWeAre: Pages
     var body: some View {
         Button(action: {
-            withAnimation {
+            withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
                 self.weAreIn = self.whoWeAre
             }
         }) {
