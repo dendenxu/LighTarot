@@ -11,84 +11,60 @@ import UIKit
 import SDWebImageSwiftUI
 
 struct ContentView: View {
-    let rTarget = Double.random(in: 0..<1)
-    let gTarget = Double.random(in: 0..<1)
-    let bTarget = Double.random(in: 0..<1)
-    let tideScale = 1.5
-    @State var rGuess: Double
-    @State var gGuess: Double
-    @State var bGuess: Double
-    @State var showAlert: Bool = false
     @State var catAnimating: Bool = true
     @State var tideAnimating: Bool = true
     @State var weAreIn = Pages.mainPage
 
-    func computeScore() -> Int {
-        let rDiff = rGuess - rTarget
-        let gDiff = gGuess - gTarget
-        let bDiff = bGuess - bTarget
-        let diff = sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff)
-        return Int((1.0 - diff) * 100.0 + 0.5)
+    let tideScale: CGFloat = 1.5
+
+    func randomPositionAroundCircle(size: CGSize) -> CGSize {
+        let angle = Double.random(in: 0..<2 * Double.pi)
+        let scale = Double.random(in: 0.95..<1.15)
+        let radius = Double(min(size.width, size.height))
+        return CGSize(width: cos(angle) * radius * scale, height: sin(angle) * radius * scale)
     }
 
     var body: some View {
         VStack {
             HStack {
-                // Targe color block
                 VStack {
-                    RoundedRectangle(cornerRadius: 10).foregroundColor(Color(red: rTarget, green: gTarget, blue: bTarget, opacity: 1.0))
-                    Text("Match this color")
-                }.padding()
-                // Guess color block
-                VStack {
-                    RoundedRectangle(cornerRadius: 10).foregroundColor(Color(red: rGuess, green: gGuess, blue: bGuess, opacity: 1.0))
+                    Text("卜光").font(.largeTitle)
                     HStack {
-                        Text("R: \(Int(rGuess * 255.0))")
-                        Text("G: \(Int(gGuess * 255.0))")
-                        Text("B: \(Int(bGuess * 255.0))")
+                        Text("Little Sun")
+                        Text("Progress Bar")
                     }
-                }.padding()
-            }.background(Color.black.opacity(0.3)).clipShape(RoundedRectangle(cornerRadius: 10)).padding(10)
-
-
-            Button(action: {
-                self.showAlert = true
-                self.catAnimating = false
-            }) {
-                VStack {
-                    Text("Hit Me!").font(.title)
-                    Text("And get your score").font(.subheadline)
-                }.padding()
-            }.alert(isPresented: $showAlert) {
-                Alert(title: Text("Your Score"), message: Text("\(computeScore())"), dismissButton: Alert.Button.default(Text("I got it."), action: {
-                    self.catAnimating = true
-                }))
-            }.overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.blue, lineWidth: 1))
-            VStack {
-                ColorSlider(value: $rGuess, text_color: .red)
-                ColorSlider(value: $gGuess, text_color: .green)
-                ColorSlider(value: $bGuess, text_color: .blue)
+                }
+                Text("Take your guess everyday")
             }
 
-            WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "catty", ofType: "gif") ?? "catty.gif"), isAnimating: $catAnimating)
-                .resizable()
-                .playbackRate(1.0)
-                .scaledToFill()
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                .shadow(radius: 10)
+            ZStack {
+                WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"), isAnimating: self.$tideAnimating)
+                    .resizable()
+                    .playbackRate(1.0)
+                    .scaledToFill()
+                    .frame(width: 350, height: 350)
+                    .background(ComplexCircleBackground())
+                    .shadow(radius: 10)
+
+                ForEach(0..<5) { number in
+                    ShinyStar(
+                        offset: self.randomPositionAroundCircle(
+                            size: CGSize(
+                                width: 350 / 2,
+                                height: 350 / 2)),
+                        scale: CGFloat.random(in: 0.9..<1.1)
+                    )
+                }
+            }
 
             ZStack {
-                GeometryReader { geo in
+                GeometryReader { geometry in
                     WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"), isAnimating: self.$tideAnimating)
                         .resizable()
                         .playbackRate(1.0)
-                        .aspectRatio(contentMode: .fill)
-//                        .frame(width: geo.size.width * self.tideScale, height: geo.size.height * self.tideScale, alignment: .bottom)
-//                        .offset(x: -geo.size.width * ((self.tideScale-1) / 2), y: geo.size.height * ((self.tideScale-1) / 2))
-                        .frame(width: geo.size.width * 1.5, height: geo.size.height * 1.5, alignment: .bottom)
-                        .offset(x: -geo.size.width * 0.25, y: geo.size.height * 0.25)
+                        .scaledToFill()
+                        .frame(width: geometry.size.width * self.tideScale, height: geometry.size.height * self.tideScale, alignment: .bottom)
+                        .offset(x: -geometry.size.width * (self.tideScale-1) / 2, y: -geometry.size.height * (self.tideScale-1) / 2)
                 }
                 PageSelector(weAreIn: $weAreIn)
             }
@@ -96,9 +72,78 @@ struct ContentView: View {
     }
 }
 
+
+struct ShinyStar: View {
+    let offset: CGSize
+    let scale: CGFloat
+    @State var isAtMaxScale = false
+    let maxScale: CGFloat = 1.5
+    var shineAnimation = Animation
+        .easeInOut(duration: 1)
+        .repeatForever(autoreverses: true)
+        .delay(Double.random(in: 0..<1))
+    var body: some View {
+        Image("star")
+            .resizable()
+            .scaledToFit()
+            .shadow(color: Color.purple, radius: 5)
+            .opacity(isAtMaxScale ? 1 : 0)
+            .scaleEffect(isAtMaxScale ? maxScale : 0.5)
+            .rotationEffect(isAtMaxScale ? .degrees(60) : .degrees(0))
+            .onAppear() {
+                withAnimation(self.shineAnimation) {
+                    self.isAtMaxScale.toggle()
+                }
+            }
+            .frame(width: 30 * scale, height: 30 * scale, alignment: .center)
+            .offset(offset)
+            .rotationEffect(isAtMaxScale ? .degrees(30) : .degrees(0))
+    }
+}
+
+struct ComplexCircleBackground: View {
+    let globalScale: CGFloat = 0.95
+    let borderScale: CGFloat = 1.05
+    var body: some View {
+        GeometryReader { geometry in
+            Circle()
+                .strokeBorder(
+                    style: StrokeStyle(
+                        lineWidth: 2,
+                        dash: [2]
+                    )
+                )
+                .foregroundColor(Color(hex: 0xe000c4))
+                .frame(width: geometry.size.width * self.borderScale * self.globalScale, height: geometry.size.height * self.borderScale * self.globalScale)
+                .offset(x: -geometry.size.width * (self.borderScale * self.globalScale-1) / 2, y: -geometry.size.height * (self.borderScale * self.globalScale-1) / 2)
+            Circle()
+                .fill(Color(hex: 0xa8eb00))
+                .frame(width: geometry.size.width * self.globalScale, height: geometry.size.height * self.globalScale)
+                .offset(x: -geometry.size.width * (self.globalScale-1) / 2, y: -geometry.size.height * (self.globalScale-1) / 2)
+        }
+    }
+}
+
+extension Color {
+    init(hex: Int, alpha: Double = 1) {
+        let components = (
+            R: Double((hex >> 16) & 0xff) / 255,
+            G: Double((hex >> 08) & 0xff) / 255,
+            B: Double((hex >> 00) & 0xff) / 255
+        )
+        self.init(
+                .sRGB,
+            red: components.R,
+            green: components.G,
+            blue: components.B,
+            opacity: alpha
+        )
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(rGuess: 0.5, gGuess: 0.5, bGuess: 0.5)
+        ContentView()
             .previewDevice(PreviewDevice(rawValue: "iPhone 11"))
             .previewDisplayName("iPhone 11")
     }
@@ -138,17 +183,5 @@ struct PageSelectorButton: View {
         }) {
             Image(String(describing: whoWeAre) + ((weAreIn == whoWeAre) ? "Material" : "")).renderingMode(.original).resizable().scaledToFit().frame(height: 50).shadow(radius: 10)
         }.padding(.horizontal, 20)
-    }
-}
-
-struct ColorSlider: View {
-    @Binding var value: Double
-    var text_color: Color
-    var body: some View {
-        HStack {
-            Text("0").foregroundColor(text_color)
-            Slider(value: $value)
-            Text("255").foregroundColor(text_color)
-        }.padding()
     }
 }
