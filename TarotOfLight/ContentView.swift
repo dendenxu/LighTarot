@@ -11,10 +11,21 @@ import SwiftUI
 import UIKit
 import SDWebImageSwiftUI
 
-struct ContentView: View {
-    @State var catAnimating: Bool = true
-    @State var tideAnimating: Bool = true
-    @State var weAreIn = Pages.mainPage
+struct CardPageContentView: View {
+    var body: some View {
+        Color(.purple).edgesIgnoringSafeArea(.all)
+    }
+}
+
+
+struct MinePageContentView: View {
+    var body: some View {
+        Color(.blue).edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct MainPageContentView: View {
+    @Binding var tideAnimating: Bool
     @State var progress = 30.0
     @State var nowDate: DateComponents = Calendar
         .current
@@ -27,7 +38,7 @@ struct ContentView: View {
             ], from: Date())
 
     var timer: Timer {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
             self.nowDate = Calendar
                 .current
                 .dateComponents([
@@ -49,10 +60,7 @@ struct ContentView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            // Background color: a small shade of grey, filling the whole screen
-            Color(hex: 0xf2f2f2).edgesIgnoringSafeArea(.all)
-            // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
+        ZStack {
             GeometryReader { geometry in
                 WebImage(
                     url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
@@ -63,11 +71,11 @@ struct ContentView: View {
                     .frame(width: geometry.size.width * self.tideScale)
                     .offset(x: -geometry.size.width * (self.tideScale-1) / 2, y: geometry.size.height * 7 / 9)
                     .edgesIgnoringSafeArea(.all)
+                    .transition(fromBottomToTop)
             }
 
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
-
                 HStack {
                     VStack() {
                         Image("buguang")
@@ -99,6 +107,9 @@ struct ContentView: View {
                                 Text("\(String(nowDate.year ?? 2000))年\(String(nowDate.month ?? 7))月")
                                     .onAppear(perform: {
                                         _ = self.timer
+//                                        self.tideAnimating = true
+//                                        print("Tide animating is set to true")
+//                                        print("\(self.tideAnimating)")
                                     })
                                     .foregroundColor(Color(hex: 0xa8eb00))
                                     .font(.custom("Source Han Sans Heavy", size: 16))
@@ -145,6 +156,7 @@ struct ContentView: View {
                         .frame(width: 350, height: 350)
                         .background(ComplexCircleBackground())
                         .shadow(radius: 10)
+                        .transition(fromBottomToTop)
 
                     ForEach(0..<5) { number in
                         ShinyStar(
@@ -167,6 +179,49 @@ struct ContentView: View {
                     .font(.custom("Source Han Sans Heavy", size: 25))
                     .foregroundColor(Color(hex: 0x38ed90))
             }.padding(.bottom, 200)
+
+        }
+    }
+}
+
+let fromBottomToTop = AnyTransition
+    .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .bottom))
+    .animation(.easeInOut(duration: 2))
+
+struct ContentView: View {
+    @State var weAreIn = Pages.mainPage
+    @State var tideAnimating = true
+
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            // Background color: a small shade of grey, filling the whole screen
+            Color(hex: 0xf2f2f2).edgesIgnoringSafeArea(.all)
+            // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
+
+            if (weAreIn == Pages.mainPage) {
+                MainPageContentView(tideAnimating: $tideAnimating)
+                    .transition(fromBottomToTop)
+                    .onDisappear() {
+                        print("MainPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
+                        self.tideAnimating = false
+                    }.onAppear() {
+                        print("MainPageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
+                }
+            } else if (weAreIn == Pages.cardPage) {
+                CardPageContentView()
+                    .transition(fromBottomToTop)
+                    .onDisappear() {
+                        print("CardPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
+                        self.tideAnimating = true
+                    }.onAppear() {
+                        print("CardPageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
+                }
+            } else if (weAreIn == Pages.minePage) {
+                MinePageContentView()
+                    .transition(fromBottomToTop)
+            }
+
 
             // The page selector, should remain if we're only navigating around different pages
             // And it should go when the scene is completely changed
@@ -315,7 +370,9 @@ struct PageSelectorButton: View {
     let whoWeAre: Pages
     var body: some View {
         Button(action: {
-            self.weAreIn = self.whoWeAre
+            withAnimation {
+                self.weAreIn = self.whoWeAre
+            }
         }) {
             Image(String(describing: whoWeAre) + ((weAreIn == whoWeAre) ? "Material" : ""))
                 .renderingMode(.original)
