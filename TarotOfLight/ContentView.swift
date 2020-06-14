@@ -26,55 +26,61 @@ struct ContentView: View {
     }
 
     var body: some View {
-        VStack {
+        ZStack(alignment: .bottom) {
 
-            HStack {
-                VStack() {
-                    Image("buguang").renderingMode(.original).resizable().scaledToFit().frame(width: 120, height: 120, alignment: .center)
-                    HStack(spacing: 0) {
-                        Image("power").renderingMode(.original).resizable().scaledToFit().frame(width: 20, height: 20).shadow(radius: 2)
-                        LittleProgressBar(value: $progress).offset(x: -10)
-                    }.offset(x: 10, y: -30)
-                }.padding()
-                Text("Take your guess everyday")
-            }.padding(.top, 40)
+            Color(hex: 0xf2f2f2).edgesIgnoringSafeArea(.all)
 
-            ZStack {
-                WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"), isAnimating: self.$tideAnimating)
+            GeometryReader { geometry in
+                WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"), isAnimating: self.$tideAnimating)
                     .resizable()
                     .playbackRate(1.0)
-                    .scaledToFill()
-                    .frame(width: 350, height: 350)
-                    .background(ComplexCircleBackground())
-                    .shadow(radius: 10)
-
-                ForEach(0..<5) { number in
-                    ShinyStar(
-                        offset: self.randomPositionAroundCircle(
-                            size: CGSize(
-                                width: 350 / 2,
-                                height: 350 / 2)),
-                        scale: CGFloat.random(in: 0.9..<1.1)
-                    )
-                }
-            }.offset(y: -20)
-
-            Text("在时间和光的交汇点").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
-            Text("遇见自己").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
+                    .scaledToFit()
+                    .frame(width: geometry.size.width * self.tideScale, height: geometry.size.height * self.tideScale, alignment: .bottom)
+                    .offset(x: -geometry.size.width * (self.tideScale-1) / 2)
+                    .edgesIgnoringSafeArea(.all)
+            }
 
 
-            ZStack() {
-                GeometryReader { geometry in
-                    WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"), isAnimating: self.$tideAnimating)
+            VStack {
+
+                HStack {
+                    VStack() {
+                        Image("buguang").renderingMode(.original).resizable().scaledToFit().frame(width: 120, height: 120, alignment: .center)
+                        HStack(spacing: 0) {
+                            Image("power").renderingMode(.original).resizable().scaledToFit().frame(width: 20, height: 20).shadow(radius: 2)
+                            LittleProgressBar(value: $progress).offset(x: -10)
+                        }.offset(x: 10, y: -30)
+                    }.padding()
+                    Text("Take your guess everyday")
+                }.padding(.top, 40)
+
+                ZStack {
+                    WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"), isAnimating: self.$tideAnimating)
                         .resizable()
                         .playbackRate(1.0)
                         .scaledToFill()
-                        .frame(width: geometry.size.width * self.tideScale, height: geometry.size.height * self.tideScale, alignment: .bottom)
-                        .offset(x: -geometry.size.width * (self.tideScale-1) / 2)
-                }
-                PageSelector(weAreIn: $weAreIn)
+                        .frame(width: 350, height: 350)
+                        .background(ComplexCircleBackground())
+                        .shadow(radius: 10)
+
+                    ForEach(0..<5) { number in
+                        ShinyStar(
+                            offset: self.randomPositionAroundCircle(
+                                size: CGSize(
+                                    width: 350 / 2,
+                                    height: 350 / 2)),
+                            scale: CGFloat.random(in: 0.9..<1.1)
+                        )
+                    }
+                }.offset(y: -20)
+
+                Text("在时间和光的交汇点").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
+                Text("遇见自己").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
             }
-        }.background(Color(hex: 0xf2f2f2)).edgesIgnoringSafeArea(.all)
+
+
+            PageSelector(weAreIn: $weAreIn).padding(.bottom, 50)
+        }
     }
 }
 
