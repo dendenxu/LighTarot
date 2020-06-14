@@ -34,9 +34,9 @@ struct ContentView: View {
                 WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"), isAnimating: self.$tideAnimating)
                     .resizable()
                     .playbackRate(1.0)
-                    .scaledToFit()
-                    .frame(width: geometry.size.width * self.tideScale, height: geometry.size.height * self.tideScale, alignment: .bottom)
-                    .offset(x: -geometry.size.width * (self.tideScale-1) / 2)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: geometry.size.width * self.tideScale)
+                    .offset(x: -geometry.size.width * (self.tideScale-1) / 2, y: geometry.size.height * 7 / 9)
                     .edgesIgnoringSafeArea(.all)
             }
 
@@ -76,7 +76,7 @@ struct ContentView: View {
 
                 Text("在时间和光的交汇点").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
                 Text("遇见自己").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
-            }
+            }.padding(.bottom, 200)
 
 
             PageSelector(weAreIn: $weAreIn).padding(.bottom, 50)
