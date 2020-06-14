@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3422C17F2495EB9000296A18 /* plant.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3422C17D2495EB9000296A18 /* plant.gif */; };
+		3422C1802495EB9000296A18 /* tide.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3422C17E2495EB9000296A18 /* tide.gif */; };
 		34673E8C2494E8CC00712F38 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34673E8B2494E8CC00712F38 /* AppDelegate.swift */; };
 		34673E8E2494E8CC00712F38 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34673E8D2494E8CC00712F38 /* SceneDelegate.swift */; };
 		34673E902494E8CC00712F38 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34673E8F2494E8CC00712F38 /* ContentView.swift */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3422C17D2495EB9000296A18 /* plant.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = plant.gif; sourceTree = "<group>"; };
+		3422C17E2495EB9000296A18 /* tide.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tide.gif; sourceTree = "<group>"; };
 		34673E882494E8CC00712F38 /* TarotOfLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TarotOfLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34673E8B2494E8CC00712F38 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		34673E8D2494E8CC00712F38 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +67,8 @@
 				34673E8B2494E8CC00712F38 /* AppDelegate.swift */,
 				34673E8D2494E8CC00712F38 /* SceneDelegate.swift */,
 				34673E8F2494E8CC00712F38 /* ContentView.swift */,
+				3422C17E2495EB9000296A18 /* tide.gif */,
+				3422C17D2495EB9000296A18 /* plant.gif */,
 				34673EA42495119C00712F38 /* catty.gif */,
 				34673E912494E8D300712F38 /* Assets.xcassets */,
 				34673E962494E8D300712F38 /* LaunchScreen.storyboard */,
@@ -146,6 +152,8 @@
 			files = (
 				34673E982494E8D300712F38 /* LaunchScreen.storyboard in Resources */,
 				34673E952494E8D300712F38 /* Preview Assets.xcassets in Resources */,
+				3422C17F2495EB9000296A18 /* plant.gif in Resources */,
+				3422C1802495EB9000296A18 /* tide.gif in Resources */,
 				34673EA52495119C00712F38 /* catty.gif in Resources */,
 				34673E922494E8D300712F38 /* Assets.xcassets in Resources */,
 			);
