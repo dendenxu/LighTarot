@@ -14,6 +14,7 @@ struct ContentView: View {
     @State var catAnimating: Bool = true
     @State var tideAnimating: Bool = true
     @State var weAreIn = Pages.mainPage
+    @State var progress = 30.0
 
     let tideScale: CGFloat = 1.5
 
@@ -26,16 +27,17 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
+
             HStack {
-                VStack {
-                    Text("卜光").font(.largeTitle)
-                    HStack {
-                        Text("Little Sun")
-                        Text("Progress Bar")
-                    }
-                }
+                VStack() {
+                    Image("buguang").renderingMode(.original).resizable().scaledToFit().frame(width: 120, height: 120, alignment: .center)
+                    HStack(spacing: 0) {
+                        Image("power").renderingMode(.original).resizable().scaledToFit().frame(width: 20, height: 20).shadow(radius: 2)
+                        LittleProgressBar(value: $progress).offset(x: -10)
+                    }.offset(x: 10, y: -30)
+                }.padding()
                 Text("Take your guess everyday")
-            }
+            }.padding(.top, 40)
 
             ZStack {
                 WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"), isAnimating: self.$tideAnimating)
@@ -55,23 +57,40 @@ struct ContentView: View {
                         scale: CGFloat.random(in: 0.9..<1.1)
                     )
                 }
-            }
+            }.offset(y: -20)
 
-            ZStack {
+            Text("在时间和光的交汇点").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
+            Text("遇见自己").font(.custom("Source Han Sans Heavy", size: 25)).foregroundColor(Color(hex: 0x38ed90))
+
+
+            ZStack() {
                 GeometryReader { geometry in
                     WebImage(url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"), isAnimating: self.$tideAnimating)
                         .resizable()
                         .playbackRate(1.0)
                         .scaledToFill()
                         .frame(width: geometry.size.width * self.tideScale, height: geometry.size.height * self.tideScale, alignment: .bottom)
-                        .offset(x: -geometry.size.width * (self.tideScale-1) / 2, y: -geometry.size.height * (self.tideScale-1) / 2)
+                        .offset(x: -geometry.size.width * (self.tideScale-1) / 2)
                 }
                 PageSelector(weAreIn: $weAreIn)
             }
-        }
+        }.background(Color(hex: 0xf2f2f2)).edgesIgnoringSafeArea(.all)
     }
 }
 
+
+struct LittleProgressBar: View {
+    @Binding var value: Double
+    var body: some View {
+        ZStack(alignment: .leading) {
+            Rectangle().frame(width: 100, height: 10)
+                .opacity(0.3)
+                .foregroundColor(Color(hex: 0xffffff))
+            Rectangle().frame(width: CGFloat(self.value), height: 10)
+                .foregroundColor(Color(hex: 0xa8eb00))
+        }.cornerRadius(45.0).shadow(radius: 5).padding()
+    }
+}
 
 struct ShinyStar: View {
     let offset: CGSize
@@ -170,7 +189,7 @@ struct PageSelector: View {
             PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.mainPage)
             PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.cardPage)
             PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.minePage)
-        }.padding().background(Color.white.opacity(0.3)).clipShape(RoundedRectangle(cornerRadius: 20))
+        }.padding().background(Color.white.opacity(0.3)).clipShape(RoundedRectangle(cornerRadius: 50))
     }
 }
 
