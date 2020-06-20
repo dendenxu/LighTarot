@@ -17,7 +17,7 @@ struct CardPageContentView: View {
     var body: some View {
         // Why do we have to make it inside some stack for it to be loaded?
         ZStack {
-            Color(hex: 0x6a0081).clipShape(RoundedRectangle(cornerRadius: 38))
+            Color("DarkPurple").clipShape(RoundedRectangle(cornerRadius: 38))
             WebImage(
                 url: URL(fileURLWithPath: Bundle.main.path(forResource: "plantfull", ofType: "gif") ?? "plantfull.gif"),
                 isAnimating: self.$plantFullAnimating)
@@ -38,8 +38,13 @@ struct MinePageContentView: View {
 }
 
 struct MainPageContentView: View {
+    var isFull: Bool {
+        get {
+            return progress >= 100.0
+        }
+    }
     @Binding var tideAnimating: Bool
-    @State var progress = 30.0
+    @Binding var progress: Double
     @State var nowDate: DateComponents = Calendar
         .current
         .dateComponents([
@@ -73,7 +78,12 @@ struct MainPageContentView: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
+            // This image shoulde be at the bottom of the whole screen
+
+            Color("MediumPurple")
+                .frame(width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 200))
+                .clipShape(RoundedRectangle(cornerRadius: 38))
             WebImage(
                 url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
                 isAnimating: self.$tideAnimating)
@@ -81,8 +91,14 @@ struct MainPageContentView: View {
                 .playbackRate(1.0)
                 .scaledToFit()
                 .frame(width: UIScreen.main.bounds.width * self.tideScale)
-                .offset(y: UIScreen.main.bounds.width * 7 / 9)
+                .offset(y: UIScreen.main.bounds.height * (100 - CGFloat(progress)) / 100 - 600)
 
+
+            if (isFull) {
+                Color("MediumDarkPurple")
+                    .clipShape(RoundedRectangle(cornerRadius: 38))
+//                    .transition(.opacity)
+            }
 
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
@@ -107,7 +123,15 @@ struct MainPageContentView: View {
                         .padding(.trailing, 20)
 
 
-                    Button(action: { }) {
+                    Button(action: {
+                        withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
+                            self.progress += 30
+                            if (self.progress > 100.0) {
+                                self.progress = 100.0
+                            }
+//                            print("Screen height would be: \(UIScreen.main.bounds.height)")
+                        }
+                    }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(.white)
@@ -121,16 +145,16 @@ struct MainPageContentView: View {
 //                                        print("Tide animating is set to true")
 //                                        print("\(self.tideAnimating)")
                                     })
-                                    .foregroundColor(Color(hex: 0xa8eb00))
+                                    .foregroundColor(Color("Lime"))
                                     .font(.custom("Source Han Sans Heavy", size: 16))
                                     .offset(y: 10)
                                 // Don't create another timer here
                                 Text("\(String(nowDate.day ?? 10))")
-                                    .foregroundColor(Color(hex: 0xe000c4))
+                                    .foregroundColor(Color("LightPurple"))
                                     .font(.custom("Source Han Sans Heavy", size: 40))
 
                                 Text("日签")
-                                    .foregroundColor(Color(hex: 0xe000c4))
+                                    .foregroundColor(Color("LightPurple"))
                                     .font(.custom("Source Han Sans Heavy", size: 25))
                                     .background(GeometryReader { geometry in
                                         RoundedRectangle(cornerRadius: 15)
@@ -140,7 +164,7 @@ struct MainPageContentView: View {
                                                     dash: [2]
                                                 )
                                             )
-                                            .foregroundColor(Color(hex: 0xa8eb00))
+                                            .foregroundColor(Color("Lime"))
                                             .frame(width: geometry.size.width * 1.3)
                                     })
                             }.offset(y: -10)
@@ -154,6 +178,7 @@ struct MainPageContentView: View {
 
                 }.padding(.bottom)
                     .offset(y: -10)
+                    .zIndex(1)
 
                 ZStack {
                     // Current we using one variable for both the plant and the tide
@@ -165,7 +190,7 @@ struct MainPageContentView: View {
                         .playbackRate(1.0)
                         .scaledToFill()
                         .frame(width: 350, height: 350)
-                        .background(ComplexCircleBackground())
+                        .background(ComplexCircleBackground(isFull: isFull))
                         .shadow(radius: 10)
 
                     ForEach(0..<5) { number in
@@ -178,16 +203,17 @@ struct MainPageContentView: View {
                         )
                     }
                 }.offset(y: -20)
+                    .zIndex(0.5)
 
                 // To use custom font, be sure to have already added them in info.plist
                 // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
                 // and: https://medium.com/better-programming/swiftui-basics-importing-custom-fonts-b6396d17424d
                 Text("在时间和光的交汇点")
                     .font(.custom("Source Han Sans Heavy", size: 25))
-                    .foregroundColor(Color(hex: 0x38ed90))
+                    .foregroundColor(Color("MediumLime"))
                 Text("遇见自己")
                     .font(.custom("Source Han Sans Heavy", size: 25))
-                    .foregroundColor(Color(hex: 0x38ed90))
+                    .foregroundColor(Color("MediumLime"))
             }.padding(.bottom, 170)
         }
     }
@@ -237,16 +263,25 @@ struct ContentView: View {
     @State var weAreIn = Pages.mainPage
     @State var tideAnimating = true
     @State var plantFullAnimating = true
+    @State var progress = 30.0
 
 
     var body: some View {
         ZStack(alignment: .bottom) {
             // Background color: a small shade of grey, filling the whole screen
-            Color(hex: 0xf2f2f2)
+            // Adding background color for different page
+            // FIXME: should consider use more consistent color
+            if (weAreIn == Pages.mainPage) {
+                Color("LightGray")
+            } else if (weAreIn == Pages.cardPage) {
+                Color("DarkPurple")
+            } else if (weAreIn == Pages.minePage) {
+                Color(.blue)
+            }
             // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
 
             if (weAreIn == Pages.mainPage) {
-                MainPageContentView(tideAnimating: $tideAnimating)
+                MainPageContentView(tideAnimating: $tideAnimating, progress: $progress)
                     .transition(.fly)
                     .onDisappear() {
                         print("MainPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
@@ -292,9 +327,9 @@ struct LittleProgressBar: View {
         ZStack(alignment: .leading) {
             Rectangle().frame(width: 100, height: 10)
                 .opacity(0.5)
-                .foregroundColor(Color(hex: 0xffffff))
+                .foregroundColor(Color(.white))
             Rectangle().frame(width: CGFloat(self.value), height: 10)
-                .foregroundColor(Color(hex: 0xa8eb00))
+                .foregroundColor(Color("Lime"))
         }
             .cornerRadius(45.0)
             .shadow(radius: 5)
@@ -339,22 +374,31 @@ struct ShinyStar: View {
 struct ComplexCircleBackground: View {
     let globalScale: CGFloat = 0.95
     let borderScale: CGFloat = 1.05
+    var isFull: Bool
     var body: some View {
         GeometryReader { geometry in
-            Circle()
-                .strokeBorder(
-                    style: StrokeStyle(
-                        lineWidth: 2,
-                        dash: [2]
+            ZStack(alignment: .center) {
+                if (self.isFull) {
+                    Rectangle()
+                        .foregroundColor(Color("DarkLime"))
+                        .frame(width: geometry.size.width * self.globalScale, height: geometry.size.height * self.globalScale * 2)
+                        .rotationEffect(.degrees(45))
+                        .offset(x: geometry.size.width * self.globalScale * sqrt(2) / 2, y: -geometry.size.width * self.globalScale * sqrt(2) / 2)
+                }
+
+                Circle()
+                    .strokeBorder(
+                        style: StrokeStyle(
+                            lineWidth: 2,
+                            dash: [2]
+                        )
                     )
-                )
-                .foregroundColor(Color(hex: 0xe000c4))
-                .frame(width: geometry.size.width * self.borderScale * self.globalScale, height: geometry.size.height * self.borderScale * self.globalScale)
-                .offset(x: -geometry.size.width * (self.borderScale * self.globalScale-1) / 2, y: -geometry.size.height * (self.borderScale * self.globalScale-1) / 2)
-            Circle()
-                .fill(Color(hex: 0xa8eb00))
-                .frame(width: geometry.size.width * self.globalScale, height: geometry.size.height * self.globalScale)
-                .offset(x: -geometry.size.width * (self.globalScale-1) / 2, y: -geometry.size.height * (self.globalScale-1) / 2)
+                    .foregroundColor(Color("LightPurple"))
+                    .frame(width: geometry.size.width * self.borderScale * self.globalScale, height: geometry.size.height * self.borderScale * self.globalScale)
+                Circle()
+                    .fill(Color("Lime"))
+                    .frame(width: geometry.size.width * self.globalScale, height: geometry.size.height * self.globalScale)
+            }
         }
     }
 }
