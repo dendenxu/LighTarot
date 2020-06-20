@@ -20,6 +20,8 @@
 		34673E982494E8D300712F38 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34673E962494E8D300712F38 /* LaunchScreen.storyboard */; };
 		34673EA32495084700712F38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 34673EA22495084700712F38 /* SDWebImageSwiftUI */; };
 		3473C1CA24965A5D003C7321 /* plantfull.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3473C1C924965A5D003C7321 /* plantfull.gif */; };
+		B95DE048249E391B007EA648 /* grown.gif in Resources */ = {isa = PBXBuildFile; fileRef = B95DE046249E391A007EA648 /* grown.gif */; };
+		B95DE049249E391B007EA648 /* growing.gif in Resources */ = {isa = PBXBuildFile; fileRef = B95DE047249E391B007EA648 /* growing.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,8 @@
 		34673E972494E8D300712F38 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		34673E992494E8D300712F38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3473C1C924965A5D003C7321 /* plantfull.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = plantfull.gif; sourceTree = "<group>"; };
+		B95DE046249E391A007EA648 /* grown.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = grown.gif; path = ../../grown.gif; sourceTree = "<group>"; };
+		B95DE047249E391B007EA648 /* growing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = growing.gif; path = ../../growing.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +82,8 @@
 				344A69B924961F7100B818A4 /* SourceHanSans-Medium.ttc */,
 				344A69B72496191D00B818A4 /* SourceHanSerif-Heavy.ttc */,
 				3422C17E2495EB9000296A18 /* tide.gif */,
+				B95DE047249E391B007EA648 /* growing.gif */,
+				B95DE046249E391A007EA648 /* grown.gif */,
 				3422C17D2495EB9000296A18 /* plant.gif */,
 				34673E912494E8D300712F38 /* Assets.xcassets */,
 				34673E962494E8D300712F38 /* LaunchScreen.storyboard */,
@@ -160,11 +166,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				34673E982494E8D300712F38 /* LaunchScreen.storyboard in Resources */,
+				B95DE049249E391B007EA648 /* growing.gif in Resources */,
 				34673E952494E8D300712F38 /* Preview Assets.xcassets in Resources */,
 				3473C1CA24965A5D003C7321 /* plantfull.gif in Resources */,
 				3422C17F2495EB9000296A18 /* plant.gif in Resources */,
 				344A69BA24961F7200B818A4 /* SourceHanSans-Medium.ttc in Resources */,
 				3422C1802495EB9000296A18 /* tide.gif in Resources */,
+				B95DE048249E391B007EA648 /* grown.gif in Resources */,
 				344A69B82496191D00B818A4 /* SourceHanSerif-Heavy.ttc in Resources */,
 				34673E922494E8D300712F38 /* Assets.xcassets in Resources */,
 				344A69BC2496232800B818A4 /* SourceHanSans-Heavy.ttc in Resources */,

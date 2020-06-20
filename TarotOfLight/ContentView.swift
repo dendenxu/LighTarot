@@ -23,6 +23,7 @@ struct CardPageContentView: View {
                 isAnimating: self.$plantFullAnimating)
                 .resizable()
                 .playbackRate(1.0)
+                .retryOnAppear(true)
                 .scaledToFit()
                 .clipShape(RoundedRectangle(cornerRadius: 38))
 
@@ -44,6 +45,8 @@ struct MainPageContentView: View {
         }
     }
     @Binding var tideAnimating: Bool
+    @State var growingAnimating: Bool = true
+    @State var grownAnimating: Bool = true
     @Binding var progress: Double
     @State var nowDate: DateComponents = Calendar
         .current
@@ -84,18 +87,25 @@ struct MainPageContentView: View {
             Color("MediumPurple")
                 .frame(width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 200))
                 .clipShape(RoundedRectangle(cornerRadius: 38))
+                .opacity(isFull ? 0 : 1)
+            
+            
             WebImage(
                 url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
                 isAnimating: self.$tideAnimating)
                 .resizable()
                 .playbackRate(1.0)
+                .retryOnAppear(true)
                 .scaledToFit()
                 .frame(width: UIScreen.main.bounds.width * self.tideScale)
                 .offset(y: UIScreen.main.bounds.height * (100 - CGFloat(progress)) / 100 - 600)
+                .opacity(isFull ? 0 : 1)
 
 
             if (isFull) {
                 Color("MediumDarkPurple")
+                    .frame(width: UIScreen.main.bounds.width)
+                    .frame(height: UIScreen.main.bounds.height)
                     .clipShape(RoundedRectangle(cornerRadius: 38))
 //                    .transition(.opacity)
             }
@@ -126,8 +136,11 @@ struct MainPageContentView: View {
                     Button(action: {
                         withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
                             self.progress += 30
-                            if (self.progress > 100.0) {
+                            if (self.progress >= 100.0) {
                                 self.progress = 100.0
+//                                self.growingAnimating = true
+//                                self.tideAnimating = false
+//                                print("We're setting self.growingAnimating to \(self.growingAnimating) and self.tideAnimating to \(self.tideAnimating)")
                             }
 //                            print("Screen height would be: \(UIScreen.main.bounds.height)")
                         }
@@ -183,15 +196,48 @@ struct MainPageContentView: View {
                 ZStack {
                     // Current we using one variable for both the plant and the tide
                     // FIXME: change to two
+
                     WebImage(
                         url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"),
                         isAnimating: self.$tideAnimating)
                         .resizable()
                         .playbackRate(1.0)
+                        .retryOnAppear(true)
                         .scaledToFill()
                         .frame(width: 350, height: 350)
                         .background(ComplexCircleBackground(isFull: isFull))
-                        .shadow(radius: 10)
+                        .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
+                        .opacity(isFull ? 0 : 1)
+                        .animation(.easeInOut(duration: 4))
+
+                    WebImage(
+                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "growing", ofType: "gif") ?? "growing.gif"),
+                        isAnimating: self.$growingAnimating)
+                        .resizable()
+                        .playbackRate(1.0)
+                        .retryOnAppear(true)
+                        .scaledToFill()
+                        .frame(width: 350, height: 350)
+                        .background(ComplexCircleBackground(isFull: isFull))
+                        .shadow(color: Color("Lime").opacity(0.3), radius: 10)
+                        .opacity(isFull ? 1 : 0)
+                        .animation(Animation.easeInOut(duration: 0.1))
+
+
+                    WebImage(
+                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
+                        isAnimating: self.$grownAnimating)
+                        .resizable()
+                        .playbackRate(1.0)
+                        .retryOnAppear(true)
+                        .scaledToFill()
+                        .frame(width: 350, height: 350)
+                        .background(ComplexCircleBackground(isFull: isFull))
+                        .shadow(color: Color("Lime").opacity(0.3), radius: 10)
+                        .opacity(isFull ? 1 : 0)
+                        .animation(Animation.easeInOut(duration: 0.1).delay(1.0))
+
+
 
                     ForEach(0..<5) { number in
                         ShinyStar(
@@ -284,31 +330,31 @@ struct ContentView: View {
                 MainPageContentView(tideAnimating: $tideAnimating, progress: $progress)
                     .transition(.fly)
                     .onDisappear() {
-                        print("MainPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
-                        self.tideAnimating = false
-                        self.plantFullAnimating = true
+//                        print("MainPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
+//                        self.tideAnimating = false
+//                        self.plantFullAnimating = true
                     }.onAppear() {
-                        print("MainPageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
+//                        print("MainPageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
                 }
             } else if (weAreIn == Pages.cardPage) {
                 CardPageContentView(plantFullAnimating: $plantFullAnimating)
                     .transition(.fly)
                     .onDisappear() {
-                        print("CardPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
-                        self.tideAnimating = true
-                        self.plantFullAnimating = false
+//                        print("CardPageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
+//                        self.tideAnimating = true
+//                        self.plantFullAnimating = false
                     }.onAppear() {
-                        print("CardPageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
+//                        print("CardPageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
                 }
             } else if (weAreIn == Pages.minePage) {
                 MinePageContentView()
                     .transition(.fly)
                     .onDisappear() {
-                        print("MinePageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
-                        self.tideAnimating = true
-                        self.plantFullAnimating = true
+//                        print("MinePageContentView::onDisAppear, tideAnimating: \(self.tideAnimating)")
+//                        self.tideAnimating = true
+//                        self.plantFullAnimating = true
                     }.onAppear() {
-                        print("MinePageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
+//                        print("MinePageContentView::onAppear, tideAnimating: \(self.tideAnimating)")
                 }
             }
 
