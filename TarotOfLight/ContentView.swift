@@ -55,7 +55,9 @@ struct MainPageContentView: View {
                 .month,
                 .day,
                 .hour,
-                .minute
+                .minute,
+                .second,
+                .nanosecond
             ], from: Date())
 
     var timer: Timer {
@@ -67,7 +69,9 @@ struct MainPageContentView: View {
                         .month,
                         .day,
                         .hour,
-                        .minute
+                        .minute,
+                        .second,
+                        .nanosecond
                     ], from: Date())
         }
     }
@@ -88,8 +92,8 @@ struct MainPageContentView: View {
                 .frame(width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 200))
                 .clipShape(RoundedRectangle(cornerRadius: 38))
                 .opacity(isFull ? 0 : 1)
-            
-            
+
+
             WebImage(
                 url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
                 isAnimating: self.$tideAnimating)
@@ -102,13 +106,12 @@ struct MainPageContentView: View {
                 .opacity(isFull ? 0 : 1)
 
 
-            if (isFull) {
-                Color("MediumDarkPurple")
-                    .frame(width: UIScreen.main.bounds.width)
-                    .frame(height: UIScreen.main.bounds.height)
-                    .clipShape(RoundedRectangle(cornerRadius: 38))
-//                    .transition(.opacity)
-            }
+            Color("MediumDarkPurple")
+                .frame(width: UIScreen.main.bounds.width)
+                .clipShape(RoundedRectangle(cornerRadius: 38))
+                .opacity(self.isFull ? 1 : 0)
+
+
 
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
@@ -208,7 +211,7 @@ struct MainPageContentView: View {
                         .background(ComplexCircleBackground(isFull: isFull))
                         .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
                         .opacity(isFull ? 0 : 1)
-                        .animation(.easeInOut(duration: 4))
+                        .animation(.easeInOut(duration: 2))
 
                     WebImage(
                         url: URL(fileURLWithPath: Bundle.main.path(forResource: "growing", ofType: "gif") ?? "growing.gif"),
@@ -251,16 +254,30 @@ struct MainPageContentView: View {
                 }.offset(y: -20)
                     .zIndex(0.5)
 
-                // To use custom font, be sure to have already added them in info.plist
-                // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
-                // and: https://medium.com/better-programming/swiftui-basics-importing-custom-fonts-b6396d17424d
-                Text("在时间和光的交汇点")
-                    .font(.custom("Source Han Sans Heavy", size: 25))
-                    .foregroundColor(Color("MediumLime"))
-                Text("遇见自己")
-                    .font(.custom("Source Han Sans Heavy", size: 25))
-                    .foregroundColor(Color("MediumLime"))
-            }.padding(.bottom, 170)
+                if (isFull) {
+                    ZStack(alignment: .center) {
+                        Text("解锁新牌阵")
+                            .font(.custom("Source Han Sans Heavy", size: 12))
+                            .foregroundColor(Color("LightPink"))
+                            .background(ComplexCircleBackground(globalScale: 1.5, borderScale: 1.1, shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false))
+                            .padding(.top, 30)
+                            .padding(.bottom, 30)
+                    }
+
+                } else {
+
+
+                    // To use custom font, be sure to have already added them in info.plist
+                    // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
+                    // and: https://medium.com/better-programming/swiftui-basics-importing-custom-fonts-b6396d17424d
+                    Text("在时间和光的交汇点")
+                        .font(.custom("Source Han Sans Heavy", size: 25))
+                        .foregroundColor(Color("MediumLime"))
+                    Text("遇见自己")
+                        .font(.custom("Source Han Sans Heavy", size: 25))
+                        .foregroundColor(Color("MediumLime"))
+                }
+            }.padding(.bottom, 170) // Magic Value
         }
     }
 }
@@ -418,32 +435,91 @@ struct ShinyStar: View {
 // We've only created this so that we can hold scales as variables
 // Should be more configurable if it's to remain
 struct ComplexCircleBackground: View {
-    let globalScale: CGFloat = 0.95
-    let borderScale: CGFloat = 1.05
+    var globalScale: CGFloat = 0.95
+    var borderScale: CGFloat = 1.05
+    var shapeShift: CGFloat = 1.03
+    var isCircleBorder = false
+    var innerColor = "Lime"
+    var outerColor = "LightPurple"
+    var shadeColor = "DarkLime"
     var isFull: Bool
+    @State var isAtMaxScaleInner = false
+    @State var isAtMaxScaleOuter = false
+    @State var isToggled = false
+
+    @State var toggleCount = 0
+
+    var randID = Double.random(in: 0..<1)
+    var shineAnimationInner = Animation
+        .easeInOut(duration: 3.15)
+        .repeatForever(autoreverses: true)
+        .delay(Double.random(in: 0..<1))
+    var shineAnimationOuter = Animation
+        .easeInOut(duration: 2.95)
+        .repeatForever(autoreverses: true)
+        .delay(Double.random(in: 0..<1))
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .center) {
                 if (self.isFull) {
                     Rectangle()
-                        .foregroundColor(Color("DarkLime"))
-                        .frame(width: geometry.size.width * self.globalScale, height: geometry.size.height * self.globalScale * 2)
+                        .foregroundColor(Color(self.shadeColor))
+                        .frame(width: geometry.size.width * self.globalScale, height: geometry.size.width * self.globalScale * 2)
                         .rotationEffect(.degrees(45))
                         .offset(x: geometry.size.width * self.globalScale * sqrt(2) / 2, y: -geometry.size.width * self.globalScale * sqrt(2) / 2)
                 }
 
-                Circle()
+                Ellipse()
                     .strokeBorder(
                         style: StrokeStyle(
                             lineWidth: 2,
                             dash: [2]
                         )
                     )
-                    .foregroundColor(Color("LightPurple"))
-                    .frame(width: geometry.size.width * self.borderScale * self.globalScale, height: geometry.size.height * self.borderScale * self.globalScale)
-                Circle()
-                    .fill(Color("Lime"))
-                    .frame(width: geometry.size.width * self.globalScale, height: geometry.size.height * self.globalScale)
+                    .foregroundColor(Color(self.outerColor))
+                    .frame(width: geometry.size.width * self.borderScale * self.globalScale * (self.isCircleBorder ? self.shapeShift : 1), height: geometry.size.width * self.globalScale * self.borderScale / (self.isCircleBorder ? self.shapeShift : 1))
+                    .rotationEffect(self.isAtMaxScaleOuter ? .degrees(720) : .degrees(0))
+                    .onAppear() {
+                        withAnimation(self.shineAnimationOuter) {
+                            // Should we just use isAtMaxScaleOuter?
+                            // FIXME: myth...
+                            // ? Why isn't this working?
+                            // ? Why is on appear of this small background called multiple times?
+                            // ? By who??
+                            // ! I'm literally feeling cheated by this...
+                            if (self.isCircleBorder) {
+                                self.isAtMaxScaleOuter.toggle()
+//                                self.isToggled.toggle()
+//                                self.toggleCount += 1
+//                                print("We're\(self.isCircleBorder ? "" : " not") in circle border and we've toggled self.isAtMaxScaleOuter from \(!self.isAtMaxScaleOuter) to \(self.isAtMaxScaleOuter) at \(Calendar.current.dateComponents([.second, .nanosecond], from: Date()).nanosecond ?? 0) and we're \(self.randID)")
+//                                print("Current value of self.isToggled: \(self.isToggled) and we've toggled \(self.toggleCount) times, you should not see this message again on this object")
+                            }
+                        }
+
+                }
+
+
+                if (self.isCircleBorder) {
+                    Ellipse()
+                        .strokeBorder(
+                            style: StrokeStyle(
+                                lineWidth: 2,
+                                dash: [2]
+                            )
+                        )
+                        .foregroundColor(Color(self.innerColor))
+                        .frame(width: geometry.size.width * self.globalScale * self.shapeShift, height: geometry.size.width * self.globalScale / self.shapeShift)
+                        .rotationEffect(self.isAtMaxScaleInner ? .degrees(360) : .degrees(0))
+                        .onAppear() {
+                            withAnimation(self.shineAnimationInner) {
+                                self.isAtMaxScaleInner.toggle()
+                            }
+                    }
+                } else {
+                    Ellipse()
+                        .fill(Color(self.innerColor))
+                        .frame(width: geometry.size.width * self.globalScale, height: geometry.size.width * self.globalScale)
+                }
             }
         }
     }
