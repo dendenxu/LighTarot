@@ -167,8 +167,12 @@ struct MainPageContentView: View {
 
 
                 AnimatingPlant(progress: progress, tideAnimating: $tideAnimating, growingAnimating: $grownAnimating, grownAnimating: $grownAnimating)
-                    .offset(y: isFull ? -60 : -20)
                     .zIndex(0.5)
+//                    .offset(y: isFull ? -60 : -20)
+                    // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)
+                    // FIXME: When we're using too large an offset, like .offset(y: CGFloat(progress)) directly, the Swift compiler crashes, returning non-zero value
+                    .offset(y: -20 - 40 * CGFloat(progress)/100)
+
 
                 if (isFull) {
                     Button(action: {
