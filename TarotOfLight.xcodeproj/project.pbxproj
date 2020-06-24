@@ -22,6 +22,14 @@
 		3473C1CA24965A5D003C7321 /* plantfull.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3473C1C924965A5D003C7321 /* plantfull.gif */; };
 		B95DE048249E391B007EA648 /* grown.gif in Resources */ = {isa = PBXBuildFile; fileRef = B95DE046249E391A007EA648 /* grown.gif */; };
 		B95DE049249E391B007EA648 /* growing.gif in Resources */ = {isa = PBXBuildFile; fileRef = B95DE047249E391B007EA648 /* growing.gif */; };
+		B970A5FA24A360A000B68189 /* ShinyStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5F924A360A000B68189 /* ShinyStar.swift */; };
+		B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5FB24A3611A00B68189 /* Transitions.swift */; };
+		B970A5FE24A3617000B68189 /* PageSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5FD24A3617000B68189 /* PageSelector.swift */; };
+		B970A60024A361CD00B68189 /* ComplexCircleBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5FF24A361CD00B68189 /* ComplexCircleBackground.swift */; };
+		B970A60224A3627700B68189 /* CardPageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60124A3627700B68189 /* CardPageContentView.swift */; };
+		B970A60424A362BF00B68189 /* MinePageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60324A362BF00B68189 /* MinePageContentView.swift */; };
+		B970A60624A3630C00B68189 /* LittleProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60524A3630C00B68189 /* LittleProgressBar.swift */; };
+		B970A60824A3634300B68189 /* MainPageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60724A3634300B68189 /* MainPageContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +49,14 @@
 		3473C1C924965A5D003C7321 /* plantfull.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = plantfull.gif; sourceTree = "<group>"; };
 		B95DE046249E391A007EA648 /* grown.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = grown.gif; path = ../../grown.gif; sourceTree = "<group>"; };
 		B95DE047249E391B007EA648 /* growing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = growing.gif; path = ../../growing.gif; sourceTree = "<group>"; };
+		B970A5F924A360A000B68189 /* ShinyStar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShinyStar.swift; sourceTree = "<group>"; };
+		B970A5FB24A3611A00B68189 /* Transitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transitions.swift; sourceTree = "<group>"; };
+		B970A5FD24A3617000B68189 /* PageSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSelector.swift; sourceTree = "<group>"; };
+		B970A5FF24A361CD00B68189 /* ComplexCircleBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplexCircleBackground.swift; sourceTree = "<group>"; };
+		B970A60124A3627700B68189 /* CardPageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPageContentView.swift; sourceTree = "<group>"; };
+		B970A60324A362BF00B68189 /* MinePageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinePageContentView.swift; sourceTree = "<group>"; };
+		B970A60524A3630C00B68189 /* LittleProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleProgressBar.swift; sourceTree = "<group>"; };
+		B970A60724A3634300B68189 /* MainPageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +105,14 @@
 				34673E962494E8D300712F38 /* LaunchScreen.storyboard */,
 				34673E992494E8D300712F38 /* Info.plist */,
 				34673E932494E8D300712F38 /* Preview Content */,
+				B970A5F924A360A000B68189 /* ShinyStar.swift */,
+				B970A5FB24A3611A00B68189 /* Transitions.swift */,
+				B970A5FD24A3617000B68189 /* PageSelector.swift */,
+				B970A5FF24A361CD00B68189 /* ComplexCircleBackground.swift */,
+				B970A60124A3627700B68189 /* CardPageContentView.swift */,
+				B970A60324A362BF00B68189 /* MinePageContentView.swift */,
+				B970A60524A3630C00B68189 /* LittleProgressBar.swift */,
+				B970A60724A3634300B68189 /* MainPageContentView.swift */,
 			);
 			path = TarotOfLight;
 			sourceTree = "<group>";
@@ -187,8 +211,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				34673E8C2494E8CC00712F38 /* AppDelegate.swift in Sources */,
+				B970A60224A3627700B68189 /* CardPageContentView.swift in Sources */,
+				B970A60424A362BF00B68189 /* MinePageContentView.swift in Sources */,
+				B970A5FE24A3617000B68189 /* PageSelector.swift in Sources */,
+				B970A60824A3634300B68189 /* MainPageContentView.swift in Sources */,
+				B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */,
 				34673E8E2494E8CC00712F38 /* SceneDelegate.swift in Sources */,
+				B970A60024A361CD00B68189 /* ComplexCircleBackground.swift in Sources */,
 				34673E902494E8CC00712F38 /* ContentView.swift in Sources */,
+				B970A60624A3630C00B68189 /* LittleProgressBar.swift in Sources */,
+				B970A5FA24A360A000B68189 /* ShinyStar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
