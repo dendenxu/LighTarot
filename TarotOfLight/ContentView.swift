@@ -14,14 +14,19 @@ struct ContentView: View {
     @State var weAreIn = GlobalViewSelection.selector
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             if (weAreIn == .selector) {
                 SelectorView()
+                    .transition(.fly)
             } else if (weAreIn == .predictLight) {
                 PredictLightView()
+                    .transition(.fly)
+//                Spacer()
             }
-
         }
+        // FIXME: when using if to select between two global view, we'll get strange animation for MainPageContentView
+        // Well, strangely we're able to fix this by adding a frame width limitation on MainPageContenView
+        // SelectorView()
     }
 }
 

@@ -251,7 +251,9 @@ struct MainPageContentView: View {
                         .foregroundColor(Color("MediumLime"))
                 }
             }.padding(.bottom, 170) // Magic Value
-        }
+            
+        // STUB: adding a frame width limitation so that the animation wouldn't looking funny
+        }.frame(width: UIScreen.main.bounds.width)
     }
 }
 

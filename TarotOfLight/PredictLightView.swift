@@ -11,7 +11,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct PredictLightView: View {
-    @State var weAreIn = PredictLightViewSelection.category
+    @State var weAreIn = PredictLightViewSelection.animation
     @State var plantFullAnimating: Bool = true
 
     var body: some View {
