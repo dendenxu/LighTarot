@@ -16,7 +16,7 @@ struct MainPageContentView: View {
             return progress >= 100.0
         }
     }
-    @Binding var tideAnimating: Bool
+    @State var tideAnimating: Bool = true
     @State var growingAnimating: Bool = true
     @State var grownAnimating: Bool = true
     @Binding var progress: Double
@@ -83,8 +83,6 @@ struct MainPageContentView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 38))
                 .opacity(self.isFull ? 1 : 0)
 
-
-
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
                 HStack {
@@ -109,20 +107,17 @@ struct MainPageContentView: View {
 
 
                     Button(action: {
-                        withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
+                        withAnimation(springAnimation) {
                             self.progress += 30
                             if (self.progress >= 100.0) {
                                 self.progress = 100.0
-//                                self.growingAnimating = true
-//                                self.tideAnimating = false
-//                                print("We're setting self.growingAnimating to \(self.growingAnimating) and self.tideAnimating to \(self.tideAnimating)")
                             }
 //                            print("Screen height would be: \(UIScreen.main.bounds.height)")
                         }
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(.white)
+                                .foregroundColor(isFull ? Color("MediumPurple") : .white)
                                 .frame(width: 100, height: 125)
                                 .shadow(radius: 10)
                             VStack {
@@ -138,11 +133,11 @@ struct MainPageContentView: View {
                                     .offset(y: 10)
                                 // Don't create another timer here
                                 Text("\(String(nowDate.day ?? 10))")
-                                    .foregroundColor(Color("LightPurple"))
+                                    .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
                                     .font(.custom("Source Han Sans Heavy", size: 40))
 
                                 Text("日签")
-                                    .foregroundColor(Color("LightPurple"))
+                                    .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
                                     .font(.custom("Source Han Sans Heavy", size: 25))
                                     .background(GeometryReader { geometry in
                                         RoundedRectangle(cornerRadius: 15)
@@ -164,9 +159,9 @@ struct MainPageContentView: View {
                     }
 
 
-                }.padding(.bottom)
-                    .offset(y: -10)
-                    .zIndex(1)
+                }.padding(.bottom) // Magic Value
+                .offset(y: -10)
+                    .zIndex(1) // So that daily prediction won't overlay with the shadow
 
                 ZStack {
                     // Current we using one variable for both the plant and the tide
@@ -183,7 +178,7 @@ struct MainPageContentView: View {
                         .background(ComplexCircleBackground(isFull: isFull))
                         .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
                         .opacity(isFull ? 0 : 1)
-                        .animation(.easeInOut(duration: 2))
+                        .animation(.easeInOut(duration: isFull ? 2.0 : 0.1))
 
                     WebImage(
                         url: URL(fileURLWithPath: Bundle.main.path(forResource: "growing", ofType: "gif") ?? "growing.gif"),
@@ -210,7 +205,7 @@ struct MainPageContentView: View {
                         .background(ComplexCircleBackground(isFull: isFull))
                         .shadow(color: Color("Lime").opacity(0.3), radius: 10)
                         .opacity(isFull ? 1 : 0)
-                        .animation(Animation.easeInOut(duration: 0.1).delay(1.0))
+                        .animation(Animation.easeInOut(duration: 0.1).delay(isFull ? 1.0 : 0))
 
 
 
@@ -227,17 +222,23 @@ struct MainPageContentView: View {
                     .zIndex(0.5)
 
                 if (isFull) {
-                    ZStack(alignment: .center) {
-                        Text("解锁新牌阵")
-                            .font(.custom("Source Han Sans Heavy", size: 12))
-                            .foregroundColor(Color("LightPink"))
-                            .background(ComplexCircleBackground(globalScale: 1.5, borderScale: 1.1, shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false))
-                            .padding(.top, 30)
-                            .padding(.bottom, 30)
+                    Button(action: {
+                        withAnimation(springAnimation) {
+                            self.progress -= 30;
+                            if (self.progress < 0) {
+                                self.progress = 0
+                            }
+                        }
+                    }) {
+                        ZStack(alignment: .center) {
+                            ShinyWord()
+                                .background(ComplexCircleBackground(globalScale: 1.5, borderScale: 1.1, shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false))
+                                .padding(.top, 30) // Magic Value
+                            .padding(.bottom, 30) // Magic Value
+                        }
                     }
 
                 } else {
-
 
                     // To use custom font, be sure to have already added them in info.plist
                     // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
@@ -254,3 +255,22 @@ struct MainPageContentView: View {
     }
 }
 
+struct ShinyWord: View {
+    var text = "解锁新牌阵"
+    var font = "Source Han Sans Heavy"
+    var size = 12
+    var maxScale: CGFloat = 1.5
+    var shadowColor = Color.white.opacity(0.75)
+    @State var isAtMaxScale = false
+    var body: some View {
+        Text(text)
+            .font(.custom(font, size: 12))
+            .foregroundColor(Color("LightPink"))
+            .shadow(color: shadowColor, radius: 10 * (isAtMaxScale ? 1 / maxScale : maxScale))
+            .onAppear() {
+                withAnimation(shineAnimationOuter) {
+                    self.isAtMaxScale.toggle()
+                }
+        }
+    }
+}

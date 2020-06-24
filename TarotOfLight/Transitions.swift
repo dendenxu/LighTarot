@@ -47,3 +47,5 @@ struct FlyTransition: GeometryEffect {
 
 let fromBottomToTop = AnyTransition
     .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top))
+
+let springAnimation = Animation.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)

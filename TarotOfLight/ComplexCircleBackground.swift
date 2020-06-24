@@ -27,14 +27,6 @@ struct ComplexCircleBackground: View {
     @State var toggleCount = 0
 
     var randID = Double.random(in: 0..<1)
-    var shineAnimationInner = Animation
-        .easeInOut(duration: 3.15)
-        .repeatForever(autoreverses: true)
-        .delay(Double.random(in: 0..<1))
-    var shineAnimationOuter = Animation
-        .easeInOut(duration: 2.95)
-        .repeatForever(autoreverses: true)
-        .delay(Double.random(in: 0..<1))
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .center) {
@@ -57,7 +49,7 @@ struct ComplexCircleBackground: View {
                     .frame(width: geometry.size.width * self.borderScale * self.globalScale * (self.isCircleBorder ? self.shapeShift : 1), height: geometry.size.width * self.globalScale * self.borderScale / (self.isCircleBorder ? self.shapeShift : 1))
                     .rotationEffect(self.isAtMaxScaleOuter ? .degrees(720) : .degrees(0))
                     .onAppear() {
-                        withAnimation(self.shineAnimationOuter) {
+                        withAnimation(shineAnimationOuter) {
                             // Should we just use isAtMaxScaleOuter?
                             // FIXME: myth...
                             // ? Why isn't this working?
@@ -84,7 +76,7 @@ struct ComplexCircleBackground: View {
                         .frame(width: geometry.size.width * self.globalScale * self.shapeShift, height: geometry.size.width * self.globalScale / self.shapeShift)
                         .rotationEffect(self.isAtMaxScaleInner ? .degrees(360) : .degrees(0))
                         .onAppear() {
-                            withAnimation(self.shineAnimationInner) {
+                            withAnimation(shineAnimationInner) {
                                 self.isAtMaxScaleInner.toggle()
                             }
                     }

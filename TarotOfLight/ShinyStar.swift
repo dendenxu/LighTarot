@@ -8,6 +8,17 @@
 
 import SwiftUI
 
+var shineAnimationInner = Animation
+    .easeInOut(duration: 3.15)
+    .repeatForever(autoreverses: true)
+    .delay(Double.random(in: 0..<1))
+var shineAnimationOuter = Animation
+    .easeInOut(duration: 2.95)
+    .repeatForever(autoreverses: true)
+    .delay(Double.random(in: 0..<1))
+
+
+
 // Some randomized shiny star with shiny animations
 struct ShinyStar: View {
     let offset: CGSize
@@ -28,14 +39,14 @@ struct ShinyStar: View {
             .opacity(isAtMaxScale ? 1 : 0)
             .scaleEffect(isAtMaxScale ? maxScale : 0.5)
             .rotationEffect(isAtMaxScale ? .degrees(60) : .degrees(0))
+            .frame(width: 30 * scale, height: 30 * scale, alignment: .center)
+            .offset(offset)
+            .rotationEffect(isAtMaxScale ? .degrees(30) : .degrees(0))
             .onAppear() {
                 withAnimation(self.shineAnimation) {
                     self.isAtMaxScale.toggle()
                 }
-            }
-            .frame(width: 30 * scale, height: 30 * scale, alignment: .center)
-            .offset(offset)
-            .rotationEffect(isAtMaxScale ? .degrees(30) : .degrees(0))
+        }
     }
 }
 
