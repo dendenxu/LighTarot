@@ -17,6 +17,10 @@ var shineAnimationOuter = Animation
     .repeatForever(autoreverses: true)
     .delay(Double.random(in: 0..<1))
 
+var shineAnimationConstant = Animation
+    .easeInOut(duration: 1.0)
+    .repeatForever(autoreverses: true)
+
 
 
 // Some randomized shiny star with shiny animations

@@ -231,7 +231,7 @@ struct MainPageContentView: View {
                         }
                     }) {
                         ZStack(alignment: .center) {
-                            ShinyWord()
+                            ShinyText()
                                 .background(ComplexCircleBackground(globalScale: 1.5, borderScale: 1.1, shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false))
                                 .padding(.top, 30) // Magic Value
                             .padding(.bottom, 30) // Magic Value
@@ -254,25 +254,5 @@ struct MainPageContentView: View {
             
         // STUB: adding a frame width limitation so that the animation wouldn't looking funny
         }.frame(width: UIScreen.main.bounds.width)
-    }
-}
-
-struct ShinyWord: View {
-    var text = "解锁新牌阵"
-    var font = "Source Han Sans Heavy"
-    var size = 12
-    var maxScale: CGFloat = 1.5
-    var shadowColor = Color.white.opacity(0.75)
-    @State var isAtMaxScale = false
-    var body: some View {
-        Text(text)
-            .font(.custom(font, size: 12))
-            .foregroundColor(Color("LightPink"))
-            .shadow(color: shadowColor, radius: 10 * (isAtMaxScale ? 1 / maxScale : maxScale))
-            .onAppear() {
-                withAnimation(shineAnimationOuter) {
-                    self.isAtMaxScale.toggle()
-                }
-        }
     }
 }
