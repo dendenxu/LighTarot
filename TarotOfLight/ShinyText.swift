@@ -14,26 +14,26 @@ struct ShinyText: View {
     var size: CGFloat = 12.0
     var maxScale: CGFloat = 1.5
     var textColor = Color("LightPink")
-    var shadowColor = Color.white.opacity(0.75)
+    var shadowColor = Color.white
     var isScaling = false
     @State var isAtMaxScale = false
     var body: some View {
 
         ZStack {
 //            GeometryReader { geometry in
-                Text(self.text)
-                    .font(.custom(self.font, size: self.size))
+            Text(self.text)
+                .font(.custom(self.font, size: self.size))
 //                .font(.custom(self.font, size: self.isScaling && self.isAtMaxScale ? self.size * self.maxScale : self.size))
 //                .frame(width : self.isScaling && self.isAtMaxScale ? geometry.size.width : geometry.size.width / self.maxScale)
 //                .minimumScaleFactor(self.isScaling && self.isAtMaxScale ? self.size * self.maxScale : self.size)
-                .foregroundColor(Color("LightPink"))
+            .foregroundColor(textColor)
 //                .background(ComplexCircleBackground(isFull: false).frame(width: self.isScaling && self.isAtMaxScale ? geometry.size.width : geometry.size.width / self.maxScale))
-                .shadow(color: self.shadowColor, radius: 10 * (self.isAtMaxScale ? 1 / self.maxScale : self.maxScale))
-                    .onAppear() {
-                        withAnimation(shineAnimationOuter) {
-                            self.isAtMaxScale.toggle()
-                        }
-                }
+            .shadow(color: self.shadowColor.opacity(self.isAtMaxScale ? 0.8 : 0.5), radius: 10 * (self.isAtMaxScale ? 1 / self.maxScale : self.maxScale))
+                .onAppear() {
+                    withAnimation(shineAnimationOuter) {
+                        self.isAtMaxScale.toggle()
+                    }
+            }
 //            }
         }
     }

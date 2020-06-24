@@ -10,6 +10,13 @@ import SwiftUI
 
 import SDWebImageSwiftUI
 
+func randomPositionAroundCircle(size: CGSize) -> CGSize {
+    let angle = Double.random(in: 0..<2 * Double.pi)
+    let scale = Double.random(in: 0.95..<1.15)
+    let radius = Double(min(size.width, size.height))
+    return CGSize(width: cos(angle) * radius * scale, height: sin(angle) * radius * scale)
+}
+
 struct MainPageContentView: View {
     var isFull: Bool {
         get {
@@ -49,12 +56,6 @@ struct MainPageContentView: View {
     }
     let tideScale: CGFloat = 1.5
 
-    func randomPositionAroundCircle(size: CGSize) -> CGSize {
-        let angle = Double.random(in: 0..<2 * Double.pi)
-        let scale = Double.random(in: 0.95..<1.15)
-        let radius = Double(min(size.width, size.height))
-        return CGSize(width: cos(angle) * radius * scale, height: sin(angle) * radius * scale)
-    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -91,7 +92,8 @@ struct MainPageContentView: View {
                             .renderingMode(.original)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 120, height: 120, alignment: .center)
+                            .frame(width: 120, height: 120)
+                            .shadow(color: Color("MediumLime").opacity(0.6), radius: 10)
                         HStack(spacing: 0) {
                             Image("power")
                                 .renderingMode(.original)
@@ -163,62 +165,9 @@ struct MainPageContentView: View {
                 .offset(y: -10)
                     .zIndex(1) // So that daily prediction won't overlay with the shadow
 
-                ZStack {
-                    // Current we using one variable for both the plant and the tide
-                    // FIXME: change to two
 
-                    WebImage(
-                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"),
-                        isAnimating: self.$tideAnimating)
-                        .resizable()
-                        .playbackRate(1.0)
-                        .retryOnAppear(true)
-                        .scaledToFill()
-                        .frame(width: 350, height: 350)
-                        .background(ComplexCircleBackground(isFull: isFull))
-                        .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
-                        .opacity(isFull ? 0 : 1)
-                        .animation(.easeInOut(duration: isFull ? 2.0 : 0.1))
-
-                    WebImage(
-                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "growing", ofType: "gif") ?? "growing.gif"),
-                        isAnimating: self.$growingAnimating)
-                        .resizable()
-                        .playbackRate(1.0)
-                        .retryOnAppear(true)
-                        .scaledToFill()
-                        .frame(width: 350, height: 350)
-                        .background(ComplexCircleBackground(isFull: isFull))
-                        .shadow(color: Color("Lime").opacity(0.3), radius: 10)
-                        .opacity(isFull ? 1 : 0)
-                        .animation(Animation.easeInOut(duration: 0.1))
-
-
-                    WebImage(
-                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
-                        isAnimating: self.$grownAnimating)
-                        .resizable()
-                        .playbackRate(1.0)
-                        .retryOnAppear(true)
-                        .scaledToFill()
-                        .frame(width: 350, height: 350)
-                        .background(ComplexCircleBackground(isFull: isFull))
-                        .shadow(color: Color("Lime").opacity(0.3), radius: 10)
-                        .opacity(isFull ? 1 : 0)
-                        .animation(Animation.easeInOut(duration: 0.1).delay(isFull ? 1.0 : 0))
-
-
-
-                    ForEach(0..<5) { number in
-                        ShinyStar(
-                            offset: self.randomPositionAroundCircle(
-                                size: CGSize(
-                                    width: 350 / 2,
-                                    height: 350 / 2)),
-                            scale: CGFloat.random(in: 0.9..<1.1)
-                        )
-                    }
-                }.offset(y: -20)
+                AnimatingPlant(progress: progress, tideAnimating: $tideAnimating, growingAnimating: $grownAnimating, grownAnimating: $grownAnimating)
+                    .offset(y: isFull ? -60 : -20)
                     .zIndex(0.5)
 
                 if (isFull) {
@@ -233,10 +182,10 @@ struct MainPageContentView: View {
                         ZStack(alignment: .center) {
                             ShinyText()
                                 .background(ComplexCircleBackground(globalScale: 1.5, borderScale: 1.1, shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false))
-                                .padding(.top, 30) // Magic Value
-                            .padding(.bottom, 30) // Magic Value
+                                .padding(.top, 40) // Magic Value
+                            .padding(.bottom, 20) // Magic Value
                         }
-                    }
+                    }.offset(y: -30)
 
                 } else {
 
@@ -244,15 +193,91 @@ struct MainPageContentView: View {
                     // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
                     // and: https://medium.com/better-programming/swiftui-basics-importing-custom-fonts-b6396d17424d
                     Text("在时间和光的交汇点")
-                        .font(.custom("Source Han Sans Heavy", size: 25))
+//                        .font(.custom("Source Han Sans Heavy", size: 25))
+                    .font(.custom("DFPHeiW12-GB", size: 25))
                         .foregroundColor(Color("MediumLime"))
+                        .padding(.bottom, 10)
+//                    Spacer(minLength: 10)
                     Text("遇见自己")
-                        .font(.custom("Source Han Sans Heavy", size: 25))
+//                        .font(.custom("Source Han Sans Heavy", size: 25))
+                    .font(.custom("DFPHeiW12-GB", size: 25))
                         .foregroundColor(Color("MediumLime"))
+                        .padding(.bottom, 20)
+//                    Spacer()
                 }
             }.padding(.bottom, 170) // Magic Value
-            
-        // STUB: adding a frame width limitation so that the animation wouldn't looking funny
+
+            // STUB: adding a frame width limitation so that the animation wouldn't looking funny
         }.frame(width: UIScreen.main.bounds.width)
+    }
+}
+
+struct AnimatingPlant: View {
+    var progress: Double
+    var isFull: Bool {
+        get {
+            return progress >= 100.0
+        }
+    }
+    @Binding var tideAnimating: Bool
+    @Binding var growingAnimating: Bool
+    @Binding var grownAnimating: Bool
+    var body: some View {
+        ZStack {
+            // Current we using one variable for both the plant and the tide
+            // FIXME: change to two
+
+            WebImage(
+                url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"),
+                isAnimating: self.$tideAnimating)
+                .resizable()
+                .playbackRate(1.0)
+                .retryOnAppear(true)
+                .scaledToFill()
+                .frame(width: 350, height: 350)
+                .background(ComplexCircleBackground(isFull: isFull))
+                .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
+                .opacity(isFull ? 0 : 1)
+                .animation(.easeInOut(duration: isFull ? 2.0 : 0.1))
+
+            WebImage(
+                url: URL(fileURLWithPath: Bundle.main.path(forResource: "growing", ofType: "gif") ?? "growing.gif"),
+                isAnimating: self.$growingAnimating)
+                .resizable()
+                .playbackRate(1.0)
+                .retryOnAppear(true)
+                .scaledToFill()
+                .frame(width: 350, height: 350)
+                .background(ComplexCircleBackground(isFull: isFull))
+                .shadow(color: Color("Lime").opacity(0.3), radius: 10)
+                .opacity(isFull ? 1 : 0)
+                .animation(Animation.easeInOut(duration: 0.1))
+
+
+            WebImage(
+                url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
+                isAnimating: self.$grownAnimating)
+                .resizable()
+                .playbackRate(1.0)
+                .retryOnAppear(true)
+                .scaledToFill()
+                .frame(width: 350, height: 350)
+                .background(ComplexCircleBackground(isFull: isFull))
+                .shadow(color: Color("Lime").opacity(0.3), radius: 10)
+                .opacity(isFull ? 1 : 0)
+                .animation(Animation.easeInOut(duration: 0.1).delay(isFull ? 1.0 : 0))
+
+
+
+            ForEach(0..<5) { number in
+                ShinyStar(
+                    offset: randomPositionAroundCircle(
+                        size: CGSize(
+                            width: 350 / 2,
+                            height: 350 / 2)),
+                    scale: CGFloat.random(in: 0.9..<1.1)
+                )
+            }
+        }
     }
 }

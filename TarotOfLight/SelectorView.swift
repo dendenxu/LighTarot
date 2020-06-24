@@ -22,7 +22,7 @@ struct SelectorView: View {
             if (weAreIn == Pages.mainPage) {
                 Color("LightGray")
             } else if (weAreIn == Pages.cardPage) {
-                Color("DarkPurple")
+                Color("MediumDarkPurple")
             } else if (weAreIn == Pages.minePage) {
                 Color(.blue)
             }
