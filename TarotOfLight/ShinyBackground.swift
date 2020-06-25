@@ -8,31 +8,25 @@
 
 import SwiftUI
 
-func randomPositionInRectangle(size: CGSize) -> CGSize {
+func randomPositionInDoubleRectangle(size: CGSize) -> CGSize {
 //    print("We're randomly generating size for bounds: \(size.width), \(size.height)")
     return CGSize(width: 2 * size.width * CGFloat.random(in: 0..<1) - size.width, height: 2 * size.height * CGFloat.random(in: 0..<1) - size.height)
 }
 
-func distance(s1: CGSize, s2: CGSize) -> Double {
-    return Double(sqrt((s1.width - s2.width) * (s1.width - s2.width) + (s1.height - s2.height) * (s1.height - s2.height)))
+func distance(s1: CGSize, s2: CGSize) -> CGFloat {
+    return sqrt((s1.width - s2.width) * (s1.width - s2.width) + (s1.height - s2.height) * (s1.height - s2.height))
 }
 
-func distance(s: CGSize) -> Double {
-    return Double(sqrt(s.width * s.width + s.height * s.height))
+func distance(s: CGSize) -> CGFloat {
+    return sqrt(s.width * s.width + s.height * s.height)
 }
 
-func distance(p: CGPoint) -> Double {
-    return Double(sqrt(p.x * p.x + p.y * p.y))
+func distance(p: CGPoint) -> CGFloat {
+    return sqrt(p.x * p.x + p.y * p.y)
 }
 
-func toSize(s: CGSize, u: UnitPoint) -> CGSize {
-    return CGSize(width: s.width * u.x, height: s.height * u.y)
-}
-
-func adjustSize(s: CGSize, u: UnitPoint, toAdjust: CGSize, scale: CGFloat = 1.0, offset: CGFloat = 10, position: CGPoint = CGPoint(x: 0, y: 0)) -> CGSize {
-    let origin = toSize(s: s, u: u) + CGSize(p: position)
-    let minus = toAdjust - origin
-    return origin + minus * scale + CGSize(width: minus.width / CGFloat(distance(s: minus)) * offset, height: minus.height / CGFloat(distance(s: minus)) * offset)
+func adjustSize(toAdjust: CGSize, scale: CGFloat = 1.0, offset: CGFloat = 30) -> CGSize {
+    return toAdjust * scale + CGSize(width: toAdjust.width / distance(s: toAdjust) * offset, height: toAdjust.height / distance(s: toAdjust) * offset)
 //    return toAdjust
 }
 
@@ -53,18 +47,16 @@ extension CGSize {
 
 struct ShinyPentagram: View {
     var originSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-    var offset: CGSize
-    var scale: CGFloat
-    var maxAngle = 720.0
+    var offsetView: CGSize
+    var scale = CGFloat.random(in: 1..<2)
+    var maxAngle = 360.0
     var selfMaxAngle = 1440.0
-    var size: CGFloat = 30.0
+    var viewSize: CGFloat = 3.0
     var imageName = "starstroke"
-    var rotationCenter = UnitPoint(x: 0.265, y: 0.11)
-    var position = CGPoint(x: 0, y: 0)
     var shineAnimation: Animation {
         get {
             Animation
-                .linear(duration: 60 / distance(s: originSize) * Double(distance(s1: offset, s2: CGSize(p: position) + toSize(s: originSize, u: rotationCenter))))
+                .linear(duration: 30 * Double(distance(s1: offsetView, s2: CGSize(width: 0, height: 0)) / distance(s: originSize)))
                 .repeatForever(autoreverses: false)
         }
     }
@@ -83,17 +75,17 @@ struct ShinyPentagram: View {
         Image(imageName)
             .resizable()
             .scaledToFit()
-            .frame(width: size, height: size)
-            .scaleEffect(isAtMaxScale ? 1 / scale : scale)
+            .frame(width: viewSize, height: viewSize)
+            .scaleEffect(isAtSelfMaxAngle ? 1 / scale : scale)
             .rotationEffect(isAtSelfMaxAngle ? .degrees(0) : .degrees(selfMaxAngle))
             .position(x: 0, y: 0)
-            .offset(x: self.offset.width, y: self.offset.height)
-            .rotationEffect(isAtMaxScale ? .degrees(0) : .degrees(maxAngle), anchor: rotationCenter)
+            .offset(x: self.offsetView.width, y: self.offsetView.height)
+            .rotationEffect(isAtMaxScale ? .degrees(0) : .degrees(maxAngle), anchor: .topLeading)
             .onAppear {
                 withAnimation(self.shineAnimation) {
                     self.isAtMaxScale.toggle()
                 }
-                withAnimation(self.shineAnimation) {
+                withAnimation(self.shineAnimationSelf) {
                     self.isAtSelfMaxAngle.toggle()
                 }
         }
@@ -101,33 +93,29 @@ struct ShinyPentagram: View {
 }
 
 struct ShinyBackground: View {
-    var originSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-//    var rotationCenter = UnitPoint(x: 0.265, y: 0.11)
-    var rotationCenter = UnitPoint(x: 0.5, y: 0.5)
+    @State var originSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
     var nStroke = 50
     var nFill = 50
     var size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-    var position = CGPoint(x: 0, y: 0)
     var body: some View {
-        ZStack {
-            ForEach(0..<nStroke) { number in
-                ShinyPentagram(
-                    originSize: self.originSize,
-                    offset: adjustSize(s: self.originSize, u: self.rotationCenter, toAdjust: randomPositionInRectangle(size: self.size)),
-                    scale: CGFloat.random(in: 0.9..<1.1),
-                    imageName: "starstroke",
-                    rotationCenter: self.rotationCenter
-                )
-            }
-            ForEach(0..<nFill) { number in
-                ShinyPentagram(
-                    originSize: self.originSize,
-                    offset: adjustSize(s: self.originSize, u: self.rotationCenter, toAdjust: randomPositionInRectangle(size: self.size)),
-                    scale: CGFloat.random(in: 0.9..<1.1),
-                    imageName: "starfull",
-                    rotationCenter: self.rotationCenter
-                )
-            }
+        GeometryReader {
+            geometry in
+            ZStack {
+                ForEach(0..<self.nStroke) { number in
+                    ShinyPentagram(
+                        originSize: self.originSize,
+                        offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: self.size)),
+                        imageName: "starstroke"
+                    )
+                }
+                ForEach(0..<self.nFill) { number in
+                    ShinyPentagram(
+                        originSize: self.originSize,
+                        offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: self.size)),
+                        imageName: "starfull"
+                    )
+                }
+            }.offset(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
     }
 }

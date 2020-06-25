@@ -12,9 +12,6 @@ struct CardPageContentView: View {
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreInCategory: CategorySelection
     var body: some View {
-//        ZStack(alignment: .center) {
-//            ShinyText(text: "让我们看看是谁的字体还没换过来", font: "DFPHeiW12-GB", size: 20, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime").opacity(0.75), isScaling: true)
-//        }
 
         VStack() {
             VStack(alignment: .leading) {
@@ -23,6 +20,9 @@ struct CardPageContentView: View {
                     .padding(.top, 60)
                     .background(
                         ShinyBackground(
+                            // FIXME: this is dirty...
+//                            rotationCenter: UnitPoint(x: 0.265, y: 0.11),
+//                            rotationCenter: UnitPoint(x: 0, y: 0),
                             size: CGSize(
                                 width: UIScreen.main.bounds.width,
                                 height: UIScreen.main.bounds.height

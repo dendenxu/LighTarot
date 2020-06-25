@@ -15,7 +15,8 @@ struct MinePageContentView: View {
     var body: some View {
 //        Color("LightGray").clipShape(RoundedRectangle(cornerRadius: 38))
         VStack {
-            Spacer()
+            Spacer(minLength: 50)
+            
             HStack {
                 Spacer()
 //                Text("Edit")
@@ -24,32 +25,35 @@ struct MinePageContentView: View {
                     .scaledToFit()
                     .frame(width: 40)
             }.padding(.trailing, 30)
-            Spacer()
-            WebImage(
-                url: URL(fileURLWithPath: Bundle.main.path(forResource: "tudou", ofType: "gif") ?? "tudou.gif"),
-                isAnimating: self.$tudouAnimating)
-                .resizable()
-                .playbackRate(1.0)
-                .retryOnAppear(true)
-                .scaledToFit()
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .shadow(radius: 10)
-                .background(
+            
+            Spacer(minLength: 100)
 
-                    ShinyBackground(
-                        nStroke: 20, nFill: 30,
-                        size: CGSize(
-                            width: UIScreen.main.bounds.width,
-                            height: UIScreen.main.bounds.height
-                        )
-                    ).opacity(0.5)
+            ZStack {
+                WebImage(
+                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "tudou", ofType: "gif") ?? "tudou.gif"),
+                    isAnimating: self.$tudouAnimating)
+                    .resizable()
+                    .playbackRate(1.0)
+                    .retryOnAppear(true)
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .clipShape(Circle())
+                    .shadow(radius: 10)
+                    .background(
+
+                        ShinyBackground(
+                            nStroke: 30, nFill: 15,
+                            size: CGSize(
+                                width: UIScreen.main.bounds.width,
+                                height: UIScreen.main.bounds.height
+                            )
+                        ).opacity(0.5)
+
+                    )
+            }
 
 
-                )
-                .padding()
-
-
+            Spacer(minLength: 10)
 
             ShinyText(text: "小土豆", font: "DFPHeiW12-GB", size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3))
 
