@@ -12,6 +12,11 @@ import SwiftUI
 struct SelectorView: View {
     @State var weAreIn = Pages.mainPage
     @State var progress = 30.0
+    var isFull: Bool {
+        get {
+            return progress >= 100.0
+        }
+    }
 
 
     var body: some View {
@@ -19,22 +24,18 @@ struct SelectorView: View {
             // Background color: a small shade of grey, filling the whole screen
             // Adding background color for different page
             // FIXME: should consider use more consistent color
-            if (weAreIn == Pages.mainPage) {
-                Color("LightGray")
-            } else if (weAreIn == Pages.cardPage) {
-                Color("MediumDarkPurple")
-            } else if (weAreIn == Pages.minePage) {
-                Color(.blue)
-            }
             // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
 
             if (weAreIn == Pages.mainPage) {
+                Color(isFull ? "MediumDarkPurple" : "LightGray")
                 MainPageContentView(progress: $progress)
                     .transition(.fly)
             } else if (weAreIn == Pages.cardPage) {
+                Color("MediumDarkPurple")
                 CardPageContentView()
                     .transition(.fly)
             } else if (weAreIn == Pages.minePage) {
+                Color(.blue)
                 MinePageContentView()
                     .transition(.fly)
             }

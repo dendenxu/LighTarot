@@ -34,7 +34,7 @@ struct CardPageContentView: View {
 
 
             Spacer(minLength: 180)
-        }
+        }.background(ShinyBackground(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)))
     }
 }
 
@@ -45,7 +45,7 @@ struct CategorySelectorView: View {
 
         }) {
             ZStack {
-                RoundedRectangle(cornerRadius: 38).foregroundColor(Color("MediumDarkPurple"))
+                RoundedRectangle(cornerRadius: 38).foregroundColor(Color("LightMediumDarkPurple"))
                 ShinyText(text: "I'm a dummy Text", font: "DFPHeiW12-GB", size: 30, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true)
             }.shadow(radius: 20).padding()
         }
