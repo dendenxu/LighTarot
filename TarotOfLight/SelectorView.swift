@@ -28,6 +28,7 @@ struct SelectorView: View {
             // FIXME: should consider use more consistent color
             // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
 
+            // We're defining pages after a background color so that they can use different transition when loading
             if (weAreIn == Pages.mainPage) {
                 Color(isFull ? "MediumDarkPurple" : "LightGray")
                 MainPageContentView(progress: $progress)
@@ -37,7 +38,7 @@ struct SelectorView: View {
                 CardPageContentView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
                     .transition(.fly)
             } else if (weAreIn == Pages.minePage) {
-                Color(.blue)
+                Color("LightGray")
                 MinePageContentView()
                     .transition(.fly)
             }
@@ -62,8 +63,11 @@ struct PageSelector: View {
             PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.minePage)
         }
             .padding()
-            .background(Color.white.opacity(0.3))
-            .clipShape(RoundedRectangle(cornerRadius: 50))
+            .background(
+                RoundedRectangle(cornerRadius: 50)
+                    .foregroundColor(Color.white.opacity(0.3))
+//                    .shadow(radius: 5)
+            )
     }
 }
 

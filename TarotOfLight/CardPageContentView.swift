@@ -15,28 +15,36 @@ struct CardPageContentView: View {
 //        ZStack(alignment: .center) {
 //            ShinyText(text: "让我们看看是谁的字体还没换过来", font: "DFPHeiW12-GB", size: 20, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime").opacity(0.75), isScaling: true)
 //        }
+
         VStack() {
             VStack(alignment: .leading) {
-                ShinyText(text: "卜光牌阵", font: "DFPHeiW12-GB", size: 40, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true).padding(.bottom).padding(.top, 60)
+                ShinyText(text: "卜光牌阵", font: "DFPHeiW12-GB", size: 40, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true)
+                    .padding(.bottom)
+                    .padding(.top, 60)
+                    .background(
+                        ShinyBackground(
+                            size: CGSize(
+                                width: UIScreen.main.bounds.width,
+                                height: UIScreen.main.bounds.height
+                            )
+                        )
+                    )
                 ShinyText(text: "让塔罗和光给予你最善意的指引", font: "DFPHeiW12-GB", size: 20, maxScale: 1.5, textColor: Color("MediumLime").opacity(0.65), shadowColor: Color("Lime"), isScaling: true)
 
             }.offset(x: -30)
 
             VStack {
                 HStack {
-                    CategorySelectorView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory, whoWeAre: .love)
-                    CategorySelectorView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory, whoWeAre: .career)
+                    CategorySelectorView(weAreInGlobal: self.$weAreInGlobal, weAreInCategory: self.$weAreInCategory, whoWeAre: .love)
+                    CategorySelectorView(weAreInGlobal: self.$weAreInGlobal, weAreInCategory: self.$weAreInCategory, whoWeAre: .career)
                 }.padding(.top)
                 HStack {
-                    CategorySelectorView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory, whoWeAre: .wealth)
-                    CategorySelectorView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory, whoWeAre: .relation)
+                    CategorySelectorView(weAreInGlobal: self.$weAreInGlobal, weAreInCategory: self.$weAreInCategory, whoWeAre: .wealth)
+                    CategorySelectorView(weAreInGlobal: self.$weAreInGlobal, weAreInCategory: self.$weAreInCategory, whoWeAre: .relation)
                 }.padding(.bottom)
             }.padding(.horizontal, 20)
 
-
-//            Spacer(minLength: 180)
         }
-            .background(ShinyBackground(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)))
             .padding(.bottom, 200)
     }
 }

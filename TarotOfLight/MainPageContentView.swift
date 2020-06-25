@@ -62,7 +62,7 @@ struct MainPageContentView: View {
             // This image shoulde be at the bottom of the whole screen
 
             Color("MediumPurple")
-                .frame(width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 200))
+                .frame(width: UIScreen.main.bounds.width * 2, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 200))
                 .clipShape(RoundedRectangle(cornerRadius: 38))
                 .opacity(isFull ? 0 : 1)
 
