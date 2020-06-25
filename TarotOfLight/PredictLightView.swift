@@ -12,6 +12,7 @@ import SDWebImageSwiftUI
 
 struct PredictLightView: View {
     @State var weAreIn = PredictLightViewSelection.animation
+    @Binding var weAreInGlobal: GlobalViewSelection
     @State var plantFullAnimating: Bool = true
 
     var body: some View {
@@ -36,6 +37,7 @@ struct PredictLightView: View {
             } else if(weAreIn == .arCamera) {
                 Spacer()
             }
+//        }.edgesIgnoringSafeArea(.all)
         }
     }
 }

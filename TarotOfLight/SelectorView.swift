@@ -11,6 +11,8 @@ import SwiftUI
 
 struct SelectorView: View {
     @State var weAreIn = Pages.mainPage
+    @Binding var weAreInGlobal: GlobalViewSelection
+    @Binding var weAreInCategory: CategorySelection
     @State var progress = 30.0
     var isFull: Bool {
         get {
@@ -32,7 +34,7 @@ struct SelectorView: View {
                     .transition(.fly)
             } else if (weAreIn == Pages.cardPage) {
                 Color("MediumDarkPurple")
-                CardPageContentView()
+                CardPageContentView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
                     .transition(.fly)
             } else if (weAreIn == Pages.minePage) {
                 Color(.blue)
@@ -44,7 +46,8 @@ struct SelectorView: View {
             // The page selector, should remain if we're only navigating around different pages
             // And it should go when the scene is completely changed
             PageSelector(weAreIn: $weAreIn).padding(.bottom, 50)
-        }.edgesIgnoringSafeArea(.all)
+//        }.edgesIgnoringSafeArea(.all)
+        }
     }
 }
 
@@ -118,14 +121,5 @@ extension Color {
             blue: components.B,
             opacity: alpha
         )
-    }
-}
-
-// Previewer
-struct SelectorView_preview: PreviewProvider {
-    static var previews: some View {
-        SelectorView()
-            .previewDevice(PreviewDevice(rawValue: "iPhone 11"))
-            .previewDisplayName("iPhone 11")
     }
 }

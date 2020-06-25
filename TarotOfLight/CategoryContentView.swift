@@ -14,8 +14,28 @@ struct CategoryContentView: View {
     }
 }
 
-struct CategoryContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        CategoryContentView()
+// Page changer
+enum CategorySelection: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .love: return "love"
+        case .relation: return "relation"
+        case .career: return "career"
+        case .wealth: return "wealth"
+        }
     }
+    
+    var descriptionChinese: String {
+        switch self {
+        case .love: return "遇见感情"
+        case .relation: return "人际交往"
+        case .career: return "事业先知"
+        case .wealth: return "财富世运"
+        }
+    }
+
+    case love
+    case relation
+    case career
+    case wealth
 }
