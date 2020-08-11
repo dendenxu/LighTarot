@@ -11,17 +11,19 @@ import SwiftUI
 import UIKit
 
 struct ContentView: View {
-    @State var weAreInGlobal = GlobalViewSelection.selector
-    @State var weAreInCategory = CategorySelection.love
-
+    @State var weAreInGlobal: GlobalViewSelection = .selector
+    @State var weAreInCategory: CategorySelection = .love
+    @State var weAreInSelector: SelectorSelection = .mainPage
     var body: some View {
         ZStack(alignment: .bottom) {
             if (weAreInGlobal == .selector) {
-                SelectorView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
-                    .transition(.fly)
+                SelectorView(weAreInSelector: $weAreInSelector, weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
+                    .transition(.scale(scale: 0.001))
+//                .transition(.fade)
             } else if (weAreInGlobal == .predictLight) {
-                PredictLightView(weAreInGlobal: $weAreInGlobal)
-                    .transition(.fly)
+                PredictLightView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
+                    .transition(.scale(scale: 0.001))
+//                .transition(.fade)
             }
         }.edgesIgnoringSafeArea(.all)
         // FIXME: when using if to select between two global view, we'll get strange animation for MainPageContentView

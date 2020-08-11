@@ -48,10 +48,10 @@ extension CGSize {
 struct ShinyPentagram: View {
     var originSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
     var offsetView: CGSize
-    var scale = CGFloat.random(in: 1..<2)
+    var scale = CGFloat.random(in: 1..<1.2)
     var maxAngle = 360.0
     var selfMaxAngle = 1440.0
-    var viewSize: CGFloat = 3.0
+    var viewSize: CGFloat = 30.0
     var imageName = "starstroke"
     var shineAnimation: Animation {
         get {
@@ -64,7 +64,7 @@ struct ShinyPentagram: View {
         get {
             Animation
                 .linear(duration: 30 * Double.random(in: 0.5..<1))
-                .repeatForever(autoreverses: false)
+                .repeatForever(autoreverses: true)
         }
     }
 

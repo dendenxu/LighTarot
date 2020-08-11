@@ -11,8 +11,9 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct PredictLightView: View {
-    @State var weAreIn = PredictLightViewSelection.animation
+    @State var weAreIn = PredictLightViewSelection.category
     @Binding var weAreInGlobal: GlobalViewSelection
+    @Binding var weAreInCategory: CategorySelection
     @State var plantFullAnimating: Bool = true
 
     var body: some View {
@@ -33,12 +34,13 @@ struct PredictLightView: View {
 
                 }
             } else if(weAreIn == .category) {
-                Spacer()
+                Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: 38))
+                CategoryView(weAreInCategory: $weAreInCategory, weAreInGlobal: $weAreInGlobal)
             } else if(weAreIn == .arCamera) {
                 Spacer()
             }
 //        }.edgesIgnoringSafeArea(.all)
-        }
+        }.clipShape(RoundedRectangle(cornerRadius: 38))
     }
 }
 

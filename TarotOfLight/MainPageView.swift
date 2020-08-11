@@ -1,5 +1,5 @@
 //
-//  MainPageContentView.swift
+//  MainPageView.swift
 //  TarotOfLight
 //
 //  Created by xzdd on 2020/6/24.
@@ -17,7 +17,7 @@ func randomPositionAroundCircle(size: CGSize) -> CGSize {
     return CGSize(width: cos(angle) * radius * scale, height: sin(angle) * radius * scale)
 }
 
-struct MainPageContentView: View {
+struct MainPageView: View {
     var isFull: Bool {
         get {
             return progress >= 100.0
@@ -93,7 +93,7 @@ struct MainPageContentView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 120, height: 120)
-                            .shadow(color: Color("MediumLime").opacity(0.6), radius: 10)
+                            .shadow(color: Color("MediumLime").opacity(0.3), radius: 5)
                         HStack(spacing: 0) {
                             Image("power")
                                 .renderingMode(.original)

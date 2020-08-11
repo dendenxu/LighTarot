@@ -1,5 +1,5 @@
 //
-//  CardPageContentView.swift
+//  CardPageView.swift
 //  TarotOfLight
 //
 //  Created by xzdd on 2020/6/24.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct CardPageContentView: View {
+struct CardPageView: View {
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreInCategory: CategorySelection
     var body: some View {
@@ -53,33 +53,42 @@ struct CardPageContentView: View {
 struct CategorySelectorView: View {
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreInCategory: CategorySelection
+    @State var isButtonReleased = false
     var whoWeAre = CategorySelection.love
     var imageScale: CGFloat = 0.7
     var body: some View {
-        Button(action: {
-            withAnimation(springAnimation) {
-                self.weAreInGlobal = .predictLight
-                self.weAreInCategory = self.whoWeAre
-            }
-        }) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 38).foregroundColor(Color("LightMediumDarkPurple"))
-                VStack {
-                    GeometryReader {
-                        geometry in
-                        Image(self.whoWeAre.description)
-                            .renderingMode(.original)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: geometry.size.width * self.imageScale, height: geometry.size.height * self.imageScale)
-                            .shadow(color: Color("Lime"), radius: 5)
-//                            .offset(y: -15)
-                    }
-
-                    ShinyText(text: whoWeAre.descriptionChinese, font: "DFPHeiW12-GB", size: 20, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true)
-                        .offset(y: -30)
+        GeometryReader {
+            geometry in
+            Button(action: {
+                withAnimation(springAnimation) {
+                    self.weAreInGlobal = .predictLight
+                    self.weAreInCategory = self.whoWeAre
                 }
-            }.shadow(radius: 20).padding()
+                withAnimation(springAnimation) {
+                    self.isButtonReleased = true
+                }
+//                self.isButtonReleased = false
+            }) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 38).foregroundColor(Color("LightMediumDarkPurple"))
+                    VStack {
+                        GeometryReader {
+                            geometry in
+                            Image(self.whoWeAre.description)
+                                .renderingMode(.original)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: geometry.size.width * self.imageScale, height: geometry.size.height * self.imageScale)
+                                .shadow(color: Color("Lime"), radius: 5)
+                        }
+
+                        ShinyText(text: self.whoWeAre.descriptionChinese, font: "DFPHeiW12-GB", size: 20, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true)
+                            .offset(y: -30)
+                    }
+                }.shadow(radius: 20).padding()
+            }
+//            .scaleEffect(self.isButtonReleased ? 1.2 : 1)
         }
     }
 }
+

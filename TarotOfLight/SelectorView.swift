@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct SelectorView: View {
-    @State var weAreIn = Pages.mainPage
+    @Binding var weAreInSelector: SelectorSelection
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreInCategory: CategorySelection
     @State var progress = 30.0
@@ -29,38 +29,38 @@ struct SelectorView: View {
             // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
 
             // We're defining pages after a background color so that they can use different transition when loading
-            if (weAreIn == Pages.mainPage) {
+            if (weAreInSelector == SelectorSelection.mainPage) {
                 Color(isFull ? "MediumDarkPurple" : "LightGray")
-                MainPageContentView(progress: $progress)
+                MainPageView(progress: $progress)
                     .transition(.fly)
-            } else if (weAreIn == Pages.cardPage) {
+            } else if (weAreInSelector == SelectorSelection.cardPage) {
                 Color("MediumDarkPurple")
-                CardPageContentView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
+                CardPageView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
                     .transition(.fly)
-            } else if (weAreIn == Pages.minePage) {
+            } else if (weAreInSelector == SelectorSelection.minePage) {
                 Color("LightGray")
-                MinePageContentView()
+                MinePageView()
                     .transition(.fly)
             }
 
 
             // The page selector, should remain if we're only navigating around different pages
             // And it should go when the scene is completely changed
-            PageSelector(weAreIn: $weAreIn).padding(.bottom, 50)
+            PageSelector(weAreIn: $weAreInSelector).padding(.bottom, 50)
 //        }.edgesIgnoringSafeArea(.all)
-        }
+        }.clipShape(RoundedRectangle(cornerRadius: 38))
     }
 }
 
 
 // The page selector view with slightly tailored edge
 struct PageSelector: View {
-    @Binding var weAreIn: Pages
+    @Binding var weAreIn: SelectorSelection
     var body: some View {
         HStack {
-            PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.mainPage)
-            PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.cardPage)
-            PageSelectorButton(weAreIn: $weAreIn, whoWeAre: Pages.minePage)
+            PageSelectorButton(weAreIn: $weAreIn, whoWeAre: SelectorSelection.mainPage)
+            PageSelectorButton(weAreIn: $weAreIn, whoWeAre: SelectorSelection.cardPage)
+            PageSelectorButton(weAreIn: $weAreIn, whoWeAre: SelectorSelection.minePage)
         }
             .padding()
             .background(
@@ -74,8 +74,8 @@ struct PageSelector: View {
 // Buttons in the page selector, using enum to avoid raw string
 // which could lead to typo that compiler cannot foresee
 struct PageSelectorButton: View {
-    @Binding var weAreIn: Pages
-    let whoWeAre: Pages
+    @Binding var weAreIn: SelectorSelection
+    let whoWeAre: SelectorSelection
     var body: some View {
         Button(action: {
             withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
@@ -93,7 +93,7 @@ struct PageSelectorButton: View {
 }
 
 // Page changer
-enum Pages: CustomStringConvertible {
+enum SelectorSelection: CustomStringConvertible {
     var description: String {
         switch self {
         case .mainPage: return "mainPage"
