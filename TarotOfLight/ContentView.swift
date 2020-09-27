@@ -19,11 +19,9 @@ struct ContentView: View {
             if (weAreInGlobal == .selector) {
                 SelectorView(weAreInSelector: $weAreInSelector, weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
                     .transition(.scale(scale: 0.001))
-//                .transition(.fade)
             } else if (weAreInGlobal == .predictLight) {
                 PredictLightView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
                     .transition(.scale(scale: 0.001))
-//                .transition(.fade)
             }
         }.edgesIgnoringSafeArea(.all)
         // FIXME: when using if to select between two global view, we'll get strange animation for MainPageContentView

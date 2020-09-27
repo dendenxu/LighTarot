@@ -71,19 +71,17 @@ struct CategorySelectorView: View {
             }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 38).foregroundColor(Color("LightMediumDarkPurple"))
-                    VStack {
-                        GeometryReader {
-                            geometry in
-                            Image(self.whoWeAre.description)
-                                .renderingMode(.original)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width * self.imageScale, height: geometry.size.height * self.imageScale)
-                                .shadow(color: Color("Lime"), radius: 5)
-                        }
-
+                    VStack(alignment: .center) {
+                        Image(self.whoWeAre.description)
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: geometry.size.width * self.imageScale, height: geometry.size.height * self.imageScale)
+                            .shadow(color: Color("Lime"), radius: 5)
+                            .offset(x: 0, y: 0)
                         ShinyText(text: self.whoWeAre.descriptionChinese, font: "DFPHeiW12-GB", size: 20, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true)
-                            .offset(y: -30)
+                            .padding(.bottom, 30)
+
                     }
                 }.shadow(radius: 20).padding()
             }

@@ -30,7 +30,7 @@ struct MinePageView: View {
 
             ZStack {
                 WebImage(
-                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "tudou", ofType: "gif") ?? "tudou.gif"),
+                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "cute", ofType: "gif") ?? "cute.gif"),
                     isAnimating: self.$tudouAnimating)
                     .resizable()
                     .playbackRate(1.0)
@@ -66,8 +66,9 @@ struct MinePageView: View {
 
             Text("资料完整度越高，占卜越真实哦！")
                 .font(.custom("Source Han Sans Medium", size: 15))
-                .opacity(0.25)
+                .foregroundColor(Color.black.opacity(0.4))
                 .padding()
+            
             Spacer(minLength: 200)
         }
     }
@@ -83,9 +84,8 @@ struct textField: View {
             HStack {
                 Text(text)
                     .font(.custom("Source Han Sans Medium", size: 16))
-                    .foregroundColor(.black)
+                    .foregroundColor(Color.black.opacity(0.4))
                     .padding(.leading, 10)
-                    .opacity(0.2)
                 Spacer()
                 Image(imageName)
                     .resizable()

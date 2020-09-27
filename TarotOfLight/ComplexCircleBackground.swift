@@ -33,8 +33,9 @@ struct ComplexCircleBackground: View {
                 if (self.isFull) {
                     Rectangle()
                         .foregroundColor(Color(self.shadeColor))
-                        .frame(width: geometry.size.width * self.globalScale, height: geometry.size.width * self.globalScale * 2)
-                        .rotationEffect(.degrees(45))
+//                        .frame(width: geometry.size.width * self.globalScale, height: geometry.size.width * self.globalScale * 2)
+                        .scaleEffect(x: self.globalScale * 2, y: self.globalScale, anchor: .center)
+                        .rotationEffect(.degrees(-45))
                         .offset(x: geometry.size.width * self.globalScale * sqrt(2) / 2, y: -geometry.size.width * self.globalScale * sqrt(2) / 2)
                 }
 

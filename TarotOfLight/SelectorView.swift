@@ -13,7 +13,7 @@ struct SelectorView: View {
     @Binding var weAreInSelector: SelectorSelection
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreInCategory: CategorySelection
-    @State var progress = 30.0
+    @State var progress = 10.0
     var isFull: Bool {
         get {
             return progress >= 100.0
@@ -42,12 +42,7 @@ struct SelectorView: View {
                 MinePageView()
                     .transition(.fly)
             }
-
-
-            // The page selector, should remain if we're only navigating around different pages
-            // And it should go when the scene is completely changed
             PageSelector(weAreIn: $weAreInSelector).padding(.bottom, 50)
-//        }.edgesIgnoringSafeArea(.all)
         }.clipShape(RoundedRectangle(cornerRadius: 38))
     }
 }

@@ -33,6 +33,7 @@
 		B970A60A24A3704700B68189 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60924A3704700B68189 /* CategoryView.swift */; };
 		B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60B24A370EE00B68189 /* SelectorView.swift */; };
 		B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60D24A3710A00B68189 /* PredictLightView.swift */; };
+		B994C6552520CD6A00320750 /* cute.gif in Resources */ = {isa = PBXBuildFile; fileRef = B994C6542520CD6A00320750 /* cute.gif */; };
 		B9ED187B24A4ED9600327351 /* tudou.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9ED187A24A4ED9600327351 /* tudou.gif */; };
 		B9EE5ED824A459AA00D8C58F /* grown.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED624A459AA00D8C58F /* grown.gif */; };
 		B9EE5ED924A459AA00D8C58F /* growing.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED724A459AA00D8C58F /* growing.gif */; };
@@ -67,6 +68,7 @@
 		B970A60924A3704700B68189 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		B970A60B24A370EE00B68189 /* SelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
 		B970A60D24A3710A00B68189 /* PredictLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictLightView.swift; sourceTree = "<group>"; };
+		B994C6542520CD6A00320750 /* cute.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cute.gif; sourceTree = "<group>"; };
 		B9ED187A24A4ED9600327351 /* tudou.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tudou.gif; sourceTree = "<group>"; };
 		B9EE5ED624A459AA00D8C58F /* grown.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = grown.gif; sourceTree = "<group>"; };
 		B9EE5ED724A459AA00D8C58F /* growing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = growing.gif; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 		34673E8A2494E8CC00712F38 /* TarotOfLight */ = {
 			isa = PBXGroup;
 			children = (
+				B994C6542520CD6A00320750 /* cute.gif */,
 				B9ED187A24A4ED9600327351 /* tudou.gif */,
 				B9EE5ED724A459AA00D8C58F /* growing.gif */,
 				B9EE5ED624A459AA00D8C58F /* grown.gif */,
@@ -176,7 +179,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = xz;
 				TargetAttributes = {
 					34673E872494E8CC00712F38 = {
@@ -221,6 +224,7 @@
 				344A69BA24961F7200B818A4 /* SourceHanSans-Medium.ttc in Resources */,
 				3422C1802495EB9000296A18 /* tide.gif in Resources */,
 				344A69B82496191D00B818A4 /* SourceHanSerif-Heavy.ttc in Resources */,
+				B994C6552520CD6A00320750 /* cute.gif in Resources */,
 				34673E922494E8D300712F38 /* Assets.xcassets in Resources */,
 				344A69BC2496232800B818A4 /* SourceHanSans-Heavy.ttc in Resources */,
 			);
@@ -292,6 +296,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -352,6 +357,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

@@ -18,23 +18,14 @@ struct ShinyText: View {
     var isScaling = false
     @State var isAtMaxScale = false
     var body: some View {
-
-        ZStack {
-//            GeometryReader { geometry in
-            Text(self.text)
-                .font(.custom(self.font, size: self.size))
-//                .font(.custom(self.font, size: self.isScaling && self.isAtMaxScale ? self.size * self.maxScale : self.size))
-//                .frame(width : self.isScaling && self.isAtMaxScale ? geometry.size.width : geometry.size.width / self.maxScale)
-//                .minimumScaleFactor(self.isScaling && self.isAtMaxScale ? self.size * self.maxScale : self.size)
+        Text(self.text)
+            .font(.custom(self.font, size: self.size))
             .foregroundColor(textColor)
-//                .background(ComplexCircleBackground(isFull: false).frame(width: self.isScaling && self.isAtMaxScale ? geometry.size.width : geometry.size.width / self.maxScale))
             .shadow(color: self.shadowColor.opacity(self.isAtMaxScale ? 0.8 : 0.5), radius: 10 * (self.isAtMaxScale ? 1 / self.maxScale : self.maxScale))
-                .onAppear() {
-                    withAnimation(shineAnimationOuter) {
-                        self.isAtMaxScale.toggle()
-                    }
-            }
-//            }
+            .onAppear() {
+                withAnimation(shineAnimationOuter) {
+                    self.isAtMaxScale.toggle()
+                }
         }
     }
 }

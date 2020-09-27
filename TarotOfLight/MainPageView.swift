@@ -17,7 +17,26 @@ func randomPositionAroundCircle(size: CGSize) -> CGSize {
     return CGSize(width: cos(angle) * radius * scale, height: sin(angle) * radius * scale)
 }
 
+struct MyRecBackground: View {
+    var body: some View {
+        GeometryReader { geo in
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .strokeBorder(
+                        style: StrokeStyle(
+                            lineWidth: 2,
+                            dash: [2]
+                        )
+                    )
+                    .foregroundColor(Color("Lime"))
+                    .scaleEffect(x: 1.3, y: 1, anchor: .center)
+            }
+        }
+    }
+}
+
 struct MainPageView: View {
+    let dailyPadding: CGFloat = 20.0
     var isFull: Bool {
         get {
             return progress >= 100.0
@@ -58,36 +77,40 @@ struct MainPageView: View {
 
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack {
+
+            // background image
             // This image shoulde be at the bottom of the whole screen
+            if (isFull) {
+                Color("MediumDarkPurple")
+                    .frame(width: UIScreen.main.bounds.width)
+                    .clipShape(RoundedRectangle(cornerRadius: 38))
+            } else {
+                VStack {
+                    Spacer()
+                    ZStack(alignment: .bottom) {
+                        Color("MediumPurple")
+                            .frame(width: UIScreen.main.bounds.width * 2, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 50))
+                            .clipShape(RoundedRectangle(cornerRadius: 38))
+                        WebImage(
+                            url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
+                            isAnimating: self.$tideAnimating)
+                            .resizable()
+                            .playbackRate(1.0)
+                            .retryOnAppear(true)
+                            .scaledToFit()
+                            .frame(width: UIScreen.main.bounds.width * self.tideScale)
+                            .offset(y: -UIScreen.main.bounds.height * (CGFloat(progress)) / 100 + 150)
+//                            .offset(y:0)
+                    }
 
-            Color("MediumPurple")
-                .frame(width: UIScreen.main.bounds.width * 2, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 200))
-                .clipShape(RoundedRectangle(cornerRadius: 38))
-                .opacity(isFull ? 0 : 1)
-
-
-            WebImage(
-                url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
-                isAnimating: self.$tideAnimating)
-                .resizable()
-                .playbackRate(1.0)
-                .retryOnAppear(true)
-                .scaledToFit()
-                .frame(width: UIScreen.main.bounds.width * self.tideScale)
-                .offset(y: UIScreen.main.bounds.height * (100 - CGFloat(progress)) / 100 - 600)
-                .opacity(isFull ? 0 : 1)
-
-
-            Color("MediumDarkPurple")
-                .frame(width: UIScreen.main.bounds.width)
-                .clipShape(RoundedRectangle(cornerRadius: 38))
-                .opacity(self.isFull ? 1 : 0)
+                }
+            }
 
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
-                HStack {
-                    VStack() {
+                HStack { // The top two objects
+                    VStack { // The energy bar
                         Image("buguang")
                             .renderingMode(.original)
                             .resizable()
@@ -103,36 +126,29 @@ struct MainPageView: View {
                                 .shadow(radius: 2)
                             LittleProgressBar(value: $progress).offset(x: -10)
                         }.offset(x: 10, y: -30)
-                    }
-                        .padding(.bottom)
-                        .padding(.trailing, 20)
+                    }.padding(.trailing, dailyPadding)
 
 
-                    Button(action: {
+                    Button(action: { // The Daily
                         withAnimation(springAnimation) {
-                            self.progress += 30
+                            self.progress += 15
                             if (self.progress >= 100.0) {
                                 self.progress = 100.0
                             }
-//                            print("Screen height would be: \(UIScreen.main.bounds.height)")
                         }
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(isFull ? Color("MediumPurple") : .white)
-                                .frame(width: 100, height: 125)
                                 .shadow(radius: 10)
                             VStack {
                                 Text("\(String(nowDate.year ?? 2000))年\(String(nowDate.month ?? 7))月")
                                     .onAppear(perform: {
                                         _ = self.timer
-//                                        self.tideAnimating = true
-//                                        print("Tide animating is set to true")
-//                                        print("\(self.tideAnimating)")
                                     })
                                     .foregroundColor(Color("Lime"))
                                     .font(.custom("Source Han Sans Heavy", size: 16))
-                                    .offset(y: 10)
+                                    .padding(.top, 10)
                                 // Don't create another timer here
                                 Text("\(String(nowDate.day ?? 10))")
                                     .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
@@ -141,37 +157,21 @@ struct MainPageView: View {
                                 Text("日签")
                                     .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
                                     .font(.custom("Source Han Sans Heavy", size: 25))
-                                    .background(GeometryReader { geometry in
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .strokeBorder(
-                                                style: StrokeStyle(
-                                                    lineWidth: 2,
-                                                    dash: [2]
-                                                )
-                                            )
-                                            .foregroundColor(Color("Lime"))
-                                            .frame(width: geometry.size.width * 1.3)
-                                    })
-                            }.offset(y: -10)
-                        }
-                            .padding()
-                            .offset(y: -5)
-                            .padding(.leading, 20)
-
-                    }
-
-
-                }.padding(.bottom) // Magic Value
-                .offset(y: -10)
-                    .zIndex(1) // So that daily prediction won't overlay with the shadow
+                                    .overlay(MyRecBackground())
+                                
+                                Spacer()
+                            }
+                        }.frame(width: 100, height: 125)
+                    }.padding(.leading, dailyPadding)
+                }.zIndex(1) // So that daily prediction won't overlay with the shadow
+                .padding(.top, 80 - 20 * CGFloat(progress) / 100)
 
 
                 AnimatingPlant(progress: progress, tideAnimating: $tideAnimating, growingAnimating: $grownAnimating, grownAnimating: $grownAnimating)
                     .zIndex(0.5)
-//                    .offset(y: isFull ? -60 : -20)
-                    // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)
-                    // FIXME: When we're using too large an offset, like .offset(y: CGFloat(progress)) directly, the Swift compiler crashes, returning non-zero value
-                    .offset(y: -20 - 40 * CGFloat(progress)/100)
+                // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)
+                // FIXME: When we're using too large an offset, like .offset(y: CGFloat(progress)) directly, the Swift compiler crashes, returning non-zero value
+                .padding(.bottom, 20 + 10 * CGFloat(progress) / 100)
 
 
                 if (isFull) {
@@ -184,34 +184,27 @@ struct MainPageView: View {
                         }
                     }) {
                         ZStack(alignment: .center) {
+                            ComplexCircleBackground(shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false)
+                                .frame(width: 100, height: 100)
                             ShinyText()
-                                .background(ComplexCircleBackground(globalScale: 1.5, borderScale: 1.1, shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false))
-                                .padding(.top, 40) // Magic Value
-                            .padding(.bottom, 20) // Magic Value
                         }
-                    }.offset(y: -30)
-
+                    }
                 } else {
 
                     // To use custom font, be sure to have already added them in info.plist
                     // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
                     // and: https://medium.com/better-programming/swiftui-basics-importing-custom-fonts-b6396d17424d
                     Text("在时间和光的交汇点")
-//                        .font(.custom("Source Han Sans Heavy", size: 25))
-                    .font(.custom("DFPHeiW12-GB", size: 25))
+                        .font(.custom("DFPHeiW12-GB", size: 25))
                         .foregroundColor(Color("MediumLime"))
                         .padding(.bottom, 10)
-//                    Spacer(minLength: 10)
                     Text("遇见自己")
-//                        .font(.custom("Source Han Sans Heavy", size: 25))
-                    .font(.custom("DFPHeiW12-GB", size: 25))
+                        .font(.custom("DFPHeiW12-GB", size: 25))
                         .foregroundColor(Color("MediumLime"))
                         .padding(.bottom, 20)
-//                    Spacer()
                 }
-            }.padding(.bottom, 170) // Magic Value
-
-            // STUB: adding a frame width limitation so that the animation wouldn't looking funny
+                Spacer()
+            }
         }.frame(width: UIScreen.main.bounds.width)
     }
 }
@@ -232,33 +225,6 @@ struct AnimatingPlant: View {
             // FIXME: change to two
 
             WebImage(
-                url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"),
-                isAnimating: self.$tideAnimating)
-                .resizable()
-                .playbackRate(1.0)
-                .retryOnAppear(true)
-                .scaledToFill()
-                .frame(width: 350, height: 350)
-                .background(ComplexCircleBackground(isFull: isFull))
-                .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
-                .opacity(isFull ? 0 : 1)
-                .animation(.easeInOut(duration: isFull ? 2.0 : 0.1))
-
-            WebImage(
-                url: URL(fileURLWithPath: Bundle.main.path(forResource: "growing", ofType: "gif") ?? "growing.gif"),
-                isAnimating: self.$growingAnimating)
-                .resizable()
-                .playbackRate(1.0)
-                .retryOnAppear(true)
-                .scaledToFill()
-                .frame(width: 350, height: 350)
-                .background(ComplexCircleBackground(isFull: isFull))
-                .shadow(color: Color("Lime").opacity(0.3), radius: 10)
-                .opacity(isFull ? 1 : 0)
-                .animation(Animation.easeInOut(duration: 0.1))
-
-
-            WebImage(
                 url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
                 isAnimating: self.$grownAnimating)
                 .resizable()
@@ -267,12 +233,33 @@ struct AnimatingPlant: View {
                 .scaledToFill()
                 .frame(width: 350, height: 350)
                 .background(ComplexCircleBackground(isFull: isFull))
-                .shadow(color: Color("Lime").opacity(0.3), radius: 10)
-                .opacity(isFull ? 1 : 0)
-                .animation(Animation.easeInOut(duration: 0.1).delay(isFull ? 1.0 : 0))
+                .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
 
-
-
+//            if (isFull) {
+//                WebImage(
+//                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
+//                    isAnimating: self.$grownAnimating)
+//                    .resizable()
+//                    .playbackRate(1.0)
+//                    .retryOnAppear(true)
+//                    .scaledToFill()
+//                    .frame(width: 350, height: 350)
+//                    .background(ComplexCircleBackground(isFull: isFull))
+//                    .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
+////                    .animation(Animation.easeInOut(duration: 0.1).delay(isFull ? 1.0 : 0))
+//            } else {
+//                WebImage(
+//                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"),
+//                    isAnimating: self.$tideAnimating)
+//                    .resizable()
+//                    .playbackRate(1.0)
+//                    .retryOnAppear(true)
+//                    .scaledToFill()
+//                    .frame(width: 350, height: 350)
+//                    .background(ComplexCircleBackground(isFull: isFull))
+//                    .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
+////                    .animation(.easeInOut(duration: isFull ? 2.0 : 0.1))
+//            }
             ForEach(0..<5) { number in
                 ShinyStar(
                     offset: randomPositionAroundCircle(
