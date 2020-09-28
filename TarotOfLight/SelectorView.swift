@@ -43,7 +43,7 @@ struct SelectorView: View {
                     .transition(.fly)
             }
             PageSelector(weAreIn: $weAreInSelector).padding(.bottom, 50)
-        }.clipShape(RoundedRectangle(cornerRadius: 38))
+        }.clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
     }
 }
 

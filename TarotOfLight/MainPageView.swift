@@ -36,7 +36,6 @@ struct MyRecBackground: View {
 }
 
 struct MainPageView: View {
-    let dailyPadding: CGFloat = 20.0
     var isFull: Bool {
         get {
             return progress >= 100.0
@@ -84,14 +83,14 @@ struct MainPageView: View {
             if (isFull) {
                 Color("MediumDarkPurple")
                     .frame(width: UIScreen.main.bounds.width)
-                    .clipShape(RoundedRectangle(cornerRadius: 38))
+                    .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
             } else {
                 VStack {
                     Spacer()
                     ZStack(alignment: .bottom) {
                         Color("MediumPurple")
                             .frame(width: UIScreen.main.bounds.width * 2, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 50))
-                            .clipShape(RoundedRectangle(cornerRadius: 38))
+                            .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                         WebImage(
                             url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
                             isAnimating: self.$tideAnimating)
@@ -109,7 +108,7 @@ struct MainPageView: View {
 
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
-                HStack { // The top two objects
+                HStack(spacing: 40) { // The top two objects
                     VStack { // The energy bar
                         Image("buguang")
                             .renderingMode(.original)
@@ -126,12 +125,12 @@ struct MainPageView: View {
                                 .shadow(radius: 2)
                             LittleProgressBar(value: $progress).offset(x: -10)
                         }.offset(x: 10, y: -30)
-                    }.padding(.trailing, dailyPadding)
+                    }
 
 
                     Button(action: { // The Daily
                         withAnimation(springAnimation) {
-                            self.progress += 15
+                            self.progress += 20
                             if (self.progress >= 100.0) {
                                 self.progress = 100.0
                             }
@@ -158,11 +157,11 @@ struct MainPageView: View {
                                     .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
                                     .font(.custom("Source Han Sans Heavy", size: 25))
                                     .overlay(MyRecBackground())
-                                
+
                                 Spacer()
                             }
                         }.frame(width: 100, height: 125)
-                    }.padding(.leading, dailyPadding)
+                    }
                 }.zIndex(1) // So that daily prediction won't overlay with the shadow
                 .padding(.top, 80 - 20 * CGFloat(progress) / 100)
 
@@ -223,7 +222,6 @@ struct AnimatingPlant: View {
         ZStack {
             // Current we using one variable for both the plant and the tide
             // FIXME: change to two
-
             WebImage(
                 url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
                 isAnimating: self.$grownAnimating)
@@ -234,32 +232,6 @@ struct AnimatingPlant: View {
                 .frame(width: 350, height: 350)
                 .background(ComplexCircleBackground(isFull: isFull))
                 .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
-
-//            if (isFull) {
-//                WebImage(
-//                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
-//                    isAnimating: self.$grownAnimating)
-//                    .resizable()
-//                    .playbackRate(1.0)
-//                    .retryOnAppear(true)
-//                    .scaledToFill()
-//                    .frame(width: 350, height: 350)
-//                    .background(ComplexCircleBackground(isFull: isFull))
-//                    .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
-////                    .animation(Animation.easeInOut(duration: 0.1).delay(isFull ? 1.0 : 0))
-//            } else {
-//                WebImage(
-//                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "plant", ofType: "gif") ?? "plant.gif"),
-//                    isAnimating: self.$tideAnimating)
-//                    .resizable()
-//                    .playbackRate(1.0)
-//                    .retryOnAppear(true)
-//                    .scaledToFill()
-//                    .frame(width: 350, height: 350)
-//                    .background(ComplexCircleBackground(isFull: isFull))
-//                    .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
-////                    .animation(.easeInOut(duration: isFull ? 2.0 : 0.1))
-//            }
             ForEach(0..<5) { number in
                 ShinyStar(
                     offset: randomPositionAroundCircle(

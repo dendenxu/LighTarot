@@ -22,7 +22,7 @@ struct PredictLightView: View {
             // Why do we have to make it inside some stack for it to be loaded?
             if (weAreIn == .animation) {
                 ZStack {
-                    Color("DarkPurple").clipShape(RoundedRectangle(cornerRadius: 38))
+                    Color("DarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     WebImage(
                         url: URL(fileURLWithPath: Bundle.main.path(forResource: "plantfull", ofType: "gif") ?? "plantfull.gif"),
                         isAnimating: self.$plantFullAnimating)
@@ -30,17 +30,17 @@ struct PredictLightView: View {
                         .playbackRate(1.0)
                         .retryOnAppear(true)
                         .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 38))
+                        .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
 
                 }
             } else if(weAreIn == .category) {
-                Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: 38))
+                Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                 CategoryView(weAreInCategory: $weAreInCategory, weAreInGlobal: $weAreInGlobal)
             } else if(weAreIn == .arCamera) {
                 Spacer()
             }
 //        }.edgesIgnoringSafeArea(.all)
-        }.clipShape(RoundedRectangle(cornerRadius: 38))
+        }.clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
     }
 }
 

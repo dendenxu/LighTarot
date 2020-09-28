@@ -59,10 +59,14 @@ struct CategoryView: View {
     }
     @Binding var weAreInCategory: CategorySelection
     @Binding var weAreInGlobal: GlobalViewSelection
+    @State var lockingSelection: LockingSelection = .locked
     @State var texts = [
         CardContent(text: "爱之🌟占卜法", energy: 50),
         CardContent(text: "吉普赛十字法", energy: 20),
         CardContent(text: "六芒🌟占卜法", energy: 30),
+        CardContent(text: "灿烂的❤️", energy: 100),
+        CardContent(text: "灿烂的❤️", energy: 100),
+        CardContent(text: "灿烂的❤️", energy: 100),
         CardContent(text: "灿烂的❤️", energy: 100),
     ]
     // todo: add code to communicate with the backend
@@ -71,21 +75,68 @@ struct CategoryView: View {
             VStack(spacing: 0) {
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .frame(width: UIScreen.main.bounds.width, height: 120)
                         .foregroundColor(Color("LightMediumDarkPurple"))
-                    Button(action: {
-                        withAnimation(springAnimation) {
-                            self.weAreInGlobal = .selector;
+                    VStack(alignment: .leading) {
+                        Button(action: {
+                            withAnimation(springAnimation) {
+                                self.weAreInGlobal = .selector;
+                            }
+                        }) {
+                            ZStack(alignment: .topLeading) {
+                                ShinyText(text: "< " + weAreInCategory.descriptionChinese, font: "DFPHeiW12-GB", size: 20, textColor: Color("LightGray"))
+                            }
                         }
-                    }) {
-                        ShinyText(text: "< " + weAreInCategory.descriptionChinese, font: "DFPHeiW12-GB", size: 20, textColor: Color("LightGray"))
-                            .offset(x: 25, y: 10)
+                            .padding(.top, 40)
+                            .padding(.leading, 20)
+
+                        Spacer()
+                        // todo: center it
+
+                        VStack(alignment: .center) {
+                            HStack {
+                                Spacer()
+                            }
+                            HStack(spacing: 30) {
+                                Button (action: {
+                                    withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
+                                        self.lockingSelection = .unlocked
+                                    } }
+                                ) {
+                                    ShinyText(text: LockingSelection.unlocked.description, font: "DFPHeiW12-GB", size: 16, textColor: lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray"), shadowColor: lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray"))
+                                }
+                                Button (action: {
+                                    withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
+                                        self.lockingSelection = .locked
+                                    } }
+                                ) {
+                                    ShinyText(text: LockingSelection.locked.description, font: "DFPHeiW12-GB", size: 16, textColor: lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray"), shadowColor: lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray"))
+                                }
+                            }
+                        }
+//                            .padding(.bottom, 5)
+
+                        VStack(alignment: .center) {
+//                            HStack {
+//                                Spacer()
+//                            }
+                            HStack(spacing: 30) {
+                                Spacer()
+                                (lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50)
+                                (lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50)
+                                Spacer()
+                            }.background(lockingSelection.backgroundColor)
+                                .frame(height: 3)
+
+                        }
                     }
+
+
                 }
-                Rectangle()
-                    .frame(width: UIScreen.main.bounds.width, height: 3)
-                    .foregroundColor(Color("MediumLime"))
-            }.shadow(radius: 20)
+
+
+            }
+                .frame(width: UIScreen.main.bounds.width, height: 120)
+                .shadow(radius: 20)
                 .zIndex(1)
 
             ScrollView {
@@ -136,4 +187,28 @@ enum CategorySelection: CustomStringConvertible {
     case relation
     case career
     case wealth
+}
+
+
+enum LockingSelection {
+    var description: String {
+        switch self {
+        case .locked: return "未解锁"
+        case .unlocked: return "已拥有"
+        }
+    }
+    var foregroundColor: Color {
+        switch self {
+        case .locked: return Color("LightPink")
+        case .unlocked: return Color("MediumLime")
+        }
+    }
+    var backgroundColor: Color {
+        switch self {
+        case .locked: return Color("DarkPurple")
+        case .unlocked: return Color("MediumLime")
+        }
+    }
+    case locked
+    case unlocked
 }

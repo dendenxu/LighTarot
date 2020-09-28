@@ -13,20 +13,16 @@ import SDWebImageSwiftUI
 struct MinePageView: View {
     @State var tudouAnimating = true
     var body: some View {
-//        Color("LightGray").clipShape(RoundedRectangle(cornerRadius: 38))
         VStack {
-            Spacer(minLength: 50)
-
             HStack {
                 Spacer()
-//                Text("Edit")
                 Image("edit")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 40)
             }.padding(.trailing, 30)
-
-            Spacer(minLength: 100)
+                .padding(.bottom, 100)
+                .padding(.top, 50)
 
             ZStack {
                 WebImage(
@@ -48,18 +44,16 @@ struct MinePageView: View {
                                 height: UIScreen.main.bounds.height
                             )
                         ).opacity(0.5)
-
                     )
             }
 
+            Spacer()
 
-            Spacer(minLength: 10)
 
             ShinyText(text: "小土豆", font: "DFPHeiW12-GB", size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3))
-
+                .padding(.top, 10)
             textField(text: "出生时间", imageName: "time")
                 .padding(.top, 30)
-
 
             textField(text: "现居地", imageName: "location")
                 .padding(.top, 30)
@@ -67,9 +61,9 @@ struct MinePageView: View {
             Text("资料完整度越高，占卜越真实哦！")
                 .font(.custom("Source Han Sans Medium", size: 15))
                 .foregroundColor(Color.black.opacity(0.4))
-                .padding()
-            
-            Spacer(minLength: 200)
+                .padding(.top, 30)
+                .padding(.bottom, 200)
+
         }
     }
 }
@@ -94,7 +88,5 @@ struct textField: View {
                     .offset(x: (imageName == "location") ? 2 : 0)
             }.padding()
         }.frame(width: 200, height: 40)
-//            .shadow(radius: 5)
-
     }
 }

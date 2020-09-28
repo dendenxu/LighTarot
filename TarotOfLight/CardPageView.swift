@@ -20,9 +20,6 @@ struct CardPageView: View {
                     .padding(.top, 60)
                     .background(
                         ShinyBackground(
-                            // FIXME: this is dirty...
-//                            rotationCenter: UnitPoint(x: 0.265, y: 0.11),
-//                            rotationCenter: UnitPoint(x: 0, y: 0),
                             size: CGSize(
                                 width: UIScreen.main.bounds.width,
                                 height: UIScreen.main.bounds.height
@@ -63,14 +60,11 @@ struct CategorySelectorView: View {
                 withAnimation(springAnimation) {
                     self.weAreInGlobal = .predictLight
                     self.weAreInCategory = self.whoWeAre
-                }
-                withAnimation(springAnimation) {
                     self.isButtonReleased = true
                 }
-//                self.isButtonReleased = false
             }) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 38).foregroundColor(Color("LightMediumDarkPurple"))
+                    RoundedRectangle(cornerRadius: .ScreenCornerRadius).foregroundColor(Color("LightMediumDarkPurple"))
                     VStack(alignment: .center) {
                         Image(self.whoWeAre.description)
                             .renderingMode(.original)
@@ -85,7 +79,6 @@ struct CategorySelectorView: View {
                     }
                 }.shadow(radius: 20).padding()
             }
-//            .scaleEffect(self.isButtonReleased ? 1.2 : 1)
         }
     }
 }

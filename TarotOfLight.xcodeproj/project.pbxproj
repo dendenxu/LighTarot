@@ -34,6 +34,7 @@
 		B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60B24A370EE00B68189 /* SelectorView.swift */; };
 		B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60D24A3710A00B68189 /* PredictLightView.swift */; };
 		B994C6552520CD6A00320750 /* cute.gif in Resources */ = {isa = PBXBuildFile; fileRef = B994C6542520CD6A00320750 /* cute.gif */; };
+		B994C6582520CF3E00320750 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B994C6572520CF3E00320750 /* Contants.swift */; };
 		B9ED187B24A4ED9600327351 /* tudou.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9ED187A24A4ED9600327351 /* tudou.gif */; };
 		B9EE5ED824A459AA00D8C58F /* grown.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED624A459AA00D8C58F /* grown.gif */; };
 		B9EE5ED924A459AA00D8C58F /* growing.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED724A459AA00D8C58F /* growing.gif */; };
@@ -69,6 +70,7 @@
 		B970A60B24A370EE00B68189 /* SelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
 		B970A60D24A3710A00B68189 /* PredictLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictLightView.swift; sourceTree = "<group>"; };
 		B994C6542520CD6A00320750 /* cute.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cute.gif; sourceTree = "<group>"; };
+		B994C6572520CF3E00320750 /* Contants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
 		B9ED187A24A4ED9600327351 /* tudou.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tudou.gif; sourceTree = "<group>"; };
 		B9EE5ED624A459AA00D8C58F /* grown.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = grown.gif; sourceTree = "<group>"; };
 		B9EE5ED724A459AA00D8C58F /* growing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = growing.gif; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				B9EE5EDA24A459F500D8C58F /* ShinyBackground.swift */,
 				B946698E24A9D19D00C8402D /* ViewCardView.swift */,
 				B970A60924A3704700B68189 /* CategoryView.swift */,
+				B994C6572520CF3E00320750 /* Contants.swift */,
 			);
 			path = TarotOfLight;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */,
 				B970A60A24A3704700B68189 /* CategoryView.swift in Sources */,
 				B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */,
+				B994C6582520CF3E00320750 /* Contants.swift in Sources */,
 				B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */,
 				34673E8E2494E8CC00712F38 /* SceneDelegate.swift in Sources */,
 				B970A60024A361CD00B68189 /* ComplexCircleBackground.swift in Sources */,
