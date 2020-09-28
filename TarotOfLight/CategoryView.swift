@@ -22,41 +22,85 @@ struct LightText: View {
     }
 
 }
-
-struct Card: View {
-    var text = "爱之星占卜法"
+struct CardContent {
+    var text = "时间之流"
+    var decription = "过去、现在和未来状况的占卜"
     var energy = 50
-    var imageName = "cardBackH"
+    var locked = false
+}
+struct Card: View {
+    @State var cardContent: CardContent
+    @Binding var lockingSelection: LockingSelection
+    var imageName: String {
+        get {
+            if self.cardContent.locked {
+                return "Gray"
+            }
+            else {
+                return (self.lockingSelection == .locked) ? "cardBackH" : "having"
+            }
+
+        }
+    }
+    var textColor: Color {
+        get {
+            return (self.lockingSelection == .locked) ? Color("LightPink") : Color("LightGray");
+        }
+    }
+    var shadowColor: Color {
+        get {
+            return (self.lockingSelection == .locked) ? Color("LightPurple") : Color("LightGray");
+        }
+    }
+    var textColorDesc: Color {
+        get {
+            return (self.lockingSelection == .locked) ? Color("Lime") : Color("LightGray");
+        }
+    }
+    var shadowColorDesc: Color {
+        get {
+            return (self.lockingSelection == .locked) ? Color("Lime") : Color("LightGray");
+        }
+    }
+
+    var imageShadowColor: Color {
+        get {
+            return (self.cardContent.locked == false) ? Color(.black).opacity(0.75) : Color(.black).opacity(0.3)
+        }
+    }
     var body: some View {
         ZStack(alignment: .topLeading) {
             Image(imageName)
                 .renderingMode(.original)
                 .resizable()
                 .scaledToFit()
-                .shadow(color: Color(.black).opacity(0.75), radius: 5)
-            VStack(alignment: .leading) {
-                LightText(text: text, font: "DFPHeiW12-GB", size: 20, textColor: Color("LightPink"), shadowColor: Color("LightPurple"))
-                    .padding(.top, 20).padding(.leading, 20)
-                HStack {
-                    Image("power")
-                        .renderingMode(.original)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                    LightText(text: String(energy) + "能量", font: "DFPHeiW12-GB", size: 16, textColor: Color("Lime"), shadowColor: Color("Lime"))
-                }.padding(.leading, 20)
+                .shadow(color: imageShadowColor, radius: 5)
+            if !cardContent.locked {
+                VStack(alignment: .leading) {
+                    LightText(text: cardContent.text, font: "DFPHeiW12-GB", size: 20, textColor: textColor, shadowColor: shadowColor)
+                        .padding(.top, 20).padding(.leading, 20)
+                    HStack {
+                        if lockingSelection == .locked {
+                            Image("power")
+                                .renderingMode(.original)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                        } else {
+                            Rectangle()
+                                .foregroundColor(Color.white.opacity(0))
+                                .frame(width: 0, height: 20)
+                        }
+                        LightText(text: String(cardContent.energy) + "能量", font: "DFPHeiW12-GB", size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
+                    }.padding(.leading, 20)
+                }
             }
-
         }
             .padding(30)
     }
 }
 
 struct CategoryView: View {
-    struct CardContent {
-        var text = "爱之🌟占卜法"
-        var energy = 50
-    }
     @Binding var weAreInCategory: CategorySelection
     @Binding var weAreInGlobal: GlobalViewSelection
     @State var lockingSelection: LockingSelection = .locked
@@ -69,6 +113,19 @@ struct CategoryView: View {
         CardContent(text: "灿烂的❤️", energy: 100),
         CardContent(text: "灿烂的❤️", energy: 100),
     ]
+    @State var unlockedTexts = [
+        CardContent(text: "时间之流", decription: "过去、现在和未来状况的占卜", locked: false),
+        CardContent(text: "吉普赛十字法", energy: 20, locked: true),
+        CardContent(text: "六芒🌟占卜法", energy: 30, locked: true),
+        CardContent(text: "灿烂的❤️", energy: 100, locked: true),
+    ]
+
+//    var touseTexts: [CardContent] {
+//        get {
+//            return (self.lockingSelection == .locked) ? self.texts : self.unlockedTexts
+//        }
+//    }
+
     // todo: add code to communicate with the backend
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -121,8 +178,8 @@ struct CategoryView: View {
 //                            }
                             HStack(spacing: 30) {
                                 Spacer()
-                                (lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50)
-                                (lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50)
+                                (lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50, height: 2).offset(y: -3)
+                                (lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50, height: 2).offset(y: -3)
                                 Spacer()
                             }.background(lockingSelection.backgroundColor)
                                 .frame(height: 3)
@@ -139,27 +196,43 @@ struct CategoryView: View {
                 .shadow(radius: 20)
                 .zIndex(1)
 
-            ScrollView {
-                if #available(iOS 14.0, *) {
-                    LazyVStack {
-                        ForEach(texts.indices) { idx in
-                            Card(text: self.texts[idx].text, energy: self.texts[idx].energy)
-                        }
-                    }
-                } else {
-                    // Fallback on earlier versions
-                    VStack {
-                        ForEach(texts.indices) { idx in
-                            Card(text: self.texts[idx].text, energy: self.texts[idx].energy)
-                        }
-                    }
-                }
-                // todo: finish the cards scroll view, currently cards are loaded statically
+            if lockingSelection == .locked {
+                FullScroll(lockingSelection: lockingSelection, texts: texts)
+                    .frame(width: UIScreen.main.bounds.width)
+                    .zIndex(0.5)
+            } else {
+                FullScroll(lockingSelection: lockingSelection, texts: unlockedTexts)
+                    .frame(width: UIScreen.main.bounds.width)
+                    .zIndex(0.5)
+            }
 
-            }.background(Color("LightGray").frame(width: UIScreen.main.bounds.width))
-                .zIndex(0.5)
         }
 
+    }
+}
+
+struct FullScroll: View {
+    @State var lockingSelection: LockingSelection
+    @State var texts: [CardContent]
+
+    var body: some View {
+        ScrollView {
+            if #available(iOS 14.0, *) {
+                LazyVStack {
+                    ForEach(texts.indices) { idx in
+                        Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection)
+                    }
+                }
+            } else {
+                // Fallback on earlier versions
+                VStack {
+                    ForEach(texts.indices) { idx in
+                        Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection)
+                    }
+                }
+            }
+            // todo: finish the cards scroll view, currently cards are loaded statically
+        }.background(Color("LightGray"))
     }
 }
 
