@@ -11,31 +11,18 @@ import SDWebImageSwiftUI
 
 
 struct MinePageView: View {
-    @State var tudouAnimating = true
-    @State var isChangingAvatar = false
-    var otherOpacity: Double {
-        get {
-            return isChangingAvatar ? 0.25 : 1
-        }
-    }
-    var avatarScale: CGFloat = 1.25
+
     @State var image: Image? = Image("head")
     @State var showImagePicker: Bool = false
     var body: some View {
         VStack {
-            VStack {
+            VStack { // FIXME: why do we need this?
                 Button(action: {
                     self.showImagePicker.toggle()
-                    print("Toggled!")
                 }) {
-                    //            WebImage(
-                    //                url: URL(fileURLWithPath: Bundle.main.path(forResource: "cute", ofType: "gif") ?? "cute.gif"),
-                    //                isAnimating: self.$tudouAnimating)
                     image?
                         .resizable()
-                    //                .playbackRate(1.0)
-                    //                .retryOnAppear(true)
-                    .scaledToFit()
+                        .scaledToFit()
                         .frame(width: 250, height: 250)
                         .clipShape(Circle())
                         .shadow(radius: 10)
@@ -48,40 +35,28 @@ struct MinePageView: View {
                                 )
                             ).opacity(0.5)
                         )
-                        .onLongPressGesture(perform: {
-                            print("Should implement changing avatar")
-                            //                    withAnimation(springAnimation) {
-                            //                        isChangingAvatar = true
-                            //                    }
-
-                        })
-                        .scaleEffect(isChangingAvatar ? avatarScale : 1)
-                        .zIndex(1)
                         .padding(.top, 150)
                 }
-            }
-                .sheet(isPresented: $showImagePicker) {
-                    ImagePicker(sourceType: .photoLibrary) { image in
-                        self.image = Image(uiImage: image)
-                    }
+            }.sheet(isPresented: $showImagePicker) {
+                ImagePicker(sourceType: .photoLibrary) { image in
+                    self.image = Image(uiImage: image)
+                }
             }
             Spacer()
+            ShinyText(text: "小土豆", font: "DFPHeiW12-GB", size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3))
+                .padding(.top, 10)
+            textField(text: "出生时间", placeholder: "出生时间", imageName: "time")
+                .padding(.top, 30)
 
-            VStack {
-                ShinyText(text: "小土豆", font: "DFPHeiW12-GB", size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3))
-                    .padding(.top, 10)
-                textField(text: "出生时间", placeholder: "出生时间", imageName: "time")
-                    .padding(.top, 30)
+            textField(text: "现居地", placeholder: "现居地", imageName: "location")
+                .padding(.top, 30)
 
-                textField(text: "现居地", placeholder: "现居地", imageName: "location")
-                    .padding(.top, 30)
+            Text("资料完整度越高，占卜越真实哦！")
+                .font(.custom("Source Han Sans Medium", size: 15))
+                .foregroundColor(Color.black.opacity(0.4))
+                .padding(.top, 30)
+                .padding(.bottom, 200)
 
-                Text("资料完整度越高，占卜越真实哦！")
-                    .font(.custom("Source Han Sans Medium", size: 15))
-                    .foregroundColor(Color.black.opacity(0.4))
-                    .padding(.top, 30)
-                    .padding(.bottom, 200)
-            }.opacity(otherOpacity)
 
         }
     }
