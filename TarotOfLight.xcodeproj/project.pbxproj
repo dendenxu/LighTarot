@@ -18,9 +18,9 @@
 		34673E922494E8D300712F38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34673E912494E8D300712F38 /* Assets.xcassets */; };
 		34673E952494E8D300712F38 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34673E942494E8D300712F38 /* Preview Assets.xcassets */; };
 		34673E982494E8D300712F38 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34673E962494E8D300712F38 /* LaunchScreen.storyboard */; };
-		34673EA32495084700712F38 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 34673EA22495084700712F38 /* SDWebImageSwiftUI */; };
 		3473C1CA24965A5D003C7321 /* plantfull.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3473C1C924965A5D003C7321 /* plantfull.gif */; };
 		B946698F24A9D19D00C8402D /* ViewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B946698E24A9D19D00C8402D /* ViewCardView.swift */; };
+		B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */; };
 		B962529324A391D4002BFE03 /* ShinyText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962529224A391D4002BFE03 /* ShinyText.swift */; };
 		B962529524A3984B002BFE03 /* DFPHeiW12-GB.TTF in Resources */ = {isa = PBXBuildFile; fileRef = B962529424A3984B002BFE03 /* DFPHeiW12-GB.TTF */; };
 		B970A5FA24A360A000B68189 /* ShinyStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5F924A360A000B68189 /* ShinyStar.swift */; };
@@ -82,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34673EA32495084700712F38 /* SDWebImageSwiftUI in Frameworks */,
+				B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +94,7 @@
 			children = (
 				34673E8A2494E8CC00712F38 /* TarotOfLight */,
 				34673E892494E8CC00712F38 /* Products */,
+				B9521E1425221B2400AC96EF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -152,6 +153,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		B9521E1425221B2400AC96EF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -169,7 +177,7 @@
 			);
 			name = TarotOfLight;
 			packageProductDependencies = (
-				34673EA22495084700712F38 /* SDWebImageSwiftUI */,
+				B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */,
 			);
 			productName = TarotOfLight;
 			productReference = 34673E882494E8CC00712F38 /* TarotOfLight.app */;
@@ -325,7 +333,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -380,7 +388,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -465,7 +473,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		34673EA22495084700712F38 /* SDWebImageSwiftUI */ = {
+		B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 34673EA12495084600712F38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
