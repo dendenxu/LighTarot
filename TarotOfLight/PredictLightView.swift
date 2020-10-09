@@ -35,7 +35,7 @@ struct PredictLightView: View {
                 }
             } else if(weAreIn == .category) {
                 Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                CategoryView(weAreInCategory: $weAreInCategory, weAreInGlobal: $weAreInGlobal)
+                CategoryView(weAreInCategory: $weAreInCategory, weAreInGlobal: $weAreInGlobal, weAreIn: $weAreIn)
             } else if(weAreIn == .arCamera) {
                 Spacer()
             }

@@ -31,6 +31,7 @@ struct CardContent {
 struct Card: View {
     @State var cardContent: CardContent
     @Binding var lockingSelection: LockingSelection
+    @Binding var weAreIn: PredictLightViewSelection
     var imageName: String {
         get {
             if self.cardContent.locked {
@@ -42,67 +43,56 @@ struct Card: View {
 
         }
     }
-    var textColor: Color {
-        get {
-            return (self.lockingSelection == .locked) ? Color("LightPink") : Color("LightGray");
-        }
-    }
-    var shadowColor: Color {
-        get {
-            return (self.lockingSelection == .locked) ? Color("LightPurple") : Color("LightGray");
-        }
-    }
-    var textColorDesc: Color {
-        get {
-            return (self.lockingSelection == .locked) ? Color("Lime") : Color("LightGray");
-        }
-    }
-    var shadowColorDesc: Color {
-        get {
-            return (self.lockingSelection == .locked) ? Color("Lime") : Color("LightGray");
-        }
-    }
-
-    var imageShadowColor: Color {
-        get {
-            return (self.cardContent.locked == false) ? Color(.black).opacity(0.75) : Color(.black).opacity(0.3)
-        }
-    }
+    var textColor: Color { get { return (self.lockingSelection == .locked) ? Color("LightPink") : Color("LightGray"); } }
+    var shadowColor: Color { get { return (self.lockingSelection == .locked) ? Color("LightPurple") : Color("LightGray"); } }
+    var textColorDesc: Color { get { return (self.lockingSelection == .locked) ? Color("Lime") : Color("LightGray"); } }
+    var shadowColorDesc: Color { get { return (self.lockingSelection == .locked) ? Color("Lime") : Color("LightGray"); } }
+    var imageShadowColor: Color { get { return (self.cardContent.locked == false) ? Color(.black).opacity(0.75) : Color(.black).opacity(0.3) } }
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            Image(imageName)
-                .renderingMode(.original)
-                .resizable()
-                .scaledToFit()
-                .shadow(color: imageShadowColor, radius: 5)
+        Button(action: {
+            print("DEBUG: Currently navigating to animation when a locked card is pressed\nand the ARCamera when card is unlocked")
+            print("Give me some action upon hitting the button")
             if !cardContent.locked {
-                VStack(alignment: .leading) {
-                    LightText(text: cardContent.text, font: "DFPHeiW12-GB", size: 20, textColor: textColor, shadowColor: shadowColor)
-                        .padding(.top, 20).padding(.leading, 20)
-                    HStack {
-                        if lockingSelection == .locked {
-                            Image("power")
-                                .renderingMode(.original)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                        } else {
-                            Rectangle()
-                                .foregroundColor(Color.white.opacity(0))
-                                .frame(width: 0, height: 20)
-                        }
-                        LightText(text: String(cardContent.energy) + "能量", font: "DFPHeiW12-GB", size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
-                    }.padding(.leading, 20)
+                weAreIn = .arCamera
+            } else {
+                weAreIn = .animation
+            }
+        }) {
+            ZStack(alignment: .topLeading) {
+                Image(imageName)
+                    .renderingMode(.original)
+                    .resizable()
+                    .scaledToFit()
+                    .shadow(color: imageShadowColor, radius: 5)
+                if !cardContent.locked {
+                    VStack(alignment: .leading) {
+                        LightText(text: cardContent.text, font: "DFPHeiW12-GB", size: 20, textColor: textColor, shadowColor: shadowColor)
+                            .padding(.top, 20).padding(.leading, 20)
+                        HStack {
+                            if lockingSelection == .locked {
+                                Image("power")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Rectangle()
+                                    .foregroundColor(Color.white.opacity(0))
+                                    .frame(width: 0, height: 20)
+                            }
+                            LightText(text: String(cardContent.energy) + "能量", font: "DFPHeiW12-GB", size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
+                        }.padding(.leading, 20)
+                    }
                 }
             }
         }
-            .padding(30)
     }
 }
 
 struct CategoryView: View {
     @Binding var weAreInCategory: CategorySelection
     @Binding var weAreInGlobal: GlobalViewSelection
+    @Binding var weAreIn: PredictLightViewSelection
     @State var lockingSelection: LockingSelection = .locked
     @State var texts = [
         CardContent(text: "爱之🌟占卜法", energy: 50),
@@ -119,13 +109,6 @@ struct CategoryView: View {
         CardContent(text: "六芒🌟占卜法", energy: 30, locked: true),
         CardContent(text: "灿烂的❤️", energy: 100, locked: true),
     ]
-
-//    var touseTexts: [CardContent] {
-//        get {
-//            return (self.lockingSelection == .locked) ? self.texts : self.unlockedTexts
-//        }
-//    }
-
     // todo: add code to communicate with the backend
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -147,7 +130,6 @@ struct CategoryView: View {
                             .padding(.leading, 20)
 
                         Spacer()
-                        // todo: center it
 
                         VStack(alignment: .center) {
                             HStack {
@@ -170,12 +152,8 @@ struct CategoryView: View {
                                 }
                             }
                         }
-//                            .padding(.bottom, 5)
 
                         VStack(alignment: .center) {
-//                            HStack {
-//                                Spacer()
-//                            }
                             HStack(spacing: 30) {
                                 Spacer()
                                 (lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50, height: 2).offset(y: -3)
@@ -197,11 +175,11 @@ struct CategoryView: View {
                 .zIndex(1)
 
             if lockingSelection == .locked {
-                FullScroll(lockingSelection: lockingSelection, texts: texts)
+                FullScroll(lockingSelection: lockingSelection, texts: texts, weAreIn: $weAreIn)
                     .frame(width: UIScreen.main.bounds.width)
                     .zIndex(0.5)
             } else {
-                FullScroll(lockingSelection: lockingSelection, texts: unlockedTexts)
+                FullScroll(lockingSelection: lockingSelection, texts: unlockedTexts, weAreIn: $weAreIn)
                     .frame(width: UIScreen.main.bounds.width)
                     .zIndex(0.5)
             }
@@ -214,20 +192,22 @@ struct CategoryView: View {
 struct FullScroll: View {
     @State var lockingSelection: LockingSelection
     @State var texts: [CardContent]
-
+    @Binding var weAreIn: PredictLightViewSelection
     var body: some View {
         ScrollView {
             if #available(iOS 14.0, *) {
                 LazyVStack {
                     ForEach(texts.indices) { idx in
-                        Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection)
+                        Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection, weAreIn: $weAreIn)
+                            .padding(30)
                     }
                 }
             } else {
                 // Fallback on earlier versions
                 VStack {
                     ForEach(texts.indices) { idx in
-                        Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection)
+                        Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection, weAreIn: $weAreIn)
+                            .padding(30)
                     }
                 }
             }

@@ -40,6 +40,7 @@ struct MinePageView: View {
             }.sheet(isPresented: $showImagePicker) {
                 ImagePicker(sourceType: .photoLibrary) { image in
                     self.image = Image(uiImage: image)
+                    print("Avatar set to new image")
                 }
             }
             Spacer()
