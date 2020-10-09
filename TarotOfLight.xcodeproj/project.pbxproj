@@ -35,6 +35,7 @@
 		B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60D24A3710A00B68189 /* PredictLightView.swift */; };
 		B994C6552520CD6A00320750 /* cute.gif in Resources */ = {isa = PBXBuildFile; fileRef = B994C6542520CD6A00320750 /* cute.gif */; };
 		B994C6582520CF3E00320750 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B994C6572520CF3E00320750 /* Contants.swift */; };
+		B99E59D5252FFEDF00F5E0A7 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */; };
 		B9ED187B24A4ED9600327351 /* tudou.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9ED187A24A4ED9600327351 /* tudou.gif */; };
 		B9EE5ED824A459AA00D8C58F /* grown.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED624A459AA00D8C58F /* grown.gif */; };
 		B9EE5ED924A459AA00D8C58F /* growing.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED724A459AA00D8C58F /* growing.gif */; };
@@ -71,6 +72,7 @@
 		B970A60D24A3710A00B68189 /* PredictLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictLightView.swift; sourceTree = "<group>"; };
 		B994C6542520CD6A00320750 /* cute.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cute.gif; sourceTree = "<group>"; };
 		B994C6572520CF3E00320750 /* Contants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
+		B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		B9ED187A24A4ED9600327351 /* tudou.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tudou.gif; sourceTree = "<group>"; };
 		B9EE5ED624A459AA00D8C58F /* grown.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = grown.gif; sourceTree = "<group>"; };
 		B9EE5ED724A459AA00D8C58F /* growing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = growing.gif; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				B970A5FB24A3611A00B68189 /* Transitions.swift */,
 				B970A5FF24A361CD00B68189 /* ComplexCircleBackground.swift */,
 				B970A60324A362BF00B68189 /* MinePageView.swift */,
+				B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */,
 				B970A60524A3630C00B68189 /* LittleProgressBar.swift */,
 				B970A60724A3634300B68189 /* MainPageView.swift */,
 				B970A60124A3627700B68189 /* CardPageView.swift */,
@@ -251,6 +254,7 @@
 				34673E8C2494E8CC00712F38 /* AppDelegate.swift in Sources */,
 				B970A60224A3627700B68189 /* CardPageView.swift in Sources */,
 				B970A60424A362BF00B68189 /* MinePageView.swift in Sources */,
+				B99E59D5252FFEDF00F5E0A7 /* ImagePicker.swift in Sources */,
 				B970A60824A3634300B68189 /* MainPageView.swift in Sources */,
 				B9EE5EDB24A459F500D8C58F /* ShinyBackground.swift in Sources */,
 				B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */,
