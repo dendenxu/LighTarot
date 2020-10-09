@@ -44,7 +44,7 @@ struct MinePageView: View {
                 }
             }
             Spacer()
-            ShinyText(text: "小土豆", font: "DFPHeiW12-GB", size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3))
+            ShinyText(text: "小土豆", font: .DefaultChineseFont, size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3))
                 .padding(.top, 10)
             textField(text: "出生时间", placeholder: "出生时间", imageName: "time")
                 .padding(.top, 30)

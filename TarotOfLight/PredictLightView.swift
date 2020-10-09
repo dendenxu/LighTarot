@@ -14,28 +14,16 @@ struct PredictLightView: View {
     @State var weAreIn = PredictLightViewSelection.category
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreInCategory: CategorySelection
-    @State var plantFullAnimating: Bool = true
-
     var body: some View {
         ZStack
         {
             // Why do we have to make it inside some stack for it to be loaded?
             if (weAreIn == .animation) {
-                ZStack {
-                    Color("DarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                    WebImage(
-                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "plantfull", ofType: "gif") ?? "plantfull.gif"),
-                        isAnimating: self.$plantFullAnimating)
-                        .resizable()
-                        .playbackRate(1.0)
-                        .retryOnAppear(true)
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-
-                }
+                Color("MediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
+                OuterInterpreterView().transition(.scale(scale: 0.001))
             } else if(weAreIn == .category) {
                 Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                CategoryView(weAreInCategory: $weAreInCategory, weAreInGlobal: $weAreInGlobal, weAreIn: $weAreIn)
+                CategoryView(weAreInCategory: $weAreInCategory, weAreInGlobal: $weAreInGlobal, weAreIn: $weAreIn).transition(.scale(scale: 0.001))
             } else if(weAreIn == .arCamera) {
                 Spacer()
             }

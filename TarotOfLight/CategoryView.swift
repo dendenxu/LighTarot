@@ -52,10 +52,12 @@ struct Card: View {
         Button(action: {
             print("DEBUG: Currently navigating to animation when a locked card is pressed\nand the ARCamera when card is unlocked")
             print("Give me some action upon hitting the button")
-            if !cardContent.locked {
-                weAreIn = .arCamera
-            } else {
-                weAreIn = .animation
+            withAnimation(springAnimation) {
+                if !cardContent.locked {
+                    weAreIn = .arCamera
+                } else {
+                    weAreIn = .animation
+                }
             }
         }) {
             ZStack(alignment: .topLeading) {
@@ -66,7 +68,7 @@ struct Card: View {
                     .shadow(color: imageShadowColor, radius: 5)
                 if !cardContent.locked {
                     VStack(alignment: .leading) {
-                        LightText(text: cardContent.text, font: "DFPHeiW12-GB", size: 20, textColor: textColor, shadowColor: shadowColor)
+                        LightText(text: cardContent.text, font: .DefaultChineseFont, size: 20, textColor: textColor, shadowColor: shadowColor)
                             .padding(.top, 20).padding(.leading, 20)
                         HStack {
                             if lockingSelection == .locked {
@@ -80,7 +82,7 @@ struct Card: View {
                                     .foregroundColor(Color.white.opacity(0))
                                     .frame(width: 0, height: 20)
                             }
-                            LightText(text: String(cardContent.energy) + "能量", font: "DFPHeiW12-GB", size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
+                            LightText(text: String(cardContent.energy) + "能量", font: .DefaultChineseFont, size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
                         }.padding(.leading, 20)
                     }
                 }
@@ -93,7 +95,7 @@ struct CategoryView: View {
     @Binding var weAreInCategory: CategorySelection
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreIn: PredictLightViewSelection
-    @State var lockingSelection: LockingSelection = .locked
+    @State var lockingSelection: LockingSelection = .unlocked
     @State var texts = [
         CardContent(text: "爱之🌟占卜法", energy: 50),
         CardContent(text: "吉普赛十字法", energy: 20),
@@ -123,7 +125,7 @@ struct CategoryView: View {
                             }
                         }) {
                             ZStack(alignment: .topLeading) {
-                                ShinyText(text: "< " + weAreInCategory.descriptionChinese, font: "DFPHeiW12-GB", size: 20, textColor: Color("LightGray"))
+                                ShinyText(text: "< " + weAreInCategory.descriptionChinese, font: .DefaultChineseFont, size: 20, textColor: Color("LightGray"))
                             }
                         }
                             .padding(.top, 40)
@@ -141,14 +143,14 @@ struct CategoryView: View {
                                         self.lockingSelection = .unlocked
                                     } }
                                 ) {
-                                    ShinyText(text: LockingSelection.unlocked.description, font: "DFPHeiW12-GB", size: 16, textColor: lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray"), shadowColor: lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray"))
+                                    ShinyText(text: LockingSelection.unlocked.description, font: .DefaultChineseFont, size: 16, textColor: lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray"), shadowColor: lockingSelection == .unlocked ? lockingSelection.foregroundColor : Color("LightGray"))
                                 }
                                 Button (action: {
                                     withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
                                         self.lockingSelection = .locked
                                     } }
                                 ) {
-                                    ShinyText(text: LockingSelection.locked.description, font: "DFPHeiW12-GB", size: 16, textColor: lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray"), shadowColor: lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray"))
+                                    ShinyText(text: LockingSelection.locked.description, font: .DefaultChineseFont, size: 16, textColor: lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray"), shadowColor: lockingSelection == .locked ? lockingSelection.foregroundColor : Color("LightGray"))
                                 }
                             }
                         }

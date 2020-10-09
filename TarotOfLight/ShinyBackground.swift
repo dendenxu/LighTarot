@@ -53,6 +53,7 @@ struct ShinyPentagram: View {
     var selfMaxAngle = 1440.0
     var viewSize: CGFloat = 30.0
     var imageName = "starstroke"
+    var tintColor = Color.white
     var shineAnimation: Animation {
         get {
             Animation
@@ -88,7 +89,8 @@ struct ShinyPentagram: View {
                 withAnimation(self.shineAnimationSelf) {
                     self.isAtSelfMaxAngle.toggle()
                 }
-        }
+            }
+            .colorMultiply(tintColor)
     }
 }
 
@@ -97,6 +99,7 @@ struct ShinyBackground: View {
     var nStroke = 50
     var nFill = 50
     var size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    var tintColor = Color.white
     var body: some View {
         GeometryReader {
             geometry in
@@ -105,14 +108,16 @@ struct ShinyBackground: View {
                     ShinyPentagram(
                         originSize: self.originSize,
                         offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: self.size)),
-                        imageName: "starstroke"
+                        imageName: "starstroke",
+                        tintColor: tintColor
                     )
                 }
                 ForEach(0..<self.nFill) { number in
                     ShinyPentagram(
                         originSize: self.originSize,
                         offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: self.size)),
-                        imageName: "starfull"
+                        imageName: "starfull",
+                        tintColor: tintColor
                     )
                 }
             }.offset(x: geometry.size.width / 2, y: geometry.size.height / 2)

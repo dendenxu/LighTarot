@@ -194,11 +194,11 @@ struct MainPageView: View {
                     // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
                     // and: https://medium.com/better-programming/swiftui-basics-importing-custom-fonts-b6396d17424d
                     Text("在时间和光的交汇点")
-                        .font(.custom("DFPHeiW12-GB", size: 25))
+                        .font(.custom(.DefaultChineseFont, size: 25))
                         .foregroundColor(Color("MediumLime"))
                         .padding(.bottom, 10)
                     Text("遇见自己")
-                        .font(.custom("DFPHeiW12-GB", size: 25))
+                        .font(.custom(.DefaultChineseFont, size: 25))
                         .foregroundColor(Color("MediumLime"))
                         .padding(.bottom, 20)
                 }
