@@ -84,6 +84,7 @@ struct CheckedLazyVStack<Content: View>: View {
 }
 
 struct InterpreterView: View {
+    var cards = [CardInfo(imageName: "theHierophant", interpretText: "    援助、同情、宽宏大量，可信任的人给予的劝告，良好的商量对象，得到精神上的满足，遵守规则。\n\n    爱情上屈从于他人的压力，只会按照对方的要求来盲目改变自己，自以为这是必要的付出，其实不过是被迫的选择。伴侣也不会对你保持忠诚，并很难满足双方真实的需要。", storyText: "    这是一张代表唤醒良心与善良觉醒的牌，同时也是张关于宗教信仰与传统的牌。\n    同皇帝所代表的物质主宰相比，他更趋向于精神层面，他是精神方面的权威，是未知世界的解释者。因为教皇能够直接与上帝联系，他用慈悲与洞察力试图拯救世人的灵魂，并用自己的言论引导人们走向正途。\n    牌面中的教皇高举双手向世人传播教义，信徒们虔诚地跪在地上聆听他的教诲。然而需要注意的是他同时也是传统知识和保守道德的代表，他控制人们的思维，使人的眼界变得狭小。只有彻底放弃陈旧的一切，探索新的解决方式，可能还有希望。")]
     var body: some View {
         VStack {
             ZStack {
@@ -110,7 +111,7 @@ struct InterpreterView: View {
 
             ScrollView {
                 CheckedLazyVStack {
-                    Image("theHierophant")
+                    Image(cards[0].imageName)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 270)
@@ -139,9 +140,8 @@ struct InterpreterView: View {
                         .zIndex(-0.5)
 
                     CheckedLazyVStack(spacing: 60) {
-                        WrapComb()
-                        WrapComb()
-                        WrapComb()
+                        WrapComb(title: "释义解读", text: cards[0].interpretText)
+                        WrapComb(title: "牌面故事", text: cards[0].storyText)
                     }
 
                     Spacer()
@@ -184,7 +184,14 @@ struct WrapText: View {
                 .opacity(0.25)
                 .foregroundColor(.white)
 //                .shadow(color: Color.black.opacity(0.95), radius: 5)
+            // TODO: HEADACHE, how to implement this?
             .scaleEffect(x: 1.2, y: 1.3, anchor: .center)
             )
     }
+}
+
+struct CardInfo {
+    var imageName: String
+    var interpretText: String
+    var storyText: String
 }
