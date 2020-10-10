@@ -96,6 +96,7 @@ struct WrapScroll: View {
                     .frame(width: 270)
                     .padding(.top, 10)
                     .zIndex(1)
+                    .offset(x: -percentage * 140, y: -abs(percentage) * 40)
                 ZStack {
                     VStack(spacing: 5) {
                         Spacer().frame(width: 1, height: 4)
@@ -130,8 +131,11 @@ struct WrapScroll: View {
 
                 // TODO: add the energy
                 Spacer()
-            }
-        }
+            }.scaleEffect(y: (1.0 - abs(percentage)) * 0.1 + 0.9)
+                .offset(x: percentage * 140)
+        }.offset(x: -percentage * 140)
+            .scaleEffect(x: (1.0 - abs(percentage)) * 0.1 + 0.9)
+
     }
 }
 
@@ -155,7 +159,7 @@ struct InterpreterView: View {
         )
     ]
 
-    @State var percentages: [CGFloat] = [1.0, 0.0, 0.0]
+    @State var percentages: [CGFloat] = [0.0, 1.0, 2.0]
     @State var currentIndex = 0
     var body: some View {
         VStack {
@@ -224,10 +228,57 @@ struct PagerView<Content: View>: View {
         self._percentages = percentages
         self.content = content()
     }
-
+    struct PagerDot: View {
+        @Binding var currentIndex: Int
+        @Binding var translation: CGFloat
+        @Binding var percentages: [CGFloat]
+        var pageCount: Int
+        var width: CGFloat
+        var body: some View {
+            VStack {
+                Spacer()
+                HStack {
+                    ForEach(0..<pageCount) { index in
+                        Circle()
+                            .fill(index == currentIndex ? Color.white : Color.gray)
+                            .frame(width: 10, height: 10)
+                        // BUG: Cannot implement tap, I give up.
+                    }
+                }
+                Spacer().frame(height: 30)
+            }
+        }
+    }
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+                let width = geometry.size.width
+                let PagerDragGesture =
+                    DragGesture(minimumDistance: 30)
+                    .onEnded { value in
+                        let offset = value.predictedEndTranslation.width / width
+                        let newIndex = (CGFloat(currentIndex) - offset).rounded()
+                        currentIndex = min(max(Int(newIndex), 0), pageCount - 1)
+                        print("Current translation: \(translation), currentIndex: \(currentIndex)")
+                        withAnimation(fastSpringAnimation) {
+                            translation = -CGFloat(currentIndex) * width
+                            // DUP: duplicated code fragment, consider optimization
+                            for index in 0..<pageCount {
+                                percentages[index] = (translation + CGFloat(index) * width) / width
+                            }
+                        }
+                        print("Paging gesture ended! Percentages are: [\(percentages[0]), \(percentages[1]), \(percentages[2])]")
+                    }
+                    .onChanged { value in
+                        print("Paging gesture changing...")
+                        withAnimation(fastSpringAnimation) {
+                            translation = value.translation.width - CGFloat(currentIndex) * width
+                            for index in 0..<pageCount {
+                                percentages[index] = (translation + CGFloat(index) * width) / width
+                            }
+                        }
+                }
+
                 HStack(spacing: 3) {
                     // BUG: Setting the spacing to 0 might cause strange behavior on the opacity during animation
                     // Possibly a bug of SwiftUI
@@ -236,50 +287,9 @@ struct PagerView<Content: View>: View {
                 }
                     .frame(width: geometry.size.width, alignment: .leading)
                     .offset(x: translation)
-                    .gesture(
-                        DragGesture(minimumDistance: 30)
-                            .onEnded { value in
-                                let offset = value.predictedEndTranslation.width / geometry.size.width
-                                let newIndex = (CGFloat(currentIndex) - offset).rounded()
-                                currentIndex = min(max(Int(newIndex), 0), pageCount - 1)
-                                print("Current translation: \(translation), currentIndex: \(currentIndex)")
-                                withAnimation(fastSpringAnimation) {
-                                    translation = -CGFloat(currentIndex) * geometry.size.width
-                                    // DUP: duplicated code fragment, consider optimization
-                                    for index in 0..<pageCount {
-                                        percentages[index] = (translation + CGFloat(index) * geometry.size.width) / geometry.size.width
-                                    }
-                                }
-                                print("Paging gesture ended!")
-                            }
-                            .onChanged { value in
-                                print("Paging gesture changing...")
-                                translation = value.translation.width - CGFloat(currentIndex) * geometry.size.width
-                                for index in 0..<pageCount {
-                                    percentages[index] = (translation + CGFloat(index) * geometry.size.width) / geometry.size.width
-                                }
-                        }
-                    )
-
-                VStack {
-                    Spacer()
-                    HStack {
-                        ForEach(0..<pageCount, id: \.self) { index in
-                            Button {
-                                withAnimation(fastSpringAnimation) {
-                                    currentIndex = index
-                                }
-                                print("Button of index \(index) is hit!")
-                                // TODO: Check why this isn't hit
-                            } label: {
-                                Circle()
-                                    .fill(index == currentIndex ? Color.white : Color.gray)
-                                    .frame(width: 10, height: 10)
-                            }
-                        }
-                    }
-                    Spacer().frame(height: 30)
-                }
+                    .gesture(PagerDragGesture)
+                    .zIndex(-1)
+                PagerDot(currentIndex: $currentIndex, translation: $translation, percentages: $percentages, pageCount: pageCount, width: geometry.size.width)
             }
         }
     }
@@ -300,7 +310,7 @@ struct WrapComb: View {
             }
                 .offset(x: -15)
                 .padding(.bottom, 10)
-//                .shadow(color: Color.black.opacity(0.6), radius: 3)
+            //.shadow(color: Color.black.opacity(0.6), radius: 3)
             WrapText(text: text)
         }
     }
