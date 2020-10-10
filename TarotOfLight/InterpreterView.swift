@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 struct OuterInterpreterView: View {
     @State var plantFullAnimating: Bool = true
     @State var placerHolderDelay: Bool = false // STUB: should communicate with backend instead
+    @Binding var weAreIn: PredictLightViewSelection
     var body: some View {
         ZStack {
             if !placerHolderDelay {
@@ -35,7 +36,7 @@ struct OuterInterpreterView: View {
                         .onAppear(perform: delay)
                 }
             } else {
-                InterpreterView()
+                InterpreterView(weAreIn: $weAreIn)
             }
 
 
@@ -85,6 +86,7 @@ struct CheckedLazyVStack<Content: View>: View {
 
 struct WrapScroll: View {
     var card: CardInfo
+    var percentage: CGFloat
     var body: some View {
         ScrollView {
             CheckedLazyVStack {
@@ -134,6 +136,7 @@ struct WrapScroll: View {
 }
 
 struct InterpreterView: View {
+    @Binding var weAreIn: PredictLightViewSelection
     var cards = [
         CardInfo(
             imageName: "theHierophant",
@@ -152,7 +155,7 @@ struct InterpreterView: View {
         )
     ]
 
-    @State var percentages = [0.0, 1.0, 0.0, 0.0, 0.0]
+    @State var percentages: [CGFloat] = [1.0, 0.0, 0.0]
     @State var currentIndex = 0
     var body: some View {
         VStack {
@@ -161,26 +164,47 @@ struct InterpreterView: View {
                 ShinyText(text: "✨过去的状态✨", size: 20, textColor: Color("MediumLime"), shadowColor: Color("MediumLime"))
                 Spacer()
                 HStack(alignment: .center, spacing: 20) {
+                    Button {
+                        withAnimation(springAnimation) {
+                            weAreIn = .category
+                        }
+                    } label: {
+                        Image("getback")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20)
+                            .shadow(color: Color("Lime"), radius: 3)
+                    }
+
+
                     Spacer()
-                    Image("share")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20)
-                        .shadow(color: Color("Lime"), radius: 3)
-                    Image("download")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20)
-                        .shadow(color: Color("Lime"), radius: 3)
+                    Button {
+                        print("STUB: Should implement sharing the interpretation result here")
+                    } label: {
+                        Image("share")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20)
+                            .shadow(color: Color("Lime"), radius: 3)
+                    }
+                    Button {
+                        print("STUB: Should implement downloading the interpretation result here")
+                    } label: {
+                        Image("download")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20)
+                            .shadow(color: Color("Lime"), radius: 3)
+                    }
                 }
             }
                 .padding(.top, 60)
                 .padding(.horizontal, 30)
 
             PagerView(pageCount: 3, currentIndex: $currentIndex, percentages: $percentages) {
-                WrapScroll(card: cards[0])
-                WrapScroll(card: cards[1])
-                WrapScroll(card: cards[2])
+                ForEach(0..<3) { index in
+                    WrapScroll(card: cards[index], percentage: percentages[index])
+                }
             }
 
 
@@ -191,10 +215,10 @@ struct InterpreterView: View {
 struct PagerView<Content: View>: View {
     let pageCount: Int
     @Binding var currentIndex: Int
-    @Binding var percentages: [Double] // left, right middle
+    @Binding var percentages: [CGFloat] // left, right middle
     let content: Content
     @State var translation: CGFloat = 0
-    init(pageCount: Int, currentIndex: Binding<Int>, percentages: Binding<[Double]>, @ViewBuilder content: () -> Content) {
+    init(pageCount: Int, currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, @ViewBuilder content: () -> Content) {
         self.pageCount = pageCount
         self._currentIndex = currentIndex
         self._percentages = percentages
@@ -204,8 +228,11 @@ struct PagerView<Content: View>: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                HStack(spacing: 0) {
-                    self.content.frame(width: geometry.size.width)
+                HStack(spacing: 3) {
+                    // BUG: Setting the spacing to 0 might cause strange behavior on the opacity during animation
+                    // Possibly a bug of SwiftUI
+                    // Here we have 3 Paging view, so 3*2 = 2*3
+                    self.content.frame(width: geometry.size.width - 2)
                 }
                     .frame(width: geometry.size.width, alignment: .leading)
                     .offset(x: translation)
@@ -218,30 +245,40 @@ struct PagerView<Content: View>: View {
                                 print("Current translation: \(translation), currentIndex: \(currentIndex)")
                                 withAnimation(fastSpringAnimation) {
                                     translation = -CGFloat(currentIndex) * geometry.size.width
+                                    // DUP: duplicated code fragment, consider optimization
+                                    for index in 0..<pageCount {
+                                        percentages[index] = (translation + CGFloat(index) * geometry.size.width) / geometry.size.width
+                                    }
                                 }
                                 print("Paging gesture ended!")
                             }
                             .onChanged { value in
                                 print("Paging gesture changing...")
-//                                if value.translation.height > 10 {
-//                                    print("Vertical gesture, reverting...")
-//                                }else {
-                                translation = value.translation.width + -CGFloat(currentIndex) * geometry.size.width
-//                                }
-
+                                translation = value.translation.width - CGFloat(currentIndex) * geometry.size.width
+                                for index in 0..<pageCount {
+                                    percentages[index] = (translation + CGFloat(index) * geometry.size.width) / geometry.size.width
+                                }
                         }
                     )
 
                 VStack {
                     Spacer()
-
                     HStack {
-                        ForEach(0..<self.pageCount, id: \.self) { index in
-                            Circle()
-                                .fill(index == self.currentIndex ? Color.white : Color.gray)
-                                .frame(width: 10, height: 10)
+                        ForEach(0..<pageCount, id: \.self) { index in
+                            Button {
+                                withAnimation(fastSpringAnimation) {
+                                    currentIndex = index
+                                }
+                                print("Button of index \(index) is hit!")
+                                // TODO: Check why this isn't hit
+                            } label: {
+                                Circle()
+                                    .fill(index == currentIndex ? Color.white : Color.gray)
+                                    .frame(width: 10, height: 10)
+                            }
                         }
-                    }.offset(y: -30)
+                    }
+                    Spacer().frame(height: 30)
                 }
             }
         }

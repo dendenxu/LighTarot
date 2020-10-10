@@ -20,7 +20,7 @@ struct PredictLightView: View {
             // Why do we have to make it inside some stack for it to be loaded?
             if (weAreIn == .animation) {
                 Color("MediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                OuterInterpreterView().transition(.scale(scale: 0.001))
+                OuterInterpreterView(weAreIn: $weAreIn).transition(.scale(scale: 0.001))
             } else if(weAreIn == .category) {
                 Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                 CategoryView(weAreInCategory: $weAreInCategory, weAreInGlobal: $weAreInGlobal, weAreIn: $weAreIn).transition(.scale(scale: 0.001))
