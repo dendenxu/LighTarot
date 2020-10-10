@@ -90,4 +90,3 @@ struct ComplexCircleBackground: View {
         }
     }
 }
-
