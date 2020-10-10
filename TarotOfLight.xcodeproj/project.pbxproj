@@ -96,7 +96,6 @@
 		34673E7F2494E8CC00712F38 = {
 			isa = PBXGroup;
 			children = (
-				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				34673E8A2494E8CC00712F38 /* TarotOfLight */,
 				34673E892494E8CC00712F38 /* Products */,
 				B9521E1425221B2400AC96EF /* Frameworks */,
@@ -115,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				B994C6542520CD6A00320750 /* cute.gif */,
+				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B9ED187A24A4ED9600327351 /* tudou.gif */,
 				B9EE5ED724A459AA00D8C58F /* growing.gif */,
 				B9EE5ED624A459AA00D8C58F /* grown.gif */,
