@@ -87,54 +87,72 @@ struct CheckedLazyVStack<Content: View>: View {
 struct WrapScroll: View {
     var card: CardInfo
     var percentage: CGFloat
+    let baseOffset: CGFloat = 100
+    let imageOffset: CGFloat = 40
+    let baseScale: CGFloat = 0.9
+    let baseOpacity: CGFloat = 0.25
+    let baseTint: CGFloat = 0.6
     var body: some View {
-        ScrollView {
+        let computedScale = (1.0 - abs(percentage)) * (1 - baseScale) + baseScale
+        let computedOpacity = Double((1.0 - abs(percentage)) * (1 - baseOpacity) + baseOpacity)
+        let computedTint = Double((1.0 - abs(percentage)) * (1 - baseTint) + baseTint)
+        let computedTintColor = Color(red: computedTint, green: computedTint, blue: computedTint)
+        return ScrollView {
             CheckedLazyVStack {
-                Image(card.imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 270)
-                    .padding(.top, 10)
-                    .zIndex(1)
-                    .offset(x: -percentage * 140, y: -abs(percentage) * 40)
-                ZStack {
-                    VStack(spacing: 5) {
-                        Spacer().frame(width: 1, height: 4)
-                        ShinyText(text: "教皇", font: .DefaultChineseFont, size: 20, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
-                        ShinyText(text: "(正位)", font: "Source Han Sans Heavy", size: 16, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
-                        Spacer().frame(width: 1, height: 4)
-                    }
-                        .background(RoundedRectangle(cornerRadius: 10)
-                            .opacity(0.35)
-                            .foregroundColor(Color(hex: 0xaaaaaa))
-                            .shadow(color: Color.black.opacity(0.95), radius: 2)
-                            .frame(width: 180)
-//                                .scaledToFill()
-                        )
-                }.background(ShinyBackground(
-                    nStroke: 20,
-                    nFill: 20,
-                    size: CGSize(
-                        width: UIScreen.main.bounds.width,
-                        height: UIScreen.main.bounds.height
-                    ))
-                )
-                    .padding(.top, 15)
-                    .padding(.bottom, 25)
-                    .zIndex(-0.5)
+                VStack {
+                    Image(card.imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 270)
+                        .padding(.top, 10)
+                        .zIndex(1)
+                        .colorMultiply(computedTintColor)
+                    ZStack {
+                        VStack(spacing: 5) {
+                            Spacer().frame(width: 1, height: 4)
+                            ShinyText(text: "教皇", font: .DefaultChineseFont, size: 20, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
+                            ShinyText(text: "(正位)", font: "Source Han Sans Heavy", size: 16, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
+                            Spacer().frame(width: 1, height: 4)
+                        }
+                            .background(RoundedRectangle(cornerRadius: 10)
+                                .opacity(0.35)
+                                .foregroundColor(Color(hex: 0xaaaaaa))
+                                .shadow(color: Color.black.opacity(0.95), radius: 2)
+                                .frame(width: 180)
+                            //                                .scaledToFill()
+                            )
+                    }.background(ShinyBackground(
+                        nStroke: 20,
+                        nFill: 20,
+                        size: CGSize(
+                            width: UIScreen.main.bounds.width,
+                            height: UIScreen.main.bounds.height
+                        ))
+                    )
+                        .padding(.top, 15)
+                        .padding(.bottom, 25)
+                        .zIndex(-0.5)
+                }
+                    .offset(x: -percentage * imageOffset, y: -abs(percentage) * 60)
+                    .scaleEffect(computedScale)
 
+                VStack {
+                    WrapComb(title: "释义解读", text: card.interpretText)
+                        .padding(.bottom, 30)
+                    WrapComb(title: "牌面故事", text: card.storyText)
+                        .padding(.bottom, 30)
 
-                WrapComb(title: "释义解读", text: card.interpretText)
-                    .padding(.bottom, 30)
-                WrapComb(title: "牌面故事", text: card.storyText)
-                    .padding(.bottom, 30)
+                    // TODO: add the energy
+                    Spacer()
+                }
+                    .opacity(computedOpacity)
 
-                // TODO: add the energy
-                Spacer()
-            }.scaleEffect(y: (1.0 - abs(percentage)) * 0.1 + 0.9)
-                .offset(x: percentage * 140)
-        }.offset(x: -percentage * 140)
-            .scaleEffect(x: (1.0 - abs(percentage)) * 0.1 + 0.9)
+            }
+                .scaleEffect(y: computedScale)
+//                .offset(x: percentage * baseOffset)
+        }
+            .offset(x: -percentage * baseOffset)
+            .scaleEffect(x: computedScale)
 
     }
 }
