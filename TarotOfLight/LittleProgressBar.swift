@@ -24,7 +24,7 @@ struct LittleProgressBar: View {
                     Text("\(value, specifier: "%.0f")")
 //                        .foregroundColor(value < 50 ? Color("MediumLime") : .white)
                         .foregroundColor(.white)
-                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
                 }
             }
                 .cornerRadius(45.0)
