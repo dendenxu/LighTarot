@@ -114,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				B994C6542520CD6A00320750 /* cute.gif */,
-				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B9ED187A24A4ED9600327351 /* tudou.gif */,
 				B9EE5ED724A459AA00D8C58F /* growing.gif */,
 				B9EE5ED624A459AA00D8C58F /* grown.gif */,
@@ -134,6 +133,7 @@
 				34673E8F2494E8CC00712F38 /* ContentView.swift */,
 				B970A60B24A370EE00B68189 /* SelectorView.swift */,
 				B970A60D24A3710A00B68189 /* PredictLightView.swift */,
+				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B970A5F924A360A000B68189 /* ShinyStar.swift */,
 				B970A5FB24A3611A00B68189 /* Transitions.swift */,
 				B970A5FF24A361CD00B68189 /* ComplexCircleBackground.swift */,

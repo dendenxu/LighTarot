@@ -10,17 +10,28 @@ import SwiftUI
 
 // A small progress bar, cool, right?
 struct LittleProgressBar: View {
-    @Binding var value: Double
+    var value: Double
     var body: some View {
-        ZStack(alignment: .leading) {
-            Rectangle().frame(width: 100, height: 10)
-                .opacity(0.5)
-                .foregroundColor(Color(.white))
-            Rectangle().frame(width: CGFloat(self.value), height: 10)
-                .foregroundColor(Color("Lime"))
+        GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                let width = geo.size.width
+                Rectangle().frame(width: width)
+                    .opacity(0.5)
+                    .foregroundColor(Color(.white))
+                ZStack {
+                    Rectangle().frame(width: CGFloat(value) / 100 * width)
+                        .foregroundColor(Color("Lime"))
+                    Text("\(value, specifier: "%.0f")")
+//                        .foregroundColor(value < 50 ? Color("MediumLime") : .white)
+                        .foregroundColor(.white)
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                }
+            }
+                .cornerRadius(45.0)
+                .shadow(radius: 5)
+                .onAppear {
+                    print("Getting width: \(geo.size.width)")
+            }
         }
-            .cornerRadius(45.0)
-            .shadow(radius: 5)
-            .padding()
     }
 }
