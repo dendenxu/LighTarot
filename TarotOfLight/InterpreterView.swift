@@ -94,6 +94,7 @@ struct WrapScroll: View {
     let baseScale: CGFloat = 0.9
     let baseOpacity: CGFloat = 0.25
     let baseTint: CGFloat = 0.6
+    @State var isEnergyAnimating = true
     var body: some View {
         let computedScale = (1.0 - abs(percentage)) * (1 - baseScale) + baseScale
         let computedOpacity = Double((1.0 - abs(percentage)) * (1 - baseOpacity) + baseOpacity)
@@ -106,6 +107,7 @@ struct WrapScroll: View {
                         Image(card.imageName)
                             .resizable()
                             .scaledToFit()
+                            .rotationEffect(card.flipped ? .degrees(180) : .zero)
                             .frame(width: 270)
                             .padding(.top, 10)
                             .zIndex(1)
@@ -113,8 +115,8 @@ struct WrapScroll: View {
                         ZStack {
                             VStack(spacing: 5) {
                                 Spacer().frame(width: 1, height: 4)
-                                ShinyText(text: "教皇", font: .DefaultChineseFont, size: 20, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
-                                ShinyText(text: "(正位)", font: "Source Han Sans Heavy", size: 16, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
+                                ShinyText(text: card.name, font: .DefaultChineseFont, size: 20, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
+                                ShinyText(text: card.flipped ? "(逆位)" : "(正位)", font: "Source Han Sans Heavy", size: 16, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
                                 Spacer().frame(width: 1, height: 4)
                             }
                                 .background(RoundedRectangle(cornerRadius: 10)
@@ -138,6 +140,28 @@ struct WrapScroll: View {
                             .padding(.bottom, 30)
 
                         // TODO: add the energy
+
+                        HStack {
+                            Image("star")
+                                .renderingMode(.original)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30)
+                            ShinyText(text: "卜光能量", font: .DefaultChineseFont, size: 20, textColor: Color(hex: 0xF7EB2E), shadowColor: Color.black.opacity(0))
+                        }
+                            .offset(x: -15)
+                        
+                        LitPentagram(numberOfPentagram: card.fullEnergy, numberOfLit: card.energy)
+                            .frame(height: 10)
+                        
+                        WebImage(
+                            url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"), isAnimating: $isEnergyAnimating)
+                            .resizable()
+                            .playbackRate(1.0)
+                            .retryOnAppear(true)
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
                         Spacer()
                     } // WrapCombs
                     .opacity(computedOpacity)
@@ -149,6 +173,35 @@ struct WrapScroll: View {
         .offset(x: -percentage * baseOffset)
             .scaleEffect(x: computedScale)
             .zIndex(Double(abs(percentage)))
+    }
+}
+
+struct LitPentagram: View {
+    let numberOfPentagram: Int
+    let numberOfLit: Int
+    let foregroundColor = Color("Gold")
+    let backgroundColor = Color.black.opacity(0.2)
+    init(numberOfPentagram: Int, numberOfLit: Int) {
+        self.numberOfPentagram = numberOfPentagram
+        self.numberOfLit = (numberOfPentagram >= numberOfLit) ? numberOfLit : numberOfPentagram
+    }
+    var body: some View {
+        HStack {
+            ForEach(0..<numberOfLit) { index in
+                Image("starfull")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(foregroundColor)
+            }
+            ForEach(0..<(numberOfPentagram - numberOfLit)) { index in
+                Image("starfull")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(backgroundColor)
+            }
+        }
     }
 }
 
@@ -190,19 +243,28 @@ struct InterpreterView: View {
 
     var cards = [
         CardInfo(
+            name: "教皇",
+            flipped: false,
             imageName: "theHierophant",
             interpretText: "    援助、同情、宽宏大量，可信任的人给予的劝告，良好的商量对象，得到精神上的满足，遵守规则。\n\n    爱情上屈从于他人的压力，只会按照对方的要求来盲目改变自己，自以为这是必要的付出，其实不过是被迫的选择。伴侣也不会对你保持忠诚，并很难满足双方真实的需要。",
-            storyText: "    这是一张代表唤醒良心与善良觉醒的牌，同时也是张关于宗教信仰与传统的牌。\n\n    同皇帝所代表的物质主宰相比，他更趋向于精神层面，他是精神方面的权威，是未知世界的解释者。因为教皇能够直接与上帝联系，他用慈悲与洞察力试图拯救世人的灵魂，并用自己的言论引导人们走向正途。\n\n    牌面中的教皇高举双手向世人传播教义，信徒们虔诚地跪在地上聆听他的教诲。然而需要注意的是他同时也是传统知识和保守道德的代表，他控制人们的思维，使人的眼界变得狭小。只有彻底放弃陈旧的一切，探索新的解决方式，可能还有希望。"
+            storyText: "    这是一张代表唤醒良心与善良觉醒的牌，同时也是张关于宗教信仰与传统的牌。\n\n    同皇帝所代表的物质主宰相比，他更趋向于精神层面，他是精神方面的权威，是未知世界的解释者。因为教皇能够直接与上帝联系，他用慈悲与洞察力试图拯救世人的灵魂，并用自己的言论引导人们走向正途。\n\n    牌面中的教皇高举双手向世人传播教义，信徒们虔诚地跪在地上聆听他的教诲。然而需要注意的是他同时也是传统知识和保守道德的代表，他控制人们的思维，使人的眼界变得狭小。只有彻底放弃陈旧的一切，探索新的解决方式，可能还有希望。",
+            energy: 4
         ),
         CardInfo(
+            name: "宝剑女王",
+            flipped: true,
             imageName: "queenOfSword",
             interpretText: "    思考清晰，有耐性且理性的人，情绪波动起伏不大，自我管理得很好，而在思考方面则相当的敏捷且迅速。\n\n    暗示着自己在这一段感情之中是站在主导的位置，因为自己懂得运用那敏捷的思考能力来分析这一段感情可能发生的一些变化，并且找出一些问题来克服，也小心谨慎的观察着对方心情上的变化，并且找出应对的方法。",
-            storyText: "    这位面貌冷峻的女子，侧身向着我们，脸朝画面的右方，以右手直举着剑。她的左手伸出手臂高举，做着排拒的手势。\n\n    女子的座椅就位于旷野之中，可以看到她身后的远方有几颗树木。 云霭低垂笼罩地面，其上萧飒的天空中，可见到遥远处有一只孤独的飞鸟。\n\n    是想法的管理者与将理念推动的人物，是一位军师级的人物，其本身具有相当的专业性，与其讨论事情可以给与其专业上的协助，讲出的是专业的智慧指导，提出自己的见解，告诉他人背后的理念与原理是什么，并且能够从多个角度上去分析，采取客观的态度，极高度的分析能力，提出最佳的建议，与精辟的见解"
+            storyText: "    这位面貌冷峻的女子，侧身向着我们，脸朝画面的右方，以右手直举着剑。她的左手伸出手臂高举，做着排拒的手势。\n\n    女子的座椅就位于旷野之中，可以看到她身后的远方有几颗树木。 云霭低垂笼罩地面，其上萧飒的天空中，可见到遥远处有一只孤独的飞鸟。\n\n    是想法的管理者与将理念推动的人物，是一位军师级的人物，其本身具有相当的专业性，与其讨论事情可以给与其专业上的协助，讲出的是专业的智慧指导，提出自己的见解，告诉他人背后的理念与原理是什么，并且能够从多个角度上去分析，采取客观的态度，极高度的分析能力，提出最佳的建议，与精辟的见解",
+            energy: 3
         ),
         CardInfo(
+            name: "圣杯侍从",
+            flipped: false,
             imageName: "pageOfCups",
             interpretText: "    有坚强的信念，现在的失意会影响你的心情，使你显得郁郁寡欢的。虽然如此，平日也还能亲切待人，是非常难得的！\n\n    你对目前的关系感到失望，不能从中得到满足，这会使你们的感情更危险，不妨仔细想一想其中的原因，相信一定会有所领悟的！",
-            storyText: "    圣杯侍从，温和而纯粹。\n\n    杯之中的鱼儿—象征着想象之力—自杯中探出了脑袋，侍从的注意力也为之吸引，但是他并没有多余的动作，只是觉得有趣而认真的回望。并未采取任何多余的行动，他放任自己想象并且不以世俗是桎梏来约束。\n\n    而对于水所代表的情感，他也充满了好奇与期盼，追求着纯粹的享受。因为他的心灵纯净，所以才能最大限度的发挥自己的想象与精神。\n\n    自这份纯粹的想象之中，他将开启自己正常的道路，对于心灵世界的探索以及心灵能力的开发，以着一种平和而稳定的方式。"
+            storyText: "    圣杯侍从，温和而纯粹。\n\n    杯之中的鱼儿—象征着想象之力—自杯中探出了脑袋，侍从的注意力也为之吸引，但是他并没有多余的动作，只是觉得有趣而认真的回望。并未采取任何多余的行动，他放任自己想象并且不以世俗是桎梏来约束。\n\n    而对于水所代表的情感，他也充满了好奇与期盼，追求着纯粹的享受。因为他的心灵纯净，所以才能最大限度的发挥自己的想象与精神。\n\n    自这份纯粹的想象之中，他将开启自己正常的道路，对于心灵世界的探索以及心灵能力的开发，以着一种平和而稳定的方式。",
+            energy: 5
         )
     ]
 
@@ -383,9 +445,13 @@ struct WrapText: View {
 }
 
 struct CardInfo {
+    var name: String
+    var flipped: Bool
     var imageName: String
     var interpretText: String
     var storyText: String
+    var energy: Int
+    var fullEnergy = 5
 }
 
 enum InterpretationStatus: Int {
