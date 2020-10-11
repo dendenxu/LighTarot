@@ -8,6 +8,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import CoreHaptics
 struct OuterInterpreterView: View {
     @State var plantFullAnimating: Bool = true
     @State var placerHolderDelay: Bool = false // STUB: should communicate with backend instead
@@ -153,6 +154,40 @@ struct WrapScroll: View {
 
 struct InterpreterView: View {
     @Binding var weAreIn: PredictLightViewSelection
+    @State private var engine: CHHapticEngine?
+
+    func prepareHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+
+        do {
+            self.engine = try CHHapticEngine()
+            try engine?.start()
+        } catch {
+            print("There was an error creating the engine: \(error.localizedDescription)")
+        }
+    }
+
+    func complexSuccess() {
+        // make sure that the device supports haptics
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+        var events = [CHHapticEvent]()
+
+        // create one intense, sharp tap
+        let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
+        let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 1)
+        let event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity, sharpness], relativeTime: 0)
+        events.append(event)
+
+        // convert those events into a pattern and play it immediately
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try engine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+        } catch {
+            print("Failed to play pattern: \(error.localizedDescription).")
+        }
+    }
+
     var cards = [
         CardInfo(
             imageName: "theHierophant",
@@ -177,7 +212,7 @@ struct InterpreterView: View {
         VStack {
             ZStack {
                 Spacer()
-                ShinyText(text: "✨过去的状态✨", size: 20, textColor: Color("MediumLime"), shadowColor: Color("MediumLime"))
+                ShinyText(text: InterpretationStatus.mapper(from: currentIndex).chinese, size: 20, textColor: Color("MediumLime"), shadowColor: Color("MediumLime"))
                 Spacer()
                 HStack(alignment: .center, spacing: 20) {
                     Button {
@@ -222,7 +257,8 @@ struct InterpreterView: View {
                     WrapScroll(card: cards[index], percentage: percentages[index])
                 }
             }.background(TravelingBackground(nStroke: 20, nFill: 20))
-        }
+        } // VStack
+        .onAppear(perform: prepareHaptics)
     }
 }
 
@@ -350,4 +386,32 @@ struct CardInfo {
     var imageName: String
     var interpretText: String
     var storyText: String
+}
+
+enum InterpretationStatus: Int {
+    case past = 0
+    case now
+    case future
+    var index: Int {
+        return rawValue
+    }
+    var value: String {
+        return String(describing: self)
+    }
+    var chinese: String {
+        switch rawValue {
+        case 0: return "✨过去的状态✨"
+        case 1: return "✨现在的状态✨"
+        case 2: return "✨未来的状态✨"
+        default: return "我也不知道的状态"
+        }
+    }
+    static func mapper(from: Int) -> InterpretationStatus {
+        switch from {
+        case 0: return .past
+        case 1: return .now
+        case 2: return .future
+        default: return .past
+        }
+    }
 }

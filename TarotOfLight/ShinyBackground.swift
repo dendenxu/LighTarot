@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-
 func randomPositionInDoubleRectangle(size: CGSize) -> CGSize {
 //    print("We're randomly generating size for bounds: \(size.width), \(size.height)")
     return CGSize(width: 2 * size.width * CGFloat.random(in: 0..<1) - size.width, height: 2 * size.height * CGFloat.random(in: 0..<1) - size.height)
