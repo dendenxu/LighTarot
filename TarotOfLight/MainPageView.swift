@@ -42,7 +42,6 @@ struct MainPageView: View {
         }
     }
     @State var tideAnimating: Bool = true
-    @State var growingAnimating: Bool = true
     @State var grownAnimating: Bool = true
     @Binding var progress: Double
     @State var nowDate: DateComponents = Calendar
@@ -80,36 +79,33 @@ struct MainPageView: View {
 
             // background image
             // This image shoulde be at the bottom of the whole screen
+            VStack {
+                Spacer()
+                ZStack(alignment: .bottom) {
+                    Color("MediumPurple")
+                        .frame(width: UIScreen.main.bounds.width * 2, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 50))
+                        .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
+                    WebImage(
+                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
+                        isAnimating: self.$tideAnimating)
+                        .resizable()
+                        .playbackRate(1.0)
+                        .retryOnAppear(true)
+                        .scaledToFit()
+                        .frame(width: UIScreen.main.bounds.width * self.tideScale)
+                        .offset(y: -UIScreen.main.bounds.height * (CGFloat(progress)) / 100 + 150)
+                }
+            }
             if (isFull) {
                 Color("MediumDarkPurple")
                     .frame(width: UIScreen.main.bounds.width)
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-            } else {
-                VStack {
-                    Spacer()
-                    ZStack(alignment: .bottom) {
-                        Color("MediumPurple")
-                            .frame(width: UIScreen.main.bounds.width * 2, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 50))
-                            .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                        WebImage(
-                            url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
-                            isAnimating: self.$tideAnimating)
-                            .resizable()
-                            .playbackRate(1.0)
-                            .retryOnAppear(true)
-                            .scaledToFit()
-                            .frame(width: UIScreen.main.bounds.width * self.tideScale)
-                            .offset(y: -UIScreen.main.bounds.height * (CGFloat(progress)) / 100 + 150)
-//                            .offset(y:0)
-                    }
-
-                }
             }
 
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
                 HStack(spacing: 40) { // The top two objects
-                    VStack { // The energy bar
+                    VStack(alignment: .center) { // The energy bar
                         Image("buguang")
                             .renderingMode(.original)
                             .resizable()
@@ -123,7 +119,10 @@ struct MainPageView: View {
                                 .scaledToFit()
                                 .frame(width: 20, height: 20)
                                 .shadow(radius: 2)
-                            LittleProgressBar(value: $progress).offset(x: -10)
+                            LittleProgressBar(value: progress)
+                                .frame(width: 100, height: 15)
+                                .padding()
+                                .offset(x: -10)
                         }.offset(x: 10, y: -30)
                     }
 
