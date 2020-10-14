@@ -101,7 +101,7 @@ struct WrapScroll: View {
         let computedTint = Double((1.0 - abs(percentage)) * (1 - baseTint) + baseTint)
         let computedTintColor = Color(red: computedTint, green: computedTint, blue: computedTint)
         return ZStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 CheckedLazyVStack {
                     VStack {
                         Image(card.imageName)
@@ -172,7 +172,7 @@ struct WrapScroll: View {
         } // ZStack
         .offset(x: -percentage * baseOffset)
             .scaleEffect(x: computedScale)
-            .zIndex(Double(abs(percentage)))
+            .zIndex(-Double(abs(percentage)))
     }
 }
 

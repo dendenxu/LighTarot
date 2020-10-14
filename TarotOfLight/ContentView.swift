@@ -22,6 +22,16 @@ struct ContentView: View {
             } else if (weAreInGlobal == .predictLight) {
                 PredictLightView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
                     .transition(.scale(scale: 0.001))
+            } else if (weAreInGlobal == .arCamera) {
+                ARCameraView()
+                    .transition(.scale(scale: 0.001))
+                    .onAppear {
+                        print("Should have opened the camera or at least ask for permission by now")
+                        // MARK: to actually make the application able to openup this ARScene, we're to imitate a simple AR project newly created
+                        // and add ARKit requirements in info.plist
+                        // add Privacy - ability to use camera to info.plist too
+                        
+                    }
             }
         }.edgesIgnoringSafeArea(.all)
         // FIXME: when using if to select between two global view, we'll get strange animation for MainPageContentView
@@ -35,11 +45,13 @@ enum GlobalViewSelection: CustomStringConvertible {
         switch self {
         case .selector: return "selector"
         case .predictLight: return "predictLight"
+        case .arCamera: return "arCamera"
         }
     }
 
     case selector
     case predictLight
+    case arCamera
 }
 
 // Previewer

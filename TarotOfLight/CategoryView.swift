@@ -32,6 +32,7 @@ struct Card: View {
     @State var cardContent: CardContent
     @Binding var lockingSelection: LockingSelection
     @Binding var weAreIn: PredictLightViewSelection
+    @Binding var weAreInGlobal: GlobalViewSelection
     var imageName: String {
         get {
             if self.cardContent.locked {
@@ -54,7 +55,7 @@ struct Card: View {
             print("Give me some action upon hitting the button")
             withAnimation(springAnimation) {
                 if !cardContent.locked {
-                    weAreIn = .arCamera
+                    weAreInGlobal = .arCamera
                 } else {
                     weAreIn = .animation
                 }
@@ -177,11 +178,11 @@ struct CategoryView: View {
                 .zIndex(1)
 
             if lockingSelection == .locked {
-                FullScroll(lockingSelection: lockingSelection, texts: texts, weAreIn: $weAreIn)
+                FullScroll(lockingSelection: lockingSelection, texts: texts, weAreIn: $weAreIn, weAreInGlobal: $weAreInGlobal)
                     .frame(width: UIScreen.main.bounds.width)
                     .zIndex(0.5)
             } else {
-                FullScroll(lockingSelection: lockingSelection, texts: unlockedTexts, weAreIn: $weAreIn)
+                FullScroll(lockingSelection: lockingSelection, texts: unlockedTexts, weAreIn: $weAreIn, weAreInGlobal: $weAreInGlobal)
                     .frame(width: UIScreen.main.bounds.width)
                     .zIndex(0.5)
             }
@@ -195,22 +196,13 @@ struct FullScroll: View {
     @State var lockingSelection: LockingSelection
     @State var texts: [CardContent]
     @Binding var weAreIn: PredictLightViewSelection
+    @Binding var weAreInGlobal: GlobalViewSelection
     var body: some View {
-        ScrollView {
-            if #available(iOS 14.0, *) {
-                LazyVStack {
-                    ForEach(texts.indices) { idx in
-                        Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection, weAreIn: $weAreIn)
-                            .padding(30)
-                    }
-                }
-            } else {
-                // Fallback on earlier versions
-                VStack {
-                    ForEach(texts.indices) { idx in
-                        Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection, weAreIn: $weAreIn)
-                            .padding(30)
-                    }
+        ScrollView(showsIndicators: false) {
+            CheckedLazyVStack {
+                ForEach(texts.indices) { idx in
+                    Card(cardContent: self.texts[idx], lockingSelection: $lockingSelection, weAreIn: $weAreIn, weAreInGlobal: $weAreInGlobal)
+                        .padding(30)
                 }
             }
             // todo: finish the cards scroll view, currently cards are loaded statically

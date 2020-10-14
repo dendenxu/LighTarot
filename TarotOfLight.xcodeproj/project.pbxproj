@@ -13,7 +13,6 @@
 		344A69BA24961F7200B818A4 /* SourceHanSans-Medium.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 344A69B924961F7100B818A4 /* SourceHanSans-Medium.ttc */; };
 		344A69BC2496232800B818A4 /* SourceHanSans-Heavy.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 344A69BB2496232800B818A4 /* SourceHanSans-Heavy.ttc */; };
 		34673E8C2494E8CC00712F38 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34673E8B2494E8CC00712F38 /* AppDelegate.swift */; };
-		34673E8E2494E8CC00712F38 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34673E8D2494E8CC00712F38 /* SceneDelegate.swift */; };
 		34673E902494E8CC00712F38 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34673E8F2494E8CC00712F38 /* ContentView.swift */; };
 		34673E922494E8D300712F38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34673E912494E8D300712F38 /* Assets.xcassets */; };
 		34673E952494E8D300712F38 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34673E942494E8D300712F38 /* Preview Assets.xcassets */; };
@@ -22,6 +21,10 @@
 		B90E08D425305AD100635B8F /* InterpreterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90E08D325305AD100635B8F /* InterpreterView.swift */; };
 		B946698F24A9D19D00C8402D /* ViewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B946698E24A9D19D00C8402D /* ViewCardView.swift */; };
 		B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */; };
+		B9624FE32536E7EE005840DC /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = B9624FE22536E7EE005840DC /* Lottie */; };
+		B9624FE92536E893005840DC /* ARCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9624FE82536E893005840DC /* ARCameraView.swift */; };
+		B96250112536EB05005840DC /* BasicPlant.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = B96250102536EB04005840DC /* BasicPlant.rcproject */; };
+		B96250162536EFBD005840DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96250152536EFBD005840DC /* SceneDelegate.swift */; };
 		B962529324A391D4002BFE03 /* ShinyText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962529224A391D4002BFE03 /* ShinyText.swift */; };
 		B962529524A3984B002BFE03 /* DFPHeiW12-GB.TTF in Resources */ = {isa = PBXBuildFile; fileRef = B962529424A3984B002BFE03 /* DFPHeiW12-GB.TTF */; };
 		B970A5FA24A360A000B68189 /* ShinyStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5F924A360A000B68189 /* ShinyStar.swift */; };
@@ -51,7 +54,6 @@
 		344A69BB2496232800B818A4 /* SourceHanSans-Heavy.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceHanSans-Heavy.ttc"; sourceTree = "<group>"; };
 		34673E882494E8CC00712F38 /* TarotOfLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TarotOfLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34673E8B2494E8CC00712F38 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		34673E8D2494E8CC00712F38 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		34673E8F2494E8CC00712F38 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ContentView.swift; sourceTree = "<group>"; };
 		34673E912494E8D300712F38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34673E942494E8D300712F38 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -60,6 +62,10 @@
 		3473C1C924965A5D003C7321 /* plantfull.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = plantfull.gif; sourceTree = "<group>"; };
 		B90E08D325305AD100635B8F /* InterpreterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterView.swift; sourceTree = "<group>"; };
 		B946698E24A9D19D00C8402D /* ViewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCardView.swift; sourceTree = "<group>"; };
+		B9624FE82536E893005840DC /* ARCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCameraView.swift; sourceTree = "<group>"; };
+		B962500C2536EA6F005840DC /* RealityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealityKit.framework; path = System/Library/Frameworks/RealityKit.framework; sourceTree = SDKROOT; };
+		B96250102536EB04005840DC /* BasicPlant.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = BasicPlant.rcproject; sourceTree = "<group>"; };
+		B96250152536EFBD005840DC /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B962529224A391D4002BFE03 /* ShinyText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShinyText.swift; sourceTree = "<group>"; };
 		B962529424A3984B002BFE03 /* DFPHeiW12-GB.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DFPHeiW12-GB.TTF"; sourceTree = "<group>"; };
 		B970A5F924A360A000B68189 /* ShinyStar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShinyStar.swift; sourceTree = "<group>"; };
@@ -87,6 +93,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */,
+				B9624FE32536E7EE005840DC /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +126,7 @@
 				B9EE5ED624A459AA00D8C58F /* grown.gif */,
 				B962529424A3984B002BFE03 /* DFPHeiW12-GB.TTF */,
 				34673E8B2494E8CC00712F38 /* AppDelegate.swift */,
-				34673E8D2494E8CC00712F38 /* SceneDelegate.swift */,
+				B96250152536EFBD005840DC /* SceneDelegate.swift */,
 				3473C1C924965A5D003C7321 /* plantfull.gif */,
 				344A69BB2496232800B818A4 /* SourceHanSans-Heavy.ttc */,
 				344A69B924961F7100B818A4 /* SourceHanSans-Medium.ttc */,
@@ -133,7 +140,6 @@
 				34673E8F2494E8CC00712F38 /* ContentView.swift */,
 				B970A60B24A370EE00B68189 /* SelectorView.swift */,
 				B970A60D24A3710A00B68189 /* PredictLightView.swift */,
-				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B970A5F924A360A000B68189 /* ShinyStar.swift */,
 				B970A5FB24A3611A00B68189 /* Transitions.swift */,
 				B970A5FF24A361CD00B68189 /* ComplexCircleBackground.swift */,
@@ -144,7 +150,10 @@
 				B970A60124A3627700B68189 /* CardPageView.swift */,
 				B962529224A391D4002BFE03 /* ShinyText.swift */,
 				B9EE5EDA24A459F500D8C58F /* ShinyBackground.swift */,
+				B9624FE82536E893005840DC /* ARCameraView.swift */,
+				B96250102536EB04005840DC /* BasicPlant.rcproject */,
 				B946698E24A9D19D00C8402D /* ViewCardView.swift */,
+				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B970A60924A3704700B68189 /* CategoryView.swift */,
 				B994C6572520CF3E00320750 /* Contants.swift */,
 			);
@@ -162,6 +171,7 @@
 		B9521E1425221B2400AC96EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B962500C2536EA6F005840DC /* RealityKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -184,6 +194,7 @@
 			name = TarotOfLight;
 			packageProductDependencies = (
 				B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */,
+				B9624FE22536E7EE005840DC /* Lottie */,
 			);
 			productName = TarotOfLight;
 			productReference = 34673E882494E8CC00712F38 /* TarotOfLight.app */;
@@ -215,6 +226,7 @@
 			mainGroup = 34673E7F2494E8CC00712F38;
 			packageReferences = (
 				34673EA12495084600712F38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				B9624FE12536E7EE005840DC /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 34673E892494E8CC00712F38 /* Products */;
 			projectDirPath = "";
@@ -262,15 +274,17 @@
 				B9EE5EDB24A459F500D8C58F /* ShinyBackground.swift in Sources */,
 				B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */,
 				B970A60A24A3704700B68189 /* CategoryView.swift in Sources */,
+				B96250162536EFBD005840DC /* SceneDelegate.swift in Sources */,
+				B9624FE92536E893005840DC /* ARCameraView.swift in Sources */,
 				B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */,
 				B994C6582520CF3E00320750 /* Contants.swift in Sources */,
 				B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */,
-				34673E8E2494E8CC00712F38 /* SceneDelegate.swift in Sources */,
 				B970A60024A361CD00B68189 /* ComplexCircleBackground.swift in Sources */,
 				34673E902494E8CC00712F38 /* ContentView.swift in Sources */,
 				B962529324A391D4002BFE03 /* ShinyText.swift in Sources */,
 				B946698F24A9D19D00C8402D /* ViewCardView.swift in Sources */,
 				B970A60624A3630C00B68189 /* LittleProgressBar.swift in Sources */,
+				B96250112536EB05005840DC /* BasicPlant.rcproject in Sources */,
 				B90E08D425305AD100635B8F /* InterpreterView.swift in Sources */,
 				B970A5FA24A360A000B68189 /* ShinyStar.swift in Sources */,
 			);
@@ -478,6 +492,14 @@
 				minimumVersion = 1.5.0;
 			};
 		};
+		B9624FE12536E7EE005840DC /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -485,6 +507,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 34673EA12495084600712F38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		B9624FE22536E7EE005840DC /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9624FE12536E7EE005840DC /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

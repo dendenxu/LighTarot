@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+import Lottie
 import SDWebImageSwiftUI
 
 func randomPositionAroundCircle(size: CGSize) -> CGSize {
