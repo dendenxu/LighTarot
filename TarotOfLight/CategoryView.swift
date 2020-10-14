@@ -72,20 +72,32 @@ struct Card: View {
                         LightText(text: cardContent.text, font: .DefaultChineseFont, size: 20, textColor: textColor, shadowColor: shadowColor)
                             .padding(.top, 20).padding(.leading, 20)
                         HStack {
-                            if lockingSelection == .locked {
+//                            if lockingSelection == .locked {
                                 Image("power")
                                     .renderingMode(.original)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 20, height: 20)
-                            } else {
-                                Rectangle()
-                                    .foregroundColor(Color.white.opacity(0))
-                                    .frame(width: 0, height: 20)
-                            }
+//                            } else {
+//                                Rectangle()
+//                                    .foregroundColor(Color.white.opacity(0))
+//                                    .frame(width: 0, height: 20)
+//                            }
                             LightText(text: String(cardContent.energy) + "能量", font: .DefaultChineseFont, size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
                         }.padding(.leading, 20)
                     }
+                } else {
+                    VStack {
+                        HStack {
+                            Spacer()
+                        }
+                        Spacer()
+                        Text("参与牌阵占卜捕获更多能量\n来解锁新牌阵吧！")
+                            .font(.custom("Source Han Sans Medium", size: 16))
+                            .foregroundColor(Color(hex: 0x888888))
+                        Spacer()
+                    }
+                    
                 }
             }
         }

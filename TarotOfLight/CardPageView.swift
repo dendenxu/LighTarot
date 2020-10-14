@@ -26,7 +26,8 @@ struct CardPageView: View {
                             )
                         )
                     )
-                ShinyText(text: "让塔罗和光给予你最善意的指引", font: .DefaultChineseFont, size: 20, maxScale: 1.5, textColor: Color("MediumLime").opacity(0.65), shadowColor: Color("Lime"), isScaling: true)
+                ShinyText(text: "让塔罗和光给予你最善意的指引", font: "Source Han Sans Medium", size: 20, maxScale: 1.5, textColor: Color("MediumLime").opacity(0.65), shadowColor: Color("Lime"), isScaling: true)
+                ShinyText(text: "选择一种塔罗牌阵开启捕光旅程", font: "Source Han Sans Medium", size: 20, maxScale: 1.5, textColor: Color("MediumLime").opacity(0.65), shadowColor: Color("Lime"), isScaling: true)
 
             }.offset(x: -30)
 
