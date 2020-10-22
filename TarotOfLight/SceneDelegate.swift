@@ -20,9 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-//        userProfile = UserProfile(filename: defaultUserProfileName)
-        let defaultUserProfileName = "profile.json"
-        let userProfile = UserProfile(filename: defaultUserProfileName)
+        let userProfile = UserProfile() // default name is profile.json
         let contentView = ContentView().environmentObject(userProfile)
         
         // Use a UIHostingController as window root view controller.

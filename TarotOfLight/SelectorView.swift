@@ -10,17 +10,11 @@ import SwiftUI
 
 
 struct SelectorView: View {
+    @EnvironmentObject var profile: UserProfile
     @Binding var weAreInSelector: SelectorSelection
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreInCategory: CategorySelection
-    @State var progress = 15.0
-    var isFull: Bool {
-        get {
-            return progress >= 100.0
-        }
-    }
-
-
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             // Background color: a small shade of grey, filling the whole screen
@@ -30,8 +24,8 @@ struct SelectorView: View {
 
             // We're defining pages after a background color so that they can use different transition when loading
             if (weAreInSelector == SelectorSelection.mainPage) {
-                Color(isFull ? "MediumDarkPurple" : "LightGray")
-                MainPageView(progress: $progress)
+                Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray")
+                MainPageView(progress: $profile.energy)
                     .transition(.fly)
             } else if (weAreInSelector == SelectorSelection.cardPage) {
                 Color("MediumDarkPurple")

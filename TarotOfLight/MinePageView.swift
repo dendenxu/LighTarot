@@ -12,7 +12,10 @@ import SDWebImageSwiftUI
 
 struct MinePageView: View {
     @EnvironmentObject var profile: UserProfile
-    @State var image: Image? = Image("head")
+    var image: Image {
+        print("Using precomputed image to speed things up")
+        return Image(uiImage: profile.avatarImage)
+    }
     @State var showImagePicker: Bool = false
     var body: some View {
         VStack {
@@ -20,7 +23,7 @@ struct MinePageView: View {
                 Button(action: {
                     self.showImagePicker.toggle()
                 }) {
-                    image?
+                    image
                         .resizable()
                         .scaledToFit()
                         .frame(width: 250, height: 250)
@@ -39,7 +42,7 @@ struct MinePageView: View {
                 }
             }.sheet(isPresented: $showImagePicker) {
                 ImagePicker(sourceType: .photoLibrary) { image in
-                    self.image = Image(uiImage: image)
+                    profile.avatar = image.toBase64()
                     print("Avatar set to new image")
                 }
             }

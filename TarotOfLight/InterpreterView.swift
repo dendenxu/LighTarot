@@ -206,6 +206,7 @@ struct LitPentagram: View {
 }
 
 struct InterpreterView: View {
+    @EnvironmentObject var profile: UserProfile
     @Binding var weAreIn: PredictLightViewSelection
     @State private var engine: CHHapticEngine?
 
@@ -293,6 +294,8 @@ struct InterpreterView: View {
                     Spacer()
                     Button {
                         print("STUB: Should implement sharing the interpretation result here")
+                        print("Currently we're using this to delete the user profile")
+                        UserProfile.deleteFile()
                     } label: {
                         Image("share")
                             .resizable()
@@ -302,6 +305,8 @@ struct InterpreterView: View {
                     }
                     Button {
                         print("STUB: Should implement downloading the interpretation result here")
+                        print("Currently we're using this to save things to user document profile so that no refreshing is needed")
+                        profile.saveToFile()
                     } label: {
                         Image("download")
                             .resizable()

@@ -33,3 +33,12 @@ extension Color {
         )
     }
 }
+
+extension UIImage {
+    func toBase64() -> String {
+        return self.jpegData(compressionQuality: 1)?.base64EncodedString() ?? ""
+    }
+    static func fromBase64(base64: String) -> UIImage {
+        return UIImage(data: Data.init(base64Encoded: base64) ?? Data()) ?? UIImage()
+    }
+}
