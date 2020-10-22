@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 
 
 struct MinePageView: View {
-//    @Binding var userProfile: UserProfile
+    @EnvironmentObject var profile: UserProfile
     @State var image: Image? = Image("head")
     @State var showImagePicker: Bool = false
     var body: some View {
@@ -44,12 +44,14 @@ struct MinePageView: View {
                 }
             }
             Spacer()
-            ShinyText(text: "小土豆", font: .DefaultChineseFont, size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3))
+            ShinyText(font: .DefaultChineseFont, size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3), editable: true, editableText: $profile.name, placeholder: profile.name)
+                .frame(width: 200, height: 40)
                 .padding(.top, 10)
-            textField(text: "出生时间", placeholder: "出生时间", imageName: "time")
+            textField(text: $profile.birthday, placeholder: profile.birthday, imageName: "time")
+                .frame(width: 200, height: 40)
                 .padding(.top, 30)
-
-            textField(text: "现居地", placeholder: "现居地", imageName: "location")
+            textField(text: $profile.location, placeholder: profile.location, imageName: "location")
+                .frame(width: 200, height: 40)
                 .padding(.top, 30)
 
             Text("资料完整度越高，占卜越真实哦！")
@@ -64,7 +66,7 @@ struct MinePageView: View {
 }
 
 struct textField: View {
-    @State var text = "现居地"
+    @Binding var text: String
     @State var placeholder = "Placeholder"
     var imageName = "location"
     var body: some View {
@@ -86,6 +88,6 @@ struct textField: View {
                     .frame(width: (imageName == "location") ? 25 : 20, height: (imageName == "location") ? 25 : 20)
                     .offset(x: (imageName == "location") ? 2 : 0)
             }.padding()
-        }.frame(width: 200, height: 40)
+        }
     }
 }

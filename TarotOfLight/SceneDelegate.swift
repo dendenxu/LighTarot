@@ -22,8 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
 //        userProfile = UserProfile(filename: defaultUserProfileName)
         let defaultUserProfileName = "profile.json"
-        var userProfile = UserProfile(filename: defaultUserProfileName)
-        let contentView = ContentView()
+        let userProfile = UserProfile(filename: defaultUserProfileName)
+        let contentView = ContentView().environmentObject(userProfile)
         
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

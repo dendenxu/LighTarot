@@ -8,42 +8,70 @@
 
 import Foundation
 import SwiftyJSON
-class UserProfile {
-    var name = "Default Name"
-    var location = "Default Location"
-    var birthday = Date(timeIntervalSince1970: TimeInterval(0))
-    var energy = 15.0
+class UserProfile:ObservableObject {
+    @Published var name = "Default Name"
+    @Published var location = "Default Location"
+    
+    var birthday: String {
+        get {
+            return dateFormatter.string(from: birthdayDate)
+        }
+        set {
+            if let triedDate = dateFormatter.date(from: newValue) {
+                birthdayDate = triedDate
+                print("Successfully loaded newly added birthday from string")
+            } else {
+                print("Cannot pharse string as Date of format \(String(describing: dateFormatter.dateFormat))")
+            }
+        }
+    }
+    @Published var energy = 15.0
+    private var birthdayDate = Date(timeIntervalSince1970: TimeInterval(0))
+    private var json = JSON()
     private var dateFormatter: DateFormatter {
         let theFormatter = DateFormatter()
         theFormatter.dateFormat = "yyyy-mm-dd"
         return theFormatter
     }
 
+    private var getDocumentDirectory: URL {
+        // find all possible documents directories for this user
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+
+        // just send back the first one, which ought to be the only one
+        return paths[0]
+    }
+    
+    private let defaultProfileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "defaultProfile", ofType: "json") ?? "defaultProfile.json")
+    
     init(filename: String) {
         loadFromFile(filename: filename)
     }
 
     func loadFromFile(filename: String) {
-        do {
-            let fileURL = getDocumentsDirectory().appendingPathComponent(filename)
-            let json = try JSON(data: Data(contentsOf: fileURL))
-            name = json["name"].string ?? name
-            location = json["location"].string ?? location
-            birthday = dateFormatter.date(from: json["birthday"].stringValue) ?? birthday
-            energy = json["energy"].double ?? energy
-            print("User profile is successfully loaded.")
-        } catch {
-            print("Ah... Something went wrong. \(error)")
+        var fileURL = getDocumentDirectory.appendingPathComponent(filename)
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
+            fileURL = defaultProfileURL
         }
+        do {
+            json = try JSON(data: Data(contentsOf: fileURL))
+            print("User profile is successfully loaded from \(fileURL)")
+        } catch {
+            print("Cannot find user specified location for loading profile. \(error)")
+        }
+        name = json["name"].string ?? name
+        location = json["location"].string ?? location
+        birthday = json["birthday"].string ?? birthday
+        energy = json["energy"].double ?? energy
     }
 
     func saveToFile(filename: String) {
-        let fileURL = getDocumentsDirectory().appendingPathComponent(filename)
+        let fileURL = getDocumentDirectory.appendingPathComponent(filename)
         do {
             let json = JSON([
                 "name": name,
                 "location": location,
-                "birthday": dateFormatter.string(from: birthday),
+                "birthday": birthday,
                 "energy": energy
             ])
             try json.rawData().write(to: fileURL)
@@ -52,11 +80,5 @@ class UserProfile {
         }
     }
 
-    func getDocumentsDirectory() -> URL {
-        // find all possible documents directories for this user
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 
-        // just send back the first one, which ought to be the only one
-        return paths[0]
-    }
 }

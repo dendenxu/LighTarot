@@ -11,6 +11,7 @@ import SwiftUI
 import UIKit
 
 struct ContentView: View {
+    
     @State var weAreInGlobal: GlobalViewSelection = .selector
     @State var weAreInCategory: CategorySelection = .love
     @State var weAreInSelector: SelectorSelection = .mainPage
