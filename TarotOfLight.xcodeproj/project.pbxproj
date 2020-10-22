@@ -19,6 +19,7 @@
 		34673E982494E8D300712F38 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34673E962494E8D300712F38 /* LaunchScreen.storyboard */; };
 		3473C1CA24965A5D003C7321 /* plantfull.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3473C1C924965A5D003C7321 /* plantfull.gif */; };
 		B90E08D425305AD100635B8F /* InterpreterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90E08D325305AD100635B8F /* InterpreterView.swift */; };
+		B9261EBD253EAE5E008DE393 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B9261EBC253EAE5E008DE393 /* SwiftyJSON */; };
 		B946698F24A9D19D00C8402D /* ViewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B946698E24A9D19D00C8402D /* ViewCardView.swift */; };
 		B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */; };
 		B9624FE32536E7EE005840DC /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = B9624FE22536E7EE005840DC /* Lottie */; };
@@ -37,6 +38,7 @@
 		B970A60A24A3704700B68189 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60924A3704700B68189 /* CategoryView.swift */; };
 		B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60B24A370EE00B68189 /* SelectorView.swift */; };
 		B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60D24A3710A00B68189 /* PredictLightView.swift */; };
+		B984405B254072CD00E43C18 /* FileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B984405A254072CD00E43C18 /* FileOperations.swift */; };
 		B994C6552520CD6A00320750 /* cute.gif in Resources */ = {isa = PBXBuildFile; fileRef = B994C6542520CD6A00320750 /* cute.gif */; };
 		B994C6582520CF3E00320750 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B994C6572520CF3E00320750 /* Contants.swift */; };
 		B99E59D5252FFEDF00F5E0A7 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */; };
@@ -78,6 +80,7 @@
 		B970A60924A3704700B68189 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		B970A60B24A370EE00B68189 /* SelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
 		B970A60D24A3710A00B68189 /* PredictLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictLightView.swift; sourceTree = "<group>"; };
+		B984405A254072CD00E43C18 /* FileOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOperations.swift; sourceTree = "<group>"; };
 		B994C6542520CD6A00320750 /* cute.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cute.gif; sourceTree = "<group>"; };
 		B994C6572520CF3E00320750 /* Contants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
 		B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9261EBD253EAE5E008DE393 /* SwiftyJSON in Frameworks */,
 				B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */,
 				B9624FE32536E7EE005840DC /* Lottie in Frameworks */,
 			);
@@ -155,6 +159,7 @@
 				B946698E24A9D19D00C8402D /* ViewCardView.swift */,
 				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B970A60924A3704700B68189 /* CategoryView.swift */,
+				B984405A254072CD00E43C18 /* FileOperations.swift */,
 				B994C6572520CF3E00320750 /* Contants.swift */,
 			);
 			path = TarotOfLight;
@@ -195,6 +200,7 @@
 			packageProductDependencies = (
 				B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */,
 				B9624FE22536E7EE005840DC /* Lottie */,
+				B9261EBC253EAE5E008DE393 /* SwiftyJSON */,
 			);
 			productName = TarotOfLight;
 			productReference = 34673E882494E8CC00712F38 /* TarotOfLight.app */;
@@ -227,6 +233,7 @@
 			packageReferences = (
 				34673EA12495084600712F38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				B9624FE12536E7EE005840DC /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				B9261EBB253EAE5E008DE393 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 34673E892494E8CC00712F38 /* Products */;
 			projectDirPath = "";
@@ -279,6 +286,7 @@
 				B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */,
 				B994C6582520CF3E00320750 /* Contants.swift in Sources */,
 				B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */,
+				B984405B254072CD00E43C18 /* FileOperations.swift in Sources */,
 				B970A60024A361CD00B68189 /* ComplexCircleBackground.swift in Sources */,
 				34673E902494E8CC00712F38 /* ContentView.swift in Sources */,
 				B962529324A391D4002BFE03 /* ShinyText.swift in Sources */,
@@ -492,6 +500,14 @@
 				minimumVersion = 1.5.0;
 			};
 		};
+		B9261EBB253EAE5E008DE393 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		B9624FE12536E7EE005840DC /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -503,6 +519,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B9261EBC253EAE5E008DE393 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9261EBB253EAE5E008DE393 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
 		B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 34673EA12495084600712F38 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;

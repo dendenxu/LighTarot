@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 
 
 struct MinePageView: View {
-
+//    @Binding var userProfile: UserProfile
     @State var image: Image? = Image("head")
     @State var showImagePicker: Bool = false
     var body: some View {

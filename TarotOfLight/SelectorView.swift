@@ -13,7 +13,7 @@ struct SelectorView: View {
     @Binding var weAreInSelector: SelectorSelection
     @Binding var weAreInGlobal: GlobalViewSelection
     @Binding var weAreInCategory: CategorySelection
-    @State var progress = 20.0
+    @State var progress = 15.0
     var isFull: Bool {
         get {
             return progress >= 100.0
