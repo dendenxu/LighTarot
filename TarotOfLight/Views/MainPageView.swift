@@ -75,31 +75,24 @@ struct MainPageView: View {
 
 
     var body: some View {
-        ZStack {
+        ZStack() {
 
             // background image
             // This image shoulde be at the bottom of the whole screen
-            VStack {
-                Spacer()
-                ZStack(alignment: .bottom) {
-                    Color("MediumPurple")
-                        .frame(width: UIScreen.main.bounds.width * 2, height: (UIScreen.main.bounds.height * CGFloat(progress) / 100 - 50))
-                        .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                    WebImage(
-                        url: URL(fileURLWithPath: Bundle.main.path(forResource: "tide", ofType: "gif") ?? "tide.gif"),
-                        isAnimating: self.$tideAnimating)
-                        .resizable()
-                        .playbackRate(1.0)
-                        .retryOnAppear(true)
-                        .scaledToFit()
-                        .frame(width: UIScreen.main.bounds.width * self.tideScale)
-                        .offset(y: -UIScreen.main.bounds.height * (CGFloat(progress)) / 100 + 150)
-                }
-            }
+
+
             if (isFull) {
-                Color("MediumDarkPurple")
-                    .frame(width: UIScreen.main.bounds.width)
-                    .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
+                RoundedRectangle(cornerRadius: .ScreenCornerRadius)
+                    .foregroundColor(Color("MediumDarkPurple"))
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            } else {
+                ZStack{
+                    TideAnimation()
+                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 2)
+                        .scaledToFit()
+                        .offset(y: UIScreen.main.bounds.height)
+                        .offset(y: -UIScreen.main.bounds.height * (CGFloat(progress)) / 100)
+                }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             }
 
             // The main content of navigations, should be changed upon selecting differene pages
@@ -195,7 +188,7 @@ struct MainPageView: View {
                     Text("在时间和光的交汇点")
                         .font(.custom(.SourceHanSansMedium, size: 20))
                         .foregroundColor(Color("MediumLime"))
-                        
+
                     Text("遇见自己，遇见治愈")
                         .font(.custom(.SourceHanSansMedium, size: 20))
                         .foregroundColor(Color("MediumLime"))
@@ -203,7 +196,7 @@ struct MainPageView: View {
                 }
                 Spacer()
             }
-        }.frame(width: UIScreen.main.bounds.width)
+        }
     }
 }
 

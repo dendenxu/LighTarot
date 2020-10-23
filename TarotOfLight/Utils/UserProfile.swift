@@ -18,12 +18,12 @@ class UserProfile:ObservableObject {
     @Published var name = "Default Name"
     @Published var location = "Default Location"
     @Published var avatar = "base64encoding" {
-        didSet {
+        didSet { // didSet will be called even when we're initializing
             print("Loading base64 encoded image from user profile as string")
             avatarImage = .fromBase64(base64: avatar)
         }
     }
-    var avatarImage = UIImage()
+    var avatarImage = UIImage() // Precomputation to speed things up
     var birthday: String {
         get {
             return dateFormatter.string(from: birthdayDate)
