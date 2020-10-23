@@ -71,7 +71,7 @@ struct MainPageView: View {
                     ], from: Date())
         }
     }
-    let tideScale: CGFloat = 1.5
+    let tideScale: CGFloat = 1.05
 
 
     var body: some View {
@@ -87,9 +87,10 @@ struct MainPageView: View {
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             } else {
                 ZStack{
-                    TideAnimation()
+                    LottieView(name: "tide", loopMode: .loop)
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 2)
                         .scaledToFit()
+                        .scaleEffect(tideScale)
                         .offset(y: UIScreen.main.bounds.height)
                         .offset(y: -UIScreen.main.bounds.height * (CGFloat(progress)) / 100)
                 }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)

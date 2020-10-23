@@ -11,12 +11,23 @@ import Lottie
 struct LottieView: UIViewRepresentable {
     var name: String!
     var loopMode: LottieLoopMode = .loop
-
     var animationView = AnimationView()
 
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject {
+        var parent: LottieView
+
+        init(_ animationView: LottieView) {
+            self.parent = animationView
+            super.init()
+        }
+    }
 
     func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
-        let view = UIView()
+        let view = UIView(frame: .zero)
 
         animationView.animation = Animation.named(name)
         animationView.contentMode = .scaleAspectFit
@@ -68,8 +79,16 @@ struct TideAnimation: View {
     }
 }
 
+struct Viewer: View {
+    var body: some View {
+        LottieView(name: "tide", loopMode: .loop)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 2)
+            .offset(y: UIScreen.main.bounds.height)
+    }
+}
+
 struct TideAnimation_Previews: PreviewProvider {
     static var previews: some View {
-        TideAnimation().previewDevice("iPhone 11").edgesIgnoringSafeArea(.all)
+        Viewer().previewDevice("iPhone 11").edgesIgnoringSafeArea(.all)
     }
 }
