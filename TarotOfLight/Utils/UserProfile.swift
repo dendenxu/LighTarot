@@ -38,6 +38,7 @@ class UserProfile:ObservableObject {
         }
     }
     @Published var energy = 15.0
+    @Published var cards: [CardInfo] = [CardInfo]()
     @Published private var birthdayDate = Date(timeIntervalSince1970: TimeInterval(0))
     private var json = JSON()
     private var dateFormatter: DateFormatter {
@@ -59,6 +60,20 @@ class UserProfile:ObservableObject {
         loadFromFile(filename: filename)
     }
 
+    func loadCardInfoFromFile(filename: String = "CardInfo.json") {
+        // MARK: More to be added here for loading information from the CardInfo.json profile
+        let fileURL = UserProfile.getDocumentDirectory.appendingPathComponent(filename)
+        do {
+            json = try JSON(data: Data(contentsOf: fileURL))
+            print("User profile is successfully loaded from \(fileURL)")
+        } catch {
+            print("Cannot find user specified location for loading profile. \(error)")
+        }
+        for index in json {
+            
+        }
+    }
+    
     func loadFromFile(filename: String = "profile.json") {
         var fileURL = UserProfile.getDocumentDirectory.appendingPathComponent(filename)
         if !FileManager.default.fileExists(atPath: fileURL.path) {
@@ -79,14 +94,14 @@ class UserProfile:ObservableObject {
 
     func saveToFile(filename: String = "profile.json") {
         let fileURL = UserProfile.getDocumentDirectory.appendingPathComponent(filename)
+        let json = JSON([
+            "name": name,
+            "location": location,
+            "birthday": birthday,
+            "energy": energy,
+            "avatar": avatar
+        ])
         do {
-            let json = JSON([
-                "name": name,
-                "location": location,
-                "birthday": birthday,
-                "energy": energy,
-                "avatar": avatar
-            ])
             try json.rawData().write(to: fileURL)
             print("Done! User profile data is saved now.")
         } catch {

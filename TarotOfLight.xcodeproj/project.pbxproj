@@ -22,7 +22,8 @@
 		B9261EBD253EAE5E008DE393 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B9261EBC253EAE5E008DE393 /* SwiftyJSON */; };
 		B946698F24A9D19D00C8402D /* ViewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B946698E24A9D19D00C8402D /* ViewCardView.swift */; };
 		B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */; };
-		B957B2282542A153007BCC81 /* CardInformation.json in Resources */ = {isa = PBXBuildFile; fileRef = B957B2272542A153007BCC81 /* CardInformation.json */; };
+		B957B2282542A153007BCC81 /* CardInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = B957B2272542A153007BCC81 /* CardInfo.json */; };
+		B957B2382542A728007BCC81 /* CardContent.json in Resources */ = {isa = PBXBuildFile; fileRef = B957B2372542A728007BCC81 /* CardContent.json */; };
 		B9624FE32536E7EE005840DC /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = B9624FE22536E7EE005840DC /* Lottie */; };
 		B9624FE92536E893005840DC /* ARCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9624FE82536E893005840DC /* ARCameraView.swift */; };
 		B96250112536EB05005840DC /* BasicPlant.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = B96250102536EB04005840DC /* BasicPlant.rcproject */; };
@@ -66,7 +67,8 @@
 		3473C1C924965A5D003C7321 /* plantfull.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = plantfull.gif; sourceTree = "<group>"; };
 		B90E08D325305AD100635B8F /* InterpreterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterView.swift; sourceTree = "<group>"; };
 		B946698E24A9D19D00C8402D /* ViewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCardView.swift; sourceTree = "<group>"; };
-		B957B2272542A153007BCC81 /* CardInformation.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardInformation.json; sourceTree = "<group>"; };
+		B957B2272542A153007BCC81 /* CardInfo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardInfo.json; sourceTree = "<group>"; };
+		B957B2372542A728007BCC81 /* CardContent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardContent.json; sourceTree = "<group>"; };
 		B9624FE82536E893005840DC /* ARCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCameraView.swift; sourceTree = "<group>"; };
 		B962500C2536EA6F005840DC /* RealityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealityKit.framework; path = System/Library/Frameworks/RealityKit.framework; sourceTree = SDKROOT; };
 		B96250102536EB04005840DC /* BasicPlant.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = BasicPlant.rcproject; sourceTree = "<group>"; };
@@ -162,7 +164,8 @@
 		B957B22C2542A1F0007BCC81 /* Profiles */ = {
 			isa = PBXGroup;
 			children = (
-				B957B2272542A153007BCC81 /* CardInformation.json */,
+				B957B2272542A153007BCC81 /* CardInfo.json */,
+				B957B2372542A728007BCC81 /* CardContent.json */,
 				B9D84A7625414DBB00FAEC62 /* DefaultProfile.json */,
 			);
 			path = Profiles;
@@ -304,12 +307,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9D84A7725414DBB00FAEC62 /* DefaultProfile.json in Resources */,
-				B957B2282542A153007BCC81 /* CardInformation.json in Resources */,
+				B957B2282542A153007BCC81 /* CardInfo.json in Resources */,
 				B962529524A3984B002BFE03 /* DFPHeiW12-GB.TTF in Resources */,
 				34673E982494E8D300712F38 /* LaunchScreen.storyboard in Resources */,
 				34673E952494E8D300712F38 /* Preview Assets.xcassets in Resources */,
 				3473C1CA24965A5D003C7321 /* plantfull.gif in Resources */,
 				B9ED187B24A4ED9600327351 /* tudou.gif in Resources */,
+				B957B2382542A728007BCC81 /* CardContent.json in Resources */,
 				B9EE5ED924A459AA00D8C58F /* growing.gif in Resources */,
 				3422C17F2495EB9000296A18 /* plant.gif in Resources */,
 				B9EE5ED824A459AA00D8C58F /* grown.gif in Resources */,

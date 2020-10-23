@@ -22,7 +22,6 @@ struct LittleProgressBar: View {
                     Rectangle().frame(width: CGFloat(value) / 100 * width)
                         .foregroundColor(Color("Lime"))
                     Text("\(value, specifier: "%.0f")")
-//                        .foregroundColor(value < 50 ? Color("MediumLime") : .white)
                         .foregroundColor(.white)
                         .font(.system(size: 12, weight: .bold, design: .rounded))
                 }
