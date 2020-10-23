@@ -11,19 +11,17 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct PredictLightView: View {
-    @State var weAreIn = PredictLightViewSelection.category
-    @Binding var weAreInGlobal: GlobalViewSelection
-    @Binding var weAreInCategory: CategorySelection
+    @EnvironmentObject var profile: UserProfile
     var body: some View {
         ZStack
         {
             // Why do we have to make it inside some stack for it to be loaded?
-            if (weAreIn == .animation) {
+            if (profile.weAreIn == .animation) {
                 Color("MediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                OuterInterpreterView(weAreIn: $weAreIn).transition(.scale(scale: 0.001))
-            } else if(weAreIn == .category) {
+                OuterInterpreterView().transition(.scale(scale: 0.001))
+            } else if(profile.weAreIn == .category) {
                 Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                CategoryView(weAreInCategory: $weAreInCategory, weAreInGlobal: $weAreInGlobal, weAreIn: $weAreIn).transition(.scale(scale: 0.001))
+                CategoryView().transition(.scale(scale: 0.001))
             }
 //        }.edgesIgnoringSafeArea(.all)
         }.clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))

@@ -12,7 +12,6 @@ import CoreHaptics
 struct OuterInterpreterView: View {
     @State var plantFullAnimating: Bool = true
     @State var placerHolderDelay: Bool = false // STUB: should communicate with backend instead
-    @Binding var weAreIn: PredictLightViewSelection
     var body: some View {
         ZStack {
             if !placerHolderDelay {
@@ -37,7 +36,7 @@ struct OuterInterpreterView: View {
                         .onAppear(perform: delay)
                 }
             } else {
-                InterpreterView(weAreIn: $weAreIn)
+                InterpreterView()
                     .transition(fromBottomToTop)
             }
 
@@ -207,7 +206,6 @@ struct LitPentagram: View {
 
 struct InterpreterView: View {
     @EnvironmentObject var profile: UserProfile
-    @Binding var weAreIn: PredictLightViewSelection
     @State private var engine: CHHapticEngine?
 
     func prepareHaptics() {
@@ -280,7 +278,7 @@ struct InterpreterView: View {
                 HStack(alignment: .center, spacing: 20) {
                     Button {
                         withAnimation(springAnimation) {
-                            weAreIn = .category
+                            profile.weAreIn = .category
                         }
                     } label: {
                         Image("getback")

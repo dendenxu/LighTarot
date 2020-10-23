@@ -123,5 +123,15 @@
     "libraryIdentifier" : "dc065805f3732a12940f9b46e8e57e0b",
     "format" : "model",
     "displayName" : "candle.usdz"
+  },
+  {
+    "libraryIdentifier" : "23dd1b3f6d4a6c90c9f9e2fb8a23ef4f",
+    "format" : "model",
+    "displayName" : "牌面.usdz"
+  },
+  {
+    "libraryIdentifier" : "9774300ca52e1942308cfbd44484ada1",
+    "format" : "model",
+    "displayName" : "牌面.usdz"
   }
 ]

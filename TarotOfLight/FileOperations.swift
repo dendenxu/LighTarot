@@ -10,6 +10,11 @@ import Foundation
 import SwiftyJSON
 import SwiftUI
 class UserProfile:ObservableObject {
+    @Published var lockingSelection: LockingSelection = .unlocked
+    @Published var weAreIn: PredictLightViewSelection = .category
+    @Published var weAreInGlobal: GlobalViewSelection = .selector
+    @Published var weAreInCategory: CategorySelection = .love
+    @Published var weAreInSelector: SelectorSelection = .mainPage
     @Published var name = "Default Name"
     @Published var location = "Default Location"
     @Published var avatar = "base64encoding" {

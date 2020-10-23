@@ -11,19 +11,18 @@ import SwiftUI
 import UIKit
 
 struct ContentView: View {
-    
-    @State var weAreInGlobal: GlobalViewSelection = .selector
-    @State var weAreInCategory: CategorySelection = .love
-    @State var weAreInSelector: SelectorSelection = .mainPage
+
+    @EnvironmentObject var profile: UserProfile
+
     var body: some View {
         ZStack(alignment: .bottom) {
-            if (weAreInGlobal == .selector) {
-                SelectorView(weAreInSelector: $weAreInSelector, weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
+            if (profile.weAreInGlobal == .selector) {
+                SelectorView()
                     .transition(.scale(scale: 0.001))
-            } else if (weAreInGlobal == .predictLight) {
-                PredictLightView(weAreInGlobal: $weAreInGlobal, weAreInCategory: $weAreInCategory)
+            } else if (profile.weAreInGlobal == .predictLight) {
+                PredictLightView()
                     .transition(.scale(scale: 0.001))
-            } else if (weAreInGlobal == .arCamera) {
+            } else if (profile.weAreInGlobal == .arCamera) {
                 ARCameraView()
                     .transition(.scale(scale: 0.001))
                     .onAppear {
@@ -31,12 +30,13 @@ struct ContentView: View {
                         // MARK: to actually make the application able to openup this ARScene, we're to imitate a simple AR project newly created
                         // and add ARKit requirements in info.plist
                         // add Privacy - ability to use camera to info.plist too
-                        
-                    }
+
+                }
             }
         }.edgesIgnoringSafeArea(.all)
         // FIXME: when using if to select between two global view, we'll get strange animation for MainPageContentView
         // Well, strangely we're able to fix this by adding a frame width limitation on MainPageContenView
+
     }
 }
 

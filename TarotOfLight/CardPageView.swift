@@ -9,10 +9,7 @@
 import SwiftUI
 
 struct CardPageView: View {
-    @Binding var weAreInGlobal: GlobalViewSelection
-    @Binding var weAreInCategory: CategorySelection
     var body: some View {
-
         VStack() {
             VStack(alignment: .leading) {
                 ShinyText(text: "卜光牌阵", font: .DefaultChineseFont, size: 40, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true)
@@ -33,12 +30,12 @@ struct CardPageView: View {
 
             VStack {
                 HStack {
-                    CategorySelectorView(weAreInGlobal: self.$weAreInGlobal, weAreInCategory: self.$weAreInCategory, whoWeAre: .love)
-                    CategorySelectorView(weAreInGlobal: self.$weAreInGlobal, weAreInCategory: self.$weAreInCategory, whoWeAre: .career)
+                    CategorySelectorView(whoWeAre: .love)
+                    CategorySelectorView(whoWeAre: .career)
                 }.padding(.top)
                 HStack {
-                    CategorySelectorView(weAreInGlobal: self.$weAreInGlobal, weAreInCategory: self.$weAreInCategory, whoWeAre: .wealth)
-                    CategorySelectorView(weAreInGlobal: self.$weAreInGlobal, weAreInCategory: self.$weAreInCategory, whoWeAre: .relation)
+                    CategorySelectorView(whoWeAre: .wealth)
+                    CategorySelectorView(whoWeAre: .relation)
                 }.padding(.bottom)
             }.padding(.horizontal, 20)
         }.padding(.bottom, 200)
@@ -47,8 +44,8 @@ struct CardPageView: View {
 
 
 struct CategorySelectorView: View {
-    @Binding var weAreInGlobal: GlobalViewSelection
-    @Binding var weAreInCategory: CategorySelection
+    @EnvironmentObject var profile: UserProfile
+
     @State var isButtonReleased = false
     var whoWeAre = CategorySelection.love
     var imageScale: CGFloat = 0.7
@@ -57,19 +54,19 @@ struct CategorySelectorView: View {
             geometry in
             Button(action: {
                 withAnimation(springAnimation) {
-                    self.weAreInGlobal = .predictLight
-                    self.weAreInCategory = self.whoWeAre
-                    self.isButtonReleased = true
+                    profile.weAreInGlobal = .predictLight
+                    profile.weAreInCategory = whoWeAre
+                    isButtonReleased = true
                 }
             }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: .ScreenCornerRadius).foregroundColor(Color("LightMediumDarkPurple"))
                     VStack(alignment: .center) {
-                        Image(self.whoWeAre.description)
+                        Image(whoWeAre.description)
                             .renderingMode(.original)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: geometry.size.width * self.imageScale, height: geometry.size.height * self.imageScale)
+                            .frame(width: geometry.size.width * imageScale, height: geometry.size.height * imageScale)
                             .shadow(color: Color("Lime"), radius: 5)
                             .offset(x: 0, y: 0)
                         ShinyText(text: self.whoWeAre.descriptionChinese, font: .DefaultChineseFont, size: 20, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true)
