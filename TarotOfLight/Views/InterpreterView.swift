@@ -115,7 +115,7 @@ struct WrapScroll: View {
                             VStack(spacing: 5) {
                                 Spacer().frame(width: 1, height: 4)
                                 ShinyText(text: card.name, font: .DefaultChineseFont, size: 20, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
-                                ShinyText(text: card.flipped ? "(逆位)" : "(正位)", font: "Source Han Sans Heavy", size: 16, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
+                                ShinyText(text: card.flipped ? "(逆位)" : "(正位)", font: .SourceHanSansHeavy, size: 16, textColor: Color("StrangePurple"), shadowColor: Color.black.opacity(0))
                                 Spacer().frame(width: 1, height: 4)
                             }
                                 .background(RoundedRectangle(cornerRadius: 10)
@@ -433,7 +433,7 @@ struct WrapText: View {
         VStack {
             Spacer().frame(width: 1, height: 30)
             Text(text)
-                .font(Font.custom("Source Han Sans Heavy", size: 14.5))
+                .font(Font.custom(.SourceHanSansHeavy, size: 14.5))
                 .lineSpacing(2)
                 .foregroundColor(.white)
                 .frame(width: 260)

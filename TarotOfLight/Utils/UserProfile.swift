@@ -53,7 +53,7 @@ class UserProfile:ObservableObject {
         return paths[0]
     }
     
-    private let defaultProfileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "defaultProfile", ofType: "json") ?? "defaultProfile.json")
+    private let defaultProfileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "DefaultProfile", ofType: "json") ?? "DefaultProfile.json")
     
     init(filename: String = "profile.json") {
         loadFromFile(filename: filename)

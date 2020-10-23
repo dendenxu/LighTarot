@@ -10,7 +10,7 @@ import SwiftUI
 
 struct LightText: View {
     var text = "解锁新牌阵"
-    var font = "Source Han Sans Heavy"
+    var font = String.SourceHanSansHeavy
     var size: CGFloat = 12.0
     var textColor = Color("LightPink")
     var shadowColor = Color.white
@@ -77,7 +77,7 @@ struct Card: View {
                         }
                         Spacer()
                         Text("参与牌阵占卜捕获更多能量\n来解锁新牌阵吧！")
-                            .font(.custom("Source Han Sans Medium", size: 16))
+                            .font(.custom(.SourceHanSansMedium, size: 16))
                             .foregroundColor(Color(hex: 0x888888))
                         Spacer()
                     }

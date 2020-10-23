@@ -11,7 +11,10 @@ extension CGFloat {
 }
 
 extension String {
-    public static let DefaultChineseFont: String = "DFPHeiW12-GB"
+    public static let DefaultChineseFont = "DFPHeiW12-GB"
+    public static let SourceHanSansHeavy = "Source Han Sans Heavy"
+    public static let SourceHanSansMedium = "Source Han Sans Medium"
+    public static let SourceHanSansLight = "Source Han Sans Light"
 }
 
 // Using hex directly

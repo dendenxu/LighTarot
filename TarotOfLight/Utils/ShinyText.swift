@@ -20,7 +20,7 @@ struct ShinyText: View {
     @State private var isAtMaxScale = false
 
     // Using custom initializer so as to give teh editableText a binding default value
-    init(text: String = "解锁新牌阵", font: String = "Source Han Sans Heavy", size: CGFloat = 12.0, maxScale: CGFloat = 1.5, textColor: Color = Color("LightPink"), shadowColor: Color = .white, isScaling: Bool = false, editable: Bool = false, editableText: Binding<String> = .constant("Hello"), placeholder: String = "Placeholder") {
+    init(text: String = "解锁新牌阵", font: String = .SourceHanSansHeavy, size: CGFloat = 12.0, maxScale: CGFloat = 1.5, textColor: Color = Color("LightPink"), shadowColor: Color = .white, isScaling: Bool = false, editable: Bool = false, editableText: Binding<String> = .constant("Hello"), placeholder: String = "Placeholder") {
         textfield = textField(editableText: editableText, text: text, editable: editable, placeholder: placeholder)
         self.font = font
         self.size = size

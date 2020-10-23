@@ -58,7 +58,7 @@ struct MinePageView: View {
                 .padding(.top, 30)
 
             Text("资料完整度越高，占卜越真实哦！")
-                .font(.custom("Source Han Sans Medium", size: 15))
+                .font(.custom(.SourceHanSansMedium, size: 15))
                 .foregroundColor(Color.black.opacity(0.4))
                 .padding(.top, 30)
                 .padding(.bottom, 200)
@@ -81,7 +81,7 @@ struct textField: View {
                     print("Editing TextField Change: \(text), editing: \(editing)")
                     if editing == false { text = placeholder }
                 }, onCommit: { placeholder = text })
-                    .font(.custom("Source Han Sans Medium", size: 16))
+                    .font(.custom(.SourceHanSansMedium, size: 16))
                     .foregroundColor(Color.black.opacity(0.4))
                     .padding(.leading, 10)
                 Spacer()

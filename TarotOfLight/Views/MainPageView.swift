@@ -145,16 +145,16 @@ struct MainPageView: View {
                                         _ = self.timer
                                     })
                                     .foregroundColor(Color("Lime"))
-                                    .font(.custom("Source Han Sans Heavy", size: 15))
+                                    .font(.custom(.SourceHanSansHeavy, size: 15))
                                     .padding(.top, 10)
                                 // Don't create another timer here
                                 Text("\(String(nowDate.day ?? 10))")
                                     .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
-                                    .font(.custom("Source Han Sans Heavy", size: 40))
+                                    .font(.custom(.SourceHanSansHeavy, size: 40))
 
                                 Text("日签")
                                     .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
-                                    .font(.custom("Source Han Sans Heavy", size: 25))
+                                    .font(.custom(.SourceHanSansHeavy, size: 25))
                                     .overlay(MyRecBackground())
 
                                 Spacer()
@@ -193,11 +193,11 @@ struct MainPageView: View {
                     // refer to https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app
                     // and: https://medium.com/better-programming/swiftui-basics-importing-custom-fonts-b6396d17424d
                     Text("在时间和光的交汇点")
-                        .font(.custom("Source Han Sans Medium", size: 20))
+                        .font(.custom(.SourceHanSansMedium, size: 20))
                         .foregroundColor(Color("MediumLime"))
                         
                     Text("遇见自己，遇见治愈")
-                        .font(.custom("Source Han Sans Medium", size: 20))
+                        .font(.custom(.SourceHanSansMedium, size: 20))
                         .foregroundColor(Color("MediumLime"))
                         .padding(.bottom, 20)
                 }
