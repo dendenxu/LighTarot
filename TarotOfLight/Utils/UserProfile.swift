@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 import SwiftUI
-class UserProfile:ObservableObject {
+class UserProfile: ObservableObject {
     @Published var lockingSelection: LockingSelection = .unlocked
     @Published var weAreIn: PredictLightViewSelection = .category
     @Published var weAreInGlobal: GlobalViewSelection = .selector
@@ -40,6 +40,7 @@ class UserProfile:ObservableObject {
     @Published var energy = 15.0
     @Published var cards: [CardInfo] = [CardInfo]()
     @Published private var birthdayDate = Date(timeIntervalSince1970: TimeInterval(0))
+
     private var json = JSON()
     private var dateFormatter: DateFormatter {
         let theFormatter = DateFormatter()
@@ -53,24 +54,44 @@ class UserProfile:ObservableObject {
         // just send back the first one, which ought to be the only one
         return paths[0]
     }
-    
+
     private let defaultProfileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "DefaultProfile", ofType: "json") ?? "DefaultProfile.json")
-    
-    init(filename: String = "profile.json") {
+
+    init(filename: String = "profile.json", cardInfoFilename: String = "CardInfo.json") {
         loadFromFile(filename: filename)
+        loadCardInfoFromFile(filename: cardInfoFilename)
+        validateCardInfo()
     }
 
     func loadCardInfoFromFile(filename: String = "CardInfo.json") {
         // MARK: More to be added here for loading information from the CardInfo.json profile
-        let fileURL = UserProfile.getDocumentDirectory.appendingPathComponent(filename)
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: filename, ofType: "") ?? filename)
         do {
             json = try JSON(data: Data(contentsOf: fileURL))
-            print("User profile is successfully loaded from \(fileURL)")
+            print("CardInfo.json is successfully loaded from \(fileURL)")
         } catch {
             print("Cannot find user specified location for loading profile. \(error)")
         }
-        for index in json {
-            
+        for entry in json.array ?? [JSON()] {
+            cards.append(
+                CardInfo(
+                    name: entry["name"].string ?? CardInfo.default.name,
+                    flipped: entry["flipped"].bool ?? CardInfo.default.flipped,
+                    imageName: entry["imageName"].string ?? CardInfo.default.imageName,
+                    interpretText: entry["interpretText"].string ?? CardInfo.default.interpretText,
+                    storyText: entry["storyText"].string ?? CardInfo.default.storyText,
+                    energy: entry["energy"].int ?? CardInfo.default.energy
+                )
+            )
+        }
+    }
+
+    func validateCardInfo() {
+        if cards.count < 3 {
+            print("This is uncool, gap of \(3-cards.count) to be filled")
+            for _ in 0..<(3-cards.count) {
+                cards.append(.default)
+            }
         }
     }
     
@@ -108,7 +129,7 @@ class UserProfile:ObservableObject {
             print("Ah... Something went wrong. \(error)")
         }
     }
-    
+
     static func deleteFile(filename: String = "profile.json") {
         let fileURL = getDocumentDirectory.appendingPathComponent(filename)
         do {

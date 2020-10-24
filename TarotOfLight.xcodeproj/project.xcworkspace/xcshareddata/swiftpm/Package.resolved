@@ -23,9 +23,9 @@
         "package": "SDWebImageSwiftUI",
         "repositoryURL": "https://github.com/SDWebImage/SDWebImageSwiftUI",
         "state": {
-          "branch": null,
-          "revision": "4c7f169e39bc35d6b80d42b8eb8301bee9cd0907",
-          "version": "1.5.0"
+          "branch": "master",
+          "revision": "0c23726533af59d9b42f757ba7c90a395ad39c55",
+          "version": null
         }
       },
       {

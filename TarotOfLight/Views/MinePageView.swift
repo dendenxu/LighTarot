@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 import SDWebImageSwiftUI
 
 
@@ -17,6 +18,7 @@ struct MinePageView: View {
         return Image(uiImage: profile.avatarImage)
     }
     @State var showImagePicker: Bool = false
+    @State var keyboardHeight: CGFloat = 0
     var body: some View {
         VStack {
             VStack { // FIXME: why do we need this?
@@ -51,12 +53,24 @@ struct MinePageView: View {
             ShinyText(font: .DefaultChineseFont, size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3), editable: true, editableText: $profile.name, placeholder: profile.name)
                 .frame(width: 200, height: 40)
                 .padding(.top, 10)
+                .padding(.bottom, keyboardHeight)
+                .onReceive(Publishers.keyboardHeight) {
+                    keyboardHeight = $0
+                }
             textField(text: $profile.birthday, placeholder: profile.birthday, imageName: "time")
                 .frame(width: 200, height: 40)
                 .padding(.top, 30)
+                .padding(.bottom, keyboardHeight)
+                .onReceive(Publishers.keyboardHeight) {
+                    keyboardHeight = $0
+                }
             textField(text: $profile.location, placeholder: profile.location, imageName: "location")
                 .frame(width: 200, height: 40)
                 .padding(.top, 30)
+                .padding(.bottom, keyboardHeight)
+                .onReceive(Publishers.keyboardHeight) {
+                    keyboardHeight = $0
+                }
 
             Text("资料完整度越高，占卜越真实哦！")
                 .font(.custom(.SourceHanSansMedium, size: 15))
