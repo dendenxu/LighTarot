@@ -12,9 +12,18 @@ struct LottieView: UIViewRepresentable {
     var name: String!
     var loopMode: LottieLoopMode = .loop
     var animationView = AnimationView()
+    @State var playing: Bool = true {
+        didSet {
+            // Currently we're making the view to play the animation whereever it is
+            // Unless already removed from memory
+            // Start the animation as soon as it's falsely terminated
+            if !playing { animationView.play(completion: completion) }
+        }
+    }
     func completion(block: Bool) {
-        print("Animation is completed, is this the loop's termination or the first repeat? There's this: \(block)")
-        animationView.play(completion: completion) // Recursion
+        print("Animation is completed, current LoopMode is set to \(loopMode), and are we OK?: \(block)")
+        playing = block
+        print("Are we doing a recursion? If this line is presented, we are not.")
     }
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
