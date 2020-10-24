@@ -20,7 +20,8 @@ struct CardPageView: View {
                             size: CGSize(
                                 width: UIScreen.main.bounds.width,
                                 height: UIScreen.main.bounds.height
-                            )
+                            ),
+                            tintColor: Color("LightMediumDarkPurple")
                         )
                     )
                 ShinyText(text: "让塔罗和光给予你最善意的指引", font: .SourceHanSansMedium, size: 20, maxScale: 1.5, textColor: Color("MediumLime").opacity(0.65), shadowColor: Color("Lime"), isScaling: true)

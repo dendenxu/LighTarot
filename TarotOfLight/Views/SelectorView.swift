@@ -33,7 +33,9 @@ struct SelectorView: View {
                     .transition(.fly)
             }
             PageSelector().padding(.bottom, 50)
-        }.clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
+        }
+        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
     }
 }
 

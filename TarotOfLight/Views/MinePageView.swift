@@ -35,8 +35,9 @@ struct MinePageView: View {
                                 size: CGSize(
                                     width: UIScreen.main.bounds.width,
                                     height: UIScreen.main.bounds.height
-                                )
-                            ).opacity(0.5)
+                                ),
+                                tintColor: Color("LightMediumDarkPurple").opacity(0.5)
+                            )
                         )
                         .padding(.top, 150)
                 }

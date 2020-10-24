@@ -73,6 +73,7 @@ struct ShinyPentagram: View {
     @State var isAtSelfMaxAngle = false
     var body: some View {
         Image(imageName)
+            .renderingMode(.template)
             .resizable()
             .scaledToFit()
             .frame(width: viewSize, height: viewSize)
@@ -89,7 +90,7 @@ struct ShinyPentagram: View {
                     self.isAtSelfMaxAngle.toggle()
                 }
             }
-            .colorMultiply(tintColor)
+            .foregroundColor(tintColor)
     }
 }
 

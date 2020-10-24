@@ -12,7 +12,10 @@ struct LottieView: UIViewRepresentable {
     var name: String!
     var loopMode: LottieLoopMode = .loop
     var animationView = AnimationView()
-
+    func completion(block: Bool) {
+        print("Animation is completed, is this the loop's termination or the first repeat? There's this: \(block)")
+        animationView.play(completion: completion) // Recursion
+    }
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -32,7 +35,6 @@ struct LottieView: UIViewRepresentable {
         animationView.animation = Animation.named(name)
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = loopMode
-
         animationView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(animationView)
 
@@ -40,12 +42,13 @@ struct LottieView: UIViewRepresentable {
             animationView.widthAnchor.constraint(equalTo: view.widthAnchor),
             animationView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
-
+        animationView.play(completion: completion)
         return view
     }
 
     func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<LottieView>) {
-        animationView.play()
+//        animationView.play()
+        print("View got updated... If something is wrong, the animation should be stopped...")
     }
 }
 

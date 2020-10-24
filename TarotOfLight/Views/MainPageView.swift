@@ -58,6 +58,7 @@ struct MainPageView: View {
 
     var timer: Timer {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+            
             self.nowDate = Calendar
                 .current
                 .dateComponents([
@@ -84,7 +85,6 @@ struct MainPageView: View {
             if (isFull) {
                 RoundedRectangle(cornerRadius: .ScreenCornerRadius)
                     .foregroundColor(Color("MediumDarkPurple"))
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             } else {
                 ZStack{
                     LottieView(name: "tide", loopMode: .loop)
