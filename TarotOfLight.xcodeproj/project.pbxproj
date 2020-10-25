@@ -502,7 +502,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TarotOfLight/Preview Content\"";
-				DEVELOPMENT_TEAM = 28Y62P3CPJ;
+				DEVELOPMENT_TEAM = WAN3RVDP5M;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TarotOfLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -510,7 +510,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = xz.TarotOfLight;
+				PRODUCT_BUNDLE_IDENTIFIER = zx.TarotOfLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -523,7 +523,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TarotOfLight/Preview Content\"";
-				DEVELOPMENT_TEAM = 28Y62P3CPJ;
+				DEVELOPMENT_TEAM = WAN3RVDP5M;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TarotOfLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -531,7 +531,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = xz.TarotOfLight;
+				PRODUCT_BUNDLE_IDENTIFIER = zx.TarotOfLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
