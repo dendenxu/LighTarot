@@ -109,8 +109,8 @@ struct WrapScroll: View {
                             .rotationEffect(card.flipped ? .degrees(180) : .zero)
                             .frame(width: 270)
                             .padding(.top, 10)
-                            .zIndex(1)
-                            .colorMultiply(computedTintColor)
+//                            .zIndex(1)
+                        .colorMultiply(computedTintColor)
                         ZStack {
                             VStack(spacing: 5) {
                                 Spacer().frame(width: 1, height: 4)
@@ -127,7 +127,7 @@ struct WrapScroll: View {
                         }
                             .padding(.top, 15)
                             .padding(.bottom, 25)
-                            .zIndex(-0.5)
+//                            .zIndex(-0.5)
                     }
                         .offset(x: -percentage * imageOffset, y: -abs(percentage) * 60)
                         .scaleEffect(computedScale)
@@ -149,10 +149,10 @@ struct WrapScroll: View {
                             ShinyText(text: "卜光能量", font: .DefaultChineseFont, size: 20, textColor: Color(hex: 0xF7EB2E), shadowColor: Color.black.opacity(0))
                         }
                             .offset(x: -15)
-                        
+
                         LitPentagram(numberOfPentagram: card.fullEnergy, numberOfLit: card.energy)
                             .frame(height: 10)
-                        
+
                         WebImage(
                             url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"), isAnimating: $isEnergyAnimating)
                             .resizable()
@@ -171,7 +171,7 @@ struct WrapScroll: View {
         } // ZStack
         .offset(x: -percentage * baseOffset)
             .scaleEffect(x: computedScale)
-            .zIndex(-Double(abs(percentage)))
+            .zIndex(-2 + Double(abs(percentage)))
     }
 }
 
@@ -244,7 +244,7 @@ struct InterpreterView: View {
                     Button {
                         print("STUB: Should implement downloading the interpretation result here")
                         print("Currently we're using this to save things to user document profile so that no refreshing is needed")
-                        profile.saveToFile()
+                        profile.saveUserInfoToFile()
                     } label: {
                         Image("download")
                             .resizable()
@@ -257,20 +257,23 @@ struct InterpreterView: View {
                 .padding(.top, 60)
                 .padding(.horizontal, 30)
 
-            PagerView(pageCount: 3, currentIndex: $currentIndex, percentages: $percentages) {
-                ForEach(0..<3) { index in
-                    WrapScroll(card: profile.cards[index], percentage: percentages[index])
-                }
-            }.background(TravelingBackground(nStroke: 20, nFill: 20))
+            ZStack {
+                PagerView(pageCount: 3, currentIndex: $currentIndex, percentages: $percentages) {
+                    ForEach(0..<3) { index in
+                        WrapScroll(card: profile.cardInfos[index], percentage: percentages[index])
+                    }
+                }.background(TravelingBackground(nStroke: 20, nFill: 20))
+            }
+
         } // VStack
     }
 }
 
 struct PagerView<Content: View>: View {
+    let content: Content
     let pageCount: Int
     @Binding var currentIndex: Int
     @Binding var percentages: [CGFloat] // left, right middle
-    let content: Content
     @State var translation: CGFloat = 0
     @EnvironmentObject var profile: UserProfile
     init(pageCount: Int, currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, @ViewBuilder content: () -> Content) {
@@ -279,25 +282,23 @@ struct PagerView<Content: View>: View {
         self._percentages = percentages
         self.content = content()
     }
-    struct PagerDot: View {
-        @Binding var currentIndex: Int
-        @Binding var translation: CGFloat
-        @Binding var percentages: [CGFloat]
-        var pageCount: Int
-        var width: CGFloat
-        var body: some View {
-            VStack {
-                Spacer()
-                HStack {
-                    ForEach(0..<pageCount) { index in
-                        Circle()
-                            .fill(index == currentIndex ? Color.white : Color.gray)
-                            .frame(width: 10, height: 10)
-                        // BUG: Cannot implement tap, I give up.
-                    }
-                }
+
+    func onEndedAction(index: Int, width: CGFloat)  {
+        let oldValue = currentIndex
+        currentIndex = index
+        isChanging = false
+        for _ in 0..<abs(currentIndex - oldValue) {
+            profile.complexSuccess()
+        }
+        print("Current translation: \(translation), currentIndex: \(currentIndex)")
+        withAnimation(fastSpringAnimation) {
+            translation = -CGFloat(currentIndex) * width
+            // DUP: duplicated code fragment, consider optimization
+            for index in 0..<pageCount {
+                percentages[index] = (translation + CGFloat(index) * width) / width
             }
         }
+        print("Paging gesture ended! Percentages are: [\(percentages[0]), \(percentages[1]), \(percentages[2])]")
     }
     
     @State var isChanging = false
@@ -313,21 +314,8 @@ struct PagerView<Content: View>: View {
                     .onEnded { value in
                         let offset = value.predictedEndTranslation.width / width
                         let newIndex = (CGFloat(currentIndex) - offset).rounded()
-                        let oldValue = currentIndex
-                        currentIndex = min(max(Int(newIndex), 0), pageCount - 1)
-                        isChanging = false
-                        for _ in 0..<abs(currentIndex - oldValue) {
-                            profile.complexSuccess()
-                        }
-                        print("Current translation: \(translation), currentIndex: \(currentIndex)")
-                        withAnimation(fastSpringAnimation) {
-                            translation = -CGFloat(currentIndex) * width
-                            // DUP: duplicated code fragment, consider optimization
-                            for index in 0..<pageCount {
-                                percentages[index] = (translation + CGFloat(index) * width) / width
-                            }
-                        }
-                        print("Paging gesture ended! Percentages are: [\(percentages[0]), \(percentages[1]), \(percentages[2])]")
+                        let index = min(max(Int(newIndex), 0), pageCount - 1)
+                        onEndedAction(index: index, width: width)
                     }
                     .onChanged { value in
                         print("Paging gesture changing...")
@@ -343,7 +331,7 @@ struct PagerView<Content: View>: View {
                                 }
                             }
                         } else {
-                            isChanging = false
+                            isChanging = false // This bool is magically making things work
                         }
                 }
 
@@ -356,9 +344,31 @@ struct PagerView<Content: View>: View {
                     .frame(width: geometry.size.width, alignment: .leading)
                     .offset(x: translation)
                     .gesture(PagerDragGesture)
-                    .zIndex(-1)
-                PagerDot(currentIndex: $currentIndex, translation: $translation, percentages: $percentages, pageCount: pageCount, width: geometry.size.width)
-                    .padding(.bottom, 50)
+//                    .zIndex(-1)
+//                Spacer()
+                VStack {
+                    Spacer()
+                    ZStack {
+                        // This is ridiculous... Adding a rectangle frame around it will make the gesture recognizable?
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundColor(Color.white.opacity(0.3))
+                            .frame(width: 65, height: 20)
+                        HStack(spacing: 10) {
+                            ForEach(0..<pageCount) { index in
+                                Button(action: {
+                                    print("SMALL BUTTON PRESSED! of index \(index)")
+                                    onEndedAction(index: index, width: width)
+                                }) {
+                                    Circle()
+                                        .fill(index == currentIndex ? Color.white : Color.gray)
+                                        .frame(width: 10, height: 10)
+                                }
+                                // BUG: Cannot implement tap, I give up.
+                            }
+                        }
+                    }
+                }
+                    .padding(.bottom, 30)
             }
         }
     }

@@ -11,11 +11,14 @@ import CoreHaptics
 import SwiftyJSON
 import SwiftUI
 class UserProfile: ObservableObject {
+    // Navigation data, updating the view by selecting different enum value for these
     @Published var lockingSelection: LockingSelection = .unlocked
     @Published var weAreIn: PredictLightViewSelection = .category
     @Published var weAreInGlobal: GlobalViewSelection = .selector
     @Published var weAreInCategory: CategorySelection = .love
     @Published var weAreInSelector: SelectorSelection = .mainPage
+    
+    // Information about the current user
     @Published var name = "Default Name"
     @Published var location = "Default Location"
     @Published var avatar = "base64encoding" {
@@ -24,6 +27,7 @@ class UserProfile: ObservableObject {
             avatarImage = .fromBase64(base64: avatar)
         }
     }
+    // Computed value (manually updated value to reserve the resource)
     var avatarImage = UIImage() // Precomputation to speed things up
     var birthday: String {
         get {
@@ -38,17 +42,26 @@ class UserProfile: ObservableObject {
             }
         }
     }
-    @Published var energy = 15.0
-    @Published var cards: [CardInfo] = [CardInfo]()
+    @Published var energy = 15.0 // Max: 100.0 as Double type
     @Published private var birthdayDate = Date(timeIntervalSince1970: TimeInterval(0))
-
+    
+    // Card informations from default json file
+    // Defines whether user has unlocked certain cards
+    @Published var cardInfos: [CardInfo] = [CardInfo]()
+    @Published var cardSets: [Card] = [Card]()
+    
+    
+    // Convenience variable for loading JSON data
     private var json = JSON()
+    
+    // Our dataformatter
     private var dateFormatter: DateFormatter {
         let theFormatter = DateFormatter()
         theFormatter.dateFormat = "yyyy-mm-dd"
         return theFormatter
     }
 
+    // Document directory that will get deleted once the user deleted the APP
     static private var getDocumentDirectory: URL {
         // find all possible documents directories for this user
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -59,7 +72,7 @@ class UserProfile: ObservableObject {
     private let defaultProfileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "DefaultProfile", ofType: "json") ?? "DefaultProfile.json")
 
     init(filename: String = "profile.json", cardInfoFilename: String = "CardInfo.json") {
-        loadFromFile(filename: filename)
+        loadUserInfoFromFile(filename: filename)
         loadCardInfoFromFile(filename: cardInfoFilename)
         validateCardInfo()
         prepareHaptics()
@@ -75,7 +88,7 @@ class UserProfile: ObservableObject {
             print("Cannot find user specified location for loading profile. \(error)")
         }
         for entry in json.array ?? [JSON()] {
-            cards.append(
+            cardInfos.append(
                 CardInfo(
                     name: entry["name"].string ?? CardInfo.default.name,
                     flipped: entry["flipped"].bool ?? CardInfo.default.flipped,
@@ -88,16 +101,19 @@ class UserProfile: ObservableObject {
         }
     }
 
-    func validateCardInfo() {
-        if cards.count < 3 {
-            print("This is uncool, gap of \(3 - cards.count) to be filled")
-            for _ in 0..<(3 - cards.count) {
-                cards.append(.default)
+    func validateCardInfo(count: Int = 3) {
+        print("Current loading static information from the json file to be displayed on the screen")
+        
+        if cardInfos.count < count {
+            print("This is uncool, gap of \(count - cardInfos.count) to be filled")
+            for _ in 0..<(count - cardInfos.count) {
+                print("Since there's \(count) guys to be displayed, we hereby check the number of available cards inside, fill the up with \(CardInfo.default)")
+                cardInfos.append(.default)
             }
         }
     }
 
-    func loadFromFile(filename: String = "profile.json") {
+    func loadUserInfoFromFile(filename: String = "profile.json") {
         var fileURL = UserProfile.getDocumentDirectory.appendingPathComponent(filename)
         if !FileManager.default.fileExists(atPath: fileURL.path) {
             fileURL = defaultProfileURL
@@ -115,7 +131,7 @@ class UserProfile: ObservableObject {
         avatar = json["avatar"].string ?? avatar
     }
 
-    func saveToFile(filename: String = "profile.json") {
+    func saveUserInfoToFile(filename: String = "profile.json") {
         let fileURL = UserProfile.getDocumentDirectory.appendingPathComponent(filename)
         let json = JSON([
             "name": name,
