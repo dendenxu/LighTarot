@@ -64,6 +64,7 @@ struct PageSelectorButton: View {
     let whoWeAre: SelectorSelection
     var body: some View {
         Button(action: {
+            profile.complexSuccess()
             withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
                 profile.weAreInSelector = whoWeAre
             }

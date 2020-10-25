@@ -36,6 +36,7 @@ struct MyRecBackground: View {
 }
 
 struct MainPageView: View {
+    @EnvironmentObject var profile: UserProfile
     var isFull: Bool {
         get {
             return progress >= 100.0
@@ -122,6 +123,7 @@ struct MainPageView: View {
 
 
                     Button(action: { // The Daily
+                        profile.complexSuccess()
                         withAnimation(springAnimation) {
                             self.progress += 20
                             if (self.progress >= 100.0) {

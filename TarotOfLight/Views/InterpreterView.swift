@@ -206,39 +206,6 @@ struct LitPentagram: View {
 
 struct InterpreterView: View {
     @EnvironmentObject var profile: UserProfile
-    @State private var engine: CHHapticEngine?
-
-    func prepareHaptics() {
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-
-        do {
-            self.engine = try CHHapticEngine()
-            try engine?.start()
-        } catch {
-            print("There was an error creating the engine: \(error.localizedDescription)")
-        }
-    }
-
-    func complexSuccess() {
-        // make sure that the device supports haptics
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-        var events = [CHHapticEvent]()
-
-        // create one intense, sharp tap
-        let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
-        let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 1)
-        let event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity, sharpness], relativeTime: 0)
-        events.append(event)
-
-        // convert those events into a pattern and play it immediately
-        do {
-            let pattern = try CHHapticPattern(events: events, parameters: [])
-            let player = try engine?.makePlayer(with: pattern)
-            try player?.start(atTime: 0)
-        } catch {
-            print("Failed to play pattern: \(error.localizedDescription).")
-        }
-    }
 
     @State var percentages: [CGFloat] = [0.0, 1.0, 2.0]
     @State var currentIndex = 0
@@ -296,7 +263,6 @@ struct InterpreterView: View {
                 }
             }.background(TravelingBackground(nStroke: 20, nFill: 20))
         } // VStack
-        .onAppear(perform: prepareHaptics)
     }
 }
 
@@ -306,6 +272,7 @@ struct PagerView<Content: View>: View {
     @Binding var percentages: [CGFloat] // left, right middle
     let content: Content
     @State var translation: CGFloat = 0
+    @EnvironmentObject var profile: UserProfile
     init(pageCount: Int, currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, @ViewBuilder content: () -> Content) {
         self.pageCount = pageCount
         self._currentIndex = currentIndex
@@ -329,20 +296,29 @@ struct PagerView<Content: View>: View {
                         // BUG: Cannot implement tap, I give up.
                     }
                 }
-                Spacer().frame(height: 30)
             }
         }
     }
+    
+    @State var isChanging = false
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 let width = geometry.size.width
                 let PagerDragGesture =
-                    DragGesture(minimumDistance: 30)
+                    DragGesture(
+                        minimumDistance: 30,
+                        coordinateSpace: .global
+                    )
                     .onEnded { value in
                         let offset = value.predictedEndTranslation.width / width
                         let newIndex = (CGFloat(currentIndex) - offset).rounded()
+                        let oldValue = currentIndex
                         currentIndex = min(max(Int(newIndex), 0), pageCount - 1)
+                        isChanging = false
+                        for _ in 0..<abs(currentIndex - oldValue) {
+                            profile.complexSuccess()
+                        }
                         print("Current translation: \(translation), currentIndex: \(currentIndex)")
                         withAnimation(fastSpringAnimation) {
                             translation = -CGFloat(currentIndex) * width
@@ -355,11 +331,19 @@ struct PagerView<Content: View>: View {
                     }
                     .onChanged { value in
                         print("Paging gesture changing...")
-                        withAnimation(fastSpringAnimation) {
-                            translation = value.translation.width - CGFloat(currentIndex) * width
-                            for index in 0..<pageCount {
-                                percentages[index] = (translation + CGFloat(index) * width) / width
+                        let translationW = value.translation.width - CGFloat(currentIndex) * width
+                        let translationH = value.translation.height
+                        if isChanging || translationH < 10 {
+                            print("Are we currently changing: \(isChanging)")
+                            isChanging = true
+                            withAnimation(fastSpringAnimation) {
+                                translation = translationW
+                                for index in 0..<pageCount {
+                                    percentages[index] = (translationW + CGFloat(index) * width) / width
+                                }
                             }
+                        } else {
+                            isChanging = false
                         }
                 }
 
@@ -374,6 +358,7 @@ struct PagerView<Content: View>: View {
                     .gesture(PagerDragGesture)
                     .zIndex(-1)
                 PagerDot(currentIndex: $currentIndex, translation: $translation, percentages: $percentages, pageCount: pageCount, width: geometry.size.width)
+                    .padding(.bottom, 50)
             }
         }
     }

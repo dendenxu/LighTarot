@@ -49,11 +49,12 @@ struct CategorySelectorView: View {
 
     @State var isButtonReleased = false
     var whoWeAre = CategorySelection.love
-    var imageScale: CGFloat = 0.7
+    var imageScale: CGFloat = 0.5
     var body: some View {
         GeometryReader {
             geometry in
             Button(action: {
+                profile.complexSuccess()
                 withAnimation(springAnimation) {
                     profile.weAreInGlobal = .predictLight
                     profile.weAreInCategory = whoWeAre
@@ -69,10 +70,9 @@ struct CategorySelectorView: View {
                             .scaledToFit()
                             .frame(width: geometry.size.width * imageScale, height: geometry.size.height * imageScale)
                             .shadow(color: Color("Lime"), radius: 5)
-                            .offset(x: 0, y: 0)
+                            .padding(.vertical, 10)
                         ShinyText(text: self.whoWeAre.descriptionChinese, font: .DefaultChineseFont, size: 20, maxScale: 1.5, textColor: Color("MediumLime"), shadowColor: Color("Lime"), isScaling: true)
                             .padding(.bottom, 30)
-
                     }
                 }.shadow(radius: 20).padding()
             }

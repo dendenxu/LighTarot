@@ -46,6 +46,7 @@ struct Card: View {
         Button(action: {
             print("DEBUG: Currently navigating to animation when a locked card is pressed\nand the ARCamera when card is unlocked")
             print("Give me some action upon hitting the button")
+            profile.complexSuccess()
             withAnimation(springAnimation) {
                 if !cardContent.locked { profile.weAreInGlobal = .arCamera }
                 else { profile.weAreIn = .animation }
@@ -113,6 +114,8 @@ struct CategoryView: View {
                         .foregroundColor(Color("LightMediumDarkPurple"))
                     VStack(alignment: .leading) {
                         Button(action: {
+                            print("Getting back...")
+                            profile.complexSuccess()
                             withAnimation(springAnimation) {
                                 profile.weAreInGlobal = .selector;
                             }
@@ -121,7 +124,7 @@ struct CategoryView: View {
                                 ShinyText(text: "< " + profile.weAreInCategory.descriptionChinese, font: .DefaultChineseFont, size: 20, textColor: Color("LightGray"))
                             }
                         }
-                            .padding(.top, 40)
+                            .padding(.top, 50)
                             .padding(.leading, 20)
 
                         Spacer()

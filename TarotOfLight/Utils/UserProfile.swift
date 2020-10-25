@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreHaptics
 import SwiftyJSON
 import SwiftUI
 class UserProfile: ObservableObject {
@@ -61,6 +62,7 @@ class UserProfile: ObservableObject {
         loadFromFile(filename: filename)
         loadCardInfoFromFile(filename: cardInfoFilename)
         validateCardInfo()
+        prepareHaptics()
     }
 
     func loadCardInfoFromFile(filename: String = "CardInfo.json") {
@@ -88,13 +90,13 @@ class UserProfile: ObservableObject {
 
     func validateCardInfo() {
         if cards.count < 3 {
-            print("This is uncool, gap of \(3-cards.count) to be filled")
-            for _ in 0..<(3-cards.count) {
+            print("This is uncool, gap of \(3 - cards.count) to be filled")
+            for _ in 0..<(3 - cards.count) {
                 cards.append(.default)
             }
         }
     }
-    
+
     func loadFromFile(filename: String = "profile.json") {
         var fileURL = UserProfile.getDocumentDirectory.appendingPathComponent(filename)
         if !FileManager.default.fileExists(atPath: fileURL.path) {
@@ -139,4 +141,48 @@ class UserProfile: ObservableObject {
         }
     }
 
+    @Published private var engine: CHHapticEngine?
+
+    func prepareHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+
+        do {
+            self.engine = try CHHapticEngine()
+            try engine?.start()
+        } catch {
+            print("There was an error creating the engine: \(error.localizedDescription)")
+        }
+    }
+
+    func complexSuccess() {
+        // make sure that the device supports haptics
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+        var events = [CHHapticEvent]()
+
+        // create one intense, sharp tap
+        let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
+        let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.3)
+//        let sustained = CHHapticEventParameter(parameterID: .sustained, value: 1)
+//        let attack = CHHapticEventParameter(parameterID: .attackTime, value: 0)
+//        let decay = CHHapticEventParameter(parameterID: .decayTime, value: 1)
+        let event = CHHapticEvent(eventType: .hapticTransient, parameters:
+            [
+                intensity,
+                sharpness,
+//                sustained,
+//                attack,
+//                decay
+            ],
+        relativeTime: 0)
+        events.append(event)
+
+        // convert those events into a pattern and play it immediately
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try engine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+        } catch {
+            print("Failed to play pattern: \(error.localizedDescription).")
+        }
+    }
 }
