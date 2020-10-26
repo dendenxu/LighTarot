@@ -17,7 +17,7 @@ class UserProfile: ObservableObject {
     @Published var weAreInGlobal: GlobalViewSelection = .selector
     @Published var weAreInCategory: CategorySelection = .love
     @Published var weAreInSelector: SelectorSelection = .mainPage
-    
+
     // Information about the current user
     @Published var name = "Default Name"
     @Published var location = "Default Location"
@@ -44,16 +44,16 @@ class UserProfile: ObservableObject {
     }
     @Published var energy = 15.0 // Max: 100.0 as Double type
     @Published private var birthdayDate = Date(timeIntervalSince1970: TimeInterval(0))
-    
+
     // Card informations from default json file
     // Defines whether user has unlocked certain cards
     @Published var cardInfos: [CardInfo] = [CardInfo]()
     @Published var cardSets: [Card] = [Card]()
-    
-    
+
+
     // Convenience variable for loading JSON data
     private var json = JSON()
-    
+
     // Our dataformatter
     private var dateFormatter: DateFormatter {
         let theFormatter = DateFormatter()
@@ -103,7 +103,7 @@ class UserProfile: ObservableObject {
 
     func validateCardInfo(count: Int = 3) {
         print("Current loading static information from the json file to be displayed on the screen")
-        
+
         if cardInfos.count < count {
             print("This is uncool, gap of \(count - cardInfos.count) to be filled")
             for _ in 0..<(count - cardInfos.count) {
@@ -170,7 +170,7 @@ class UserProfile: ObservableObject {
         }
     }
 
-    func complexSuccess() {
+    func pagerSuccess(count: Int = 1) {
         // make sure that the device supports haptics
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
         var events = [CHHapticEvent]()
@@ -178,16 +178,44 @@ class UserProfile: ObservableObject {
         // create one intense, sharp tap
         let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
         let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.3)
-//        let sustained = CHHapticEventParameter(parameterID: .sustained, value: 1)
-//        let attack = CHHapticEventParameter(parameterID: .attackTime, value: 0)
-//        let decay = CHHapticEventParameter(parameterID: .decayTime, value: 1)
+
+        print("Current count is \(count), should play multiple Haptics")
+
+        var relativeTime: Double = 0
+        
+        for _ in 0..<count {
+            let newEvent = CHHapticEvent(eventType: .hapticTransient, parameters:
+                [
+                    intensity,
+                    sharpness,
+                ],
+            relativeTime: relativeTime)
+            events.append(newEvent)
+            relativeTime += 0.05
+        }
+
+        // convert those events into a pattern and play it immediately
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try engine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+        } catch {
+            print("Failed to play pattern: \(error.localizedDescription).")
+        }
+    }
+
+    func complexSuccess() {
+        // make sure that the device supports haptics
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+        var events = [CHHapticEvent]()
+
+        // create one intense, sharp tap
+        let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
+        let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.7)
         let event = CHHapticEvent(eventType: .hapticTransient, parameters:
             [
                 intensity,
                 sharpness,
-//                sustained,
-//                attack,
-//                decay
             ],
         relativeTime: 0)
         events.append(event)

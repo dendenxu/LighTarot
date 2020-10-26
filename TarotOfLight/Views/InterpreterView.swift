@@ -47,7 +47,6 @@ struct OuterInterpreterView: View {
         // Delay of 3 seconds
         print("Playing the animation")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-
             if !placerHolderDelay {
                 withAnimation(springAnimation) {
                     placerHolderDelay = true
@@ -56,7 +55,6 @@ struct OuterInterpreterView: View {
             } else {
                 print("Not the first time called")
             }
-
         }
     }
 }
@@ -283,13 +281,11 @@ struct PagerView<Content: View>: View {
         self.content = content()
     }
 
-    func onEndedAction(index: Int, width: CGFloat)  {
+    private func onEndedAction(index: Int, width: CGFloat) {
         let oldValue = currentIndex
         currentIndex = index
         isChanging = false
-        for _ in 0..<abs(currentIndex - oldValue) {
-            profile.complexSuccess()
-        }
+        profile.pagerSuccess(count: abs(currentIndex - oldValue))
         print("Current translation: \(translation), currentIndex: \(currentIndex)")
         withAnimation(fastSpringAnimation) {
             translation = -CGFloat(currentIndex) * width
@@ -300,8 +296,27 @@ struct PagerView<Content: View>: View {
         }
         print("Paging gesture ended! Percentages are: [\(percentages[0]), \(percentages[1]), \(percentages[2])]")
     }
-    
+
+    private func delay() {
+        // Delay of 3 seconds
+        counter += 1
+        print("Waiting a while... counter: \(counter)")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            counter -= 1
+            if selecting && (counter == 0) {
+                withAnimation(springAnimation) {
+                    selecting = false
+                }
+                print("Done!")
+            } else {
+                print("Not selected")
+            }
+        }
+    }
+
     @State var isChanging = false
+    @State var selecting = false
+    @State var counter: Int = 0
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -350,25 +365,52 @@ struct PagerView<Content: View>: View {
                     Spacer()
                     ZStack {
                         // This is ridiculous... Adding a rectangle frame around it will make the gesture recognizable?
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(Color.white.opacity(0.3))
-                            .frame(width: 65, height: 20)
-                        HStack(spacing: 10) {
+
+                        HStack(spacing: 0) {
                             ForEach(0..<pageCount) { index in
                                 Button(action: {
-                                    print("SMALL BUTTON PRESSED! of index \(index)")
-                                    onEndedAction(index: index, width: width)
                                 }) {
-                                    Circle()
-                                        .fill(index == currentIndex ? Color.white : Color.gray)
-                                        .frame(width: 10, height: 10)
+                                    if index == 0 {
+                                        Spacer().frame(width: selecting ? 10 : 5)
+                                    }
+                                    Ellipse()
+                                        .frame(width: 20, height: selecting ? 80 : 40)
+//                                        .scaleEffect(1.5)
+//                                        .scaleEffect(y: 2, anchor: .center)
+                                    .opacity(0)
+                                        .overlay(Circle().fill(index == currentIndex ? Color.white : Color.gray).frame(width: 10, height: 10))
+                                        .onTapGesture {
+                                            print("SMALL BUTTON PRESSED! of index \(index)")
+                                            onEndedAction(index: index, width: width)
+                                            delay()
+                                            if !selecting {
+                                                withAnimation(springAnimation) {
+                                                    selecting = true
+                                                }
+                                            }
+                                    }
+                                    if index == pageCount - 1 {
+                                        Spacer().frame(width: selecting ? 10 : 5)
+                                    }
                                 }
                                 // BUG: Cannot implement tap, I give up.
                             }
                         }
-                    }
+//                            .padding(.vertical, 0)
+                        .background(
+                            GeometryReader {
+                                geo in
+                                VStack {
+                                    Capsule().foregroundColor(Color.white.opacity(0.3))
+                                        .frame(width: geo.size.width, height: geo.size.height/2)
+                                        .offset(y: geo.size.height/4)
+                                }
+                            }
+                        )
+                    }.padding(.bottom, 50)
+
                 }
-                    .padding(.bottom, 30)
+
             }
         }
     }
