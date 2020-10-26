@@ -75,8 +75,6 @@ struct MainPageView: View {
     }
     let tideScale: CGFloat = 1.05
 
-    @State var lottieView: LottieView = LottieView(name: "tide", loopMode: .loop)
-
     var body: some View {
         ZStack() {
 
@@ -89,7 +87,7 @@ struct MainPageView: View {
                     .foregroundColor(Color("MediumDarkPurple"))
             } else {
                 ZStack {
-                    lottieView
+                    LottieView(name: "tide", loopMode: .loop)
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 2)
                         .scaledToFit()
                         .scaleEffect(tideScale)
@@ -97,11 +95,11 @@ struct MainPageView: View {
                         .offset(y: -UIScreen.main.bounds.height * (CGFloat(progress)) / 100)
                         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                             print("Moving back to the foreground!")
-                            lottieView.shouldPlay = true
+//                            lottieView.shouldPlay = true
                         }
-                        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                             print("Moving to the background!")
-                            lottieView.shouldPlay = false
+//                            lottieView.shouldPlay = false
                             
                     }
                 }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)

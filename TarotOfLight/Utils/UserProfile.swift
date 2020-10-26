@@ -160,7 +160,7 @@ class UserProfile: ObservableObject {
         }
     }
 
-    @Published private var engine: CHHapticEngine?
+    @Published var engine: CHHapticEngine?
 
     func prepareHaptics() {
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
