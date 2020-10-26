@@ -83,11 +83,11 @@ struct ShinyPentagram: View {
             .offset(x: self.offsetView.width, y: self.offsetView.height)
             .rotationEffect(isAtMaxScale ? .degrees(0) : .degrees(maxAngle), anchor: .topLeading)
             .onAppear {
-                withAnimation(self.shineAnimation) {
-                    self.isAtMaxScale.toggle()
+                withAnimation(shineAnimation) {
+                    isAtMaxScale.toggle()
                 }
-                withAnimation(self.shineAnimationSelf) {
-                    self.isAtSelfMaxAngle.toggle()
+                withAnimation(shineAnimationSelf) {
+                    isAtSelfMaxAngle.toggle()
                 }
             }
             .foregroundColor(tintColor)

@@ -11,6 +11,9 @@ import CoreHaptics
 import SwiftyJSON
 import SwiftUI
 class UserProfile: ObservableObject {
+    // Some animation configuration
+    @Published var sceneAtForeground = true
+    
     // Navigation data, updating the view by selecting different enum value for these
     @Published var lockingSelection: LockingSelection = .unlocked
     @Published var weAreIn: PredictLightViewSelection = .category

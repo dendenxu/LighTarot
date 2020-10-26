@@ -9,22 +9,27 @@
 import SwiftUI
 import Lottie
 struct LottieView: UIViewRepresentable {
-    var name: String!
-    var loopMode: LottieLoopMode = .loop
-    var animationView = AnimationView()
-    @State var playing: Bool = true {
-        didSet {
-            // Currently we're making the view to play the animation whereever it is
-            // Unless already removed from memory
-            // Start the animation as soon as it's falsely terminated
-            if !playing { animationView.play(completion: completion) }
-        }
+    var name: String
+    var loopMode: LottieLoopMode
+    var shouldPlay = true {
+        didSet { if shouldPlay { animationView.play(completion: completion) } }
     }
-    func completion(block: Bool) {
+    private var animationView = AnimationView()
+
+    init(name: String = "tide", loopMode: LottieLoopMode = .loop) {
+        self.name = name
+        self.loopMode = loopMode
+    }
+
+    public func completion(block: Bool) {
         print("Animation is completed, current LoopMode is set to \(loopMode), and are we OK?: \(block)")
-        playing = block
+        if !block && shouldPlay {
+            print("The animation should be played")
+            animationView.play(completion: completion)
+        }
         print("Are we doing a recursion? If this line is presented, we are not.")
     }
+
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -52,13 +57,14 @@ struct LottieView: UIViewRepresentable {
             animationView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
         animationView.play(completion: completion)
+
         return view
     }
 
     func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<LottieView>) {
-//        animationView.play()
         print("View got updated... If something is wrong, the animation should be stopped...")
     }
+
 }
 
 struct SpiroSquare: Shape {
@@ -85,11 +91,6 @@ struct SpiroSquare: Shape {
     }
 }
 
-struct TideAnimation: View {
-    var body: some View {
-        LottieView(name: "tide", loopMode: .loop)
-    }
-}
 
 struct Viewer: View {
     var body: some View {
