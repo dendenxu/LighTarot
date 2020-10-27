@@ -30,13 +30,13 @@ struct ComplexCircleBackground: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .center) {
-                if (self.isFull) {
+                if (isFull) {
                     Rectangle()
-                        .foregroundColor(Color(self.shadeColor))
+                        .foregroundColor(Color(shadeColor))
 //                        .frame(width: geometry.size.width * self.globalScale, height: geometry.size.width * self.globalScale * 2)
-                        .scaleEffect(x: self.globalScale * 2, y: self.globalScale, anchor: .center)
+                        .scaleEffect(x: globalScale * 2, y: globalScale, anchor: .center)
                         .rotationEffect(.degrees(-45))
-                        .offset(x: geometry.size.width * self.globalScale * sqrt(2) / 2, y: -geometry.size.width * self.globalScale * sqrt(2) / 2)
+                        .offset(x: geometry.size.width * globalScale * sqrt(2) / 2, y: -geometry.size.width * globalScale * sqrt(2) / 2)
                 }
 
                 Ellipse()
@@ -46,13 +46,13 @@ struct ComplexCircleBackground: View {
                             dash: [2]
                         )
                     )
-                    .foregroundColor(Color(self.outerColor))
-                    .frame(width: geometry.size.width * self.borderScale * self.globalScale * (self.isCircleBorder ? self.shapeShift : 1), height: geometry.size.width * self.globalScale * self.borderScale / (self.isCircleBorder ? self.shapeShift : 1))
-                    .rotationEffect(self.isAtMaxScaleOuter ? .degrees(720) : .degrees(0))
+                    .foregroundColor(Color(outerColor))
+                    .frame(width: geometry.size.width * borderScale * globalScale * (isCircleBorder ? shapeShift : 1), height: geometry.size.width * globalScale * borderScale / (isCircleBorder ? shapeShift : 1))
+                    .rotationEffect(isAtMaxScaleOuter ? .degrees(720) : .degrees(0))
                     .onAppear() {
                         withAnimation(shineAnimationOuter) {
-                            if (self.isCircleBorder) {
-                                self.isAtMaxScaleOuter.toggle()
+                            if (isCircleBorder) {
+                                isAtMaxScaleOuter.toggle()
                             }
                         }
 
@@ -67,18 +67,18 @@ struct ComplexCircleBackground: View {
                                 dash: [2]
                             )
                         )
-                        .foregroundColor(Color(self.innerColor))
-                        .frame(width: geometry.size.width * self.globalScale * self.shapeShift, height: geometry.size.width * self.globalScale / self.shapeShift)
-                        .rotationEffect(self.isAtMaxScaleInner ? .degrees(360) : .degrees(0))
+                        .foregroundColor(Color(innerColor))
+                        .frame(width: geometry.size.width * globalScale / shapeShift, height: geometry.size.width * globalScale / shapeShift)
+                        .rotationEffect(isAtMaxScaleInner ? .degrees(360) : .degrees(0))
                         .onAppear() {
                             withAnimation(shineAnimationInner) {
-                                self.isAtMaxScaleInner.toggle()
+                                isAtMaxScaleInner.toggle()
                             }
                     }
                 } else {
                     Ellipse()
-                        .fill(Color(self.innerColor))
-                        .frame(width: geometry.size.width * self.globalScale, height: geometry.size.width * self.globalScale)
+                        .fill(Color(innerColor))
+                        .frame(width: geometry.size.width * globalScale, height: geometry.size.width * globalScale)
                 }
             }
         }

@@ -221,11 +221,24 @@ struct AnimatingPlant: View {
     @Binding var tideAnimating: Bool
     @Binding var growingAnimating: Bool
     @Binding var grownAnimating: Bool
-    var plantRadius: CGFloat
+    var plantRadius: CGFloat = 350
+    var globalScale: CGFloat = 0.95
+    var shapeShift: CGFloat = 1.03
     var body: some View {
         ZStack {
             // Current we using one variable for both the plant and the tide
             // FIXME: change to two
+            ComplexCircleBackground(globalScale: globalScale, shapeShift: shapeShift, isFull: isFull)
+                .frame(width: plantRadius, height: plantRadius)
+            ForEach(0..<5) { number in
+                ShinyStar(
+                    offset: randomPositionAroundCircle(
+                        size: CGSize(
+                            width: plantRadius / 2,
+                            height: plantRadius / 2)),
+                    scale: CGFloat.random(in: 0.9..<1.1)
+                )
+            }
             WebImage(
                 url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
                 isAnimating: self.$grownAnimating)
@@ -234,17 +247,19 @@ struct AnimatingPlant: View {
                 .retryOnAppear(true)
                 .scaledToFill()
                 .frame(width: plantRadius, height: plantRadius)
-                .background(ComplexCircleBackground(isFull: isFull))
+                .scaleEffect(1.2)
+                .offset(x: -5, y: -5)
                 .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
-            ForEach(0..<5) { number in
-                ShinyStar(
-                    offset: randomPositionAroundCircle(
-                        size: CGSize(
-                            width: 350 / 2,
-                            height: 350 / 2)),
-                    scale: CGFloat.random(in: 0.9..<1.1)
+                .mask(
+                    ZStack(alignment: .center) {
+                        Rectangle().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                            .offset(y: -UIScreen.main.bounds.height / 2)
+                        Capsule()
+                            .frame(width: plantRadius, height: plantRadius * 2)
+                            .scaleEffect(globalScale, anchor: .center)
+                            .offset(y: -plantRadius / 2)
+                    }
                 )
-            }
         }
     }
 }
