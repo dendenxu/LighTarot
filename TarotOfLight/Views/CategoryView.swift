@@ -24,33 +24,33 @@ struct LightText: View {
 }
 struct CardContent {
     var text = "时间之流"
-    var decription = "过去、现在和未来状况的占卜"
-    var energy = 50
+    var description = "过去、现在和未来状况的占卜"
+    var energy: Double = 50
     var locked = false
-    
-    static let `default` = CardContent(text: "时间之流", decription: "过去、现在和未来状况的占卜", energy: 50, locked: false)
+
+    static let `default` = CardContent(text: "时间之流", description: "过去、现在和未来状况的占卜", energy: 50, locked: false)
 }
 struct Card: View {
     @State var cardContent: CardContent
     @EnvironmentObject var profile: LighTarotModel
     var imageName: String {
         get {
-            if cardContent.locked { return "Gray" }
-            else { return (profile.lockingSelection == .locked) ? "cardBackH" : "having" }
+            if profile.lockingSelection == .locked { return "cardBackH" }
+            else { return (cardContent.locked) ? "Gray" : "having" }
         }
     }
     var textColor: Color { get { return (profile.lockingSelection == .locked) ? Color("LightPink") : Color("LightGray"); } }
     var shadowColor: Color { get { return (profile.lockingSelection == .locked) ? Color("LightPurple") : Color("LightGray"); } }
     var textColorDesc: Color { get { return (profile.lockingSelection == .locked) ? Color("Lime") : Color("LightGray"); } }
     var shadowColorDesc: Color { get { return (profile.lockingSelection == .locked) ? Color("Lime") : Color("LightGray"); } }
-    var imageShadowColor: Color { get { return (cardContent.locked == false) ? Color(.black).opacity(0.75) : Color(.black).opacity(0.3) } }
+    var imageShadowColor: Color { get { return (!cardContent.locked || profile.lockingSelection == .locked) ? Color(.black).opacity(0.75) : Color(.black).opacity(0.3) } }
     var body: some View {
         Button(action: {
             print("DEBUG: Currently navigating to animation when a locked card is pressed\nand the ARCamera when card is unlocked")
             print("Give me some action upon hitting the button")
             profile.complexSuccess()
             withAnimation(springAnimation) {
-                if !cardContent.locked { profile.weAreInGlobal = .arCamera }
+                if !cardContent.locked || profile.lockingSelection == .locked { profile.weAreInGlobal = .arCamera }
                 else { profile.weAreIn = .animation }
             }
         }) {
@@ -60,7 +60,7 @@ struct Card: View {
                     .resizable()
                     .scaledToFit()
                     .shadow(color: imageShadowColor, radius: 5)
-                if !cardContent.locked {
+                if !cardContent.locked || profile.lockingSelection == .locked {
                     VStack(alignment: .leading) {
                         LightText(text: cardContent.text, font: .DefaultChineseFont, size: 20, textColor: textColor, shadowColor: shadowColor)
                             .padding(.top, 20).padding(.leading, 20)
@@ -70,7 +70,7 @@ struct Card: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 20, height: 20)
-                            LightText(text: String(cardContent.energy) + "能量", font: .DefaultChineseFont, size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
+                            LightText(text: String(format: "%.0f能量", cardContent.energy), font: .DefaultChineseFont, size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
                         }.padding(.leading, 20)
                     }
                 } else {
@@ -92,21 +92,12 @@ struct Card: View {
 
 struct CategoryView: View {
     @EnvironmentObject var profile: LighTarotModel
-    @State var texts = [
-        CardContent(text: "爱之🌟占卜法", energy: 50),
-        CardContent(text: "吉普赛十字法", energy: 20),
-        CardContent(text: "六芒🌟占卜法", energy: 30),
-        CardContent(text: "灿烂的❤️", energy: 100),
-        CardContent(text: "灿烂的❤️", energy: 100),
-        CardContent(text: "灿烂的❤️", energy: 100),
-        CardContent(text: "灿烂的❤️", energy: 100),
-    ]
-    @State var unlockedTexts = [
-        CardContent(text: "时间之流", decription: "过去、现在和未来状况的占卜", locked: false),
-        CardContent(text: "吉普赛十字法", energy: 20, locked: true),
-        CardContent(text: "六芒🌟占卜法", energy: 30, locked: true),
-        CardContent(text: "灿烂的❤️", energy: 100, locked: true),
-    ]
+    var lockedTexts: [CardContent] {
+        var lockedContents = [CardContent]()
+        for item in profile.cardContents { if (item.locked) { lockedContents.append(item) } }
+        return lockedContents
+    }
+
     // todo: add code to communicate with the backend
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -175,11 +166,11 @@ struct CategoryView: View {
                 .zIndex(1)
 
             if profile.lockingSelection == .locked {
-                FullScroll(texts: texts)
+                FullScroll(texts: lockedTexts)
                     .frame(width: UIScreen.main.bounds.width)
                     .zIndex(0.5)
             } else {
-                FullScroll(texts: unlockedTexts)
+                FullScroll(texts: profile.cardContents)
                     .frame(width: UIScreen.main.bounds.width)
                     .zIndex(0.5)
             }

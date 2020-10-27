@@ -14,7 +14,7 @@ class LighTarotModel: ObservableObject {
     // Some animation configuration
     // Currently not used in the code, for lottie animation, we're using builtin settings instead
     @Published var sceneAtForeground = true
-    
+
     // Navigation data, updating the view by selecting different enum value for these
     @Published var lockingSelection: LockingSelection = .unlocked
     @Published var weAreIn: PredictLightViewSelection = .category
@@ -52,7 +52,7 @@ class LighTarotModel: ObservableObject {
     // Card informations from default json file
     // Defines whether user has unlocked certain cards
     @Published var cardInfos: [CardInfo] = [CardInfo]()
-    @Published var cardSets: [Card] = [Card]()
+    @Published var cardContents: [CardContent] = [CardContent]()
 
     // Convenience variable for loading JSON data
     private var json = JSON()
@@ -77,9 +77,10 @@ class LighTarotModel: ObservableObject {
 
     // Contruct the user profile, it's actually a model
     // The view controller is taken care of by SwiftUI
-    init(filename: String = "profile.json", cardInfoFilename: String = "CardInfo.json") {
+    init(filename: String = "profile.json", cardInfoFilename: String = "CardInfo.json", cardContentFileName: String = "CardContent.json") {
         loadUserInfoFromFile(filename: filename)
         loadCardInfoFromFile(filename: cardInfoFilename)
+        loadCardContentFromFile(filename: cardContentFileName)
         validateCardInfo(count: 5)
         prepareHaptics()
     }
@@ -94,19 +95,17 @@ class LighTarotModel: ObservableObject {
             print("Cannot find user specified location for loading profile. \(error)")
         }
         for entry in json.array ?? [JSON()] {
-            cardInfos.append(
-                CardInfo(
-                    name: entry["name"].string ?? CardInfo.default.name,
-                    flipped: entry["flipped"].bool ?? CardInfo.default.flipped,
-                    imageName: entry["imageName"].string ?? CardInfo.default.imageName,
-                    interpretText: entry["interpretText"].string ?? CardInfo.default.interpretText,
-                    storyText: entry["storyText"].string ?? CardInfo.default.storyText,
-                    energy: entry["energy"].int ?? CardInfo.default.energy
+            cardContents.append(
+                CardContent(
+                    text: entry["text"].string ?? CardContent.default.text,
+                    description: entry["description"].string ?? CardContent.default.description,
+                    energy: entry["energy"].double ?? CardContent.default.energy,
+                    locked: entry["locked"].bool ?? CardContent.default.locked
                 )
             )
         }
     }
-    
+
     // Lood card info, like a full card description and some other things
     func loadCardInfoFromFile(filename: String = "CardInfo.json") {
         // MARK: More to be added here for loading information from the CardInfo.json profile
@@ -221,7 +220,7 @@ class LighTarotModel: ObservableObject {
         print("Current count is \(count), should play multiple Haptics")
 
         var relativeTime: Double = 0
-        
+
         for _ in 0..<count {
             let newEvent = CHHapticEvent(eventType: .hapticTransient, parameters:
                 [
@@ -243,7 +242,7 @@ class LighTarotModel: ObservableObject {
         }
     }
 
-    
+
     // A sharp, short burst of haptics vibration to give user some feedback of their operation
     func complexSuccess() {
         // make sure that the device supports haptics
