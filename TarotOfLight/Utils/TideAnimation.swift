@@ -86,37 +86,3 @@ struct SpiroSquare: Shape {
         return shape.applying(transform)
     }
 }
-
-
-struct Viewer: View {
-    var body: some View {
-        LottieView(name: "tide", loopMode: .loop)
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 2)
-            .offset(y: UIScreen.main.bounds.height)
-    }
-}
-
-struct TideAnimation_Previews: PreviewProvider {
-    static var previews: some View {
-        Viewer().previewDevice("iPhone 11").edgesIgnoringSafeArea(.all)
-    }
-}
-
-extension Binding {
-    /// Wrapper to listen to didSet of Binding
-    func didSet(_ didSet: @escaping ((newValue: Value, oldValue: Value)) -> Void) -> Binding<Value> {
-        return .init(get: { self.wrappedValue }, set: { newValue in
-            let oldValue = self.wrappedValue
-            self.wrappedValue = newValue
-            didSet((newValue, oldValue))
-        })
-    }
-
-    /// Wrapper to listen to willSet of Binding
-    func willSet(_ willSet: @escaping ((newValue: Value, oldValue: Value)) -> Void) -> Binding<Value> {
-        return .init(get: { self.wrappedValue }, set: { newValue in
-            willSet((newValue, self.wrappedValue))
-            self.wrappedValue = newValue
-        })
-    }
-}

@@ -12,6 +12,7 @@ var shineAnimationInner = Animation
     .easeInOut(duration: 3.15)
     .repeatForever(autoreverses: true)
     .delay(Double.random(in: 0..<1))
+
 var shineAnimationOuter = Animation
     .easeInOut(duration: 2.95)
     .repeatForever(autoreverses: true)

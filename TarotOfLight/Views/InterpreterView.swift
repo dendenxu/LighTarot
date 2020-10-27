@@ -404,7 +404,7 @@ struct PagerView<Content: View>: View {
 //                                        .scaleEffect(1.5)
 //                                        .scaleEffect(y: 2, anchor: .center)
                                     .opacity(0)
-                                        .overlay(Circle().fill(index == currentIndex ? Color.white.opacity(0.7) : Color.gray.opacity(0.7)).frame(width: 10, height: 10))
+                                        .overlay(Circle().fill(index == currentIndex ? Color.white.opacity(0.9) : Color.gray.opacity(0.7)).frame(width: 10, height: 10))
                                         .onTapGesture { tapGesture(index: index, width: width) }
                                     if index == pageCount - 1 {
                                         Spacer().frame(width: selecting ? 10 : 5)

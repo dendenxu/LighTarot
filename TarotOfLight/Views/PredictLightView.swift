@@ -15,16 +15,19 @@ struct PredictLightView: View {
     var body: some View {
         ZStack
         {
+            if (profile.weAreIn == .animation) { Color("MediumDarkPurple") }
+            else if (profile.weAreIn == .category) { Color("LightMediumDarkPurple") }
             // Why do we have to make it inside some stack for it to be loaded?
             if (profile.weAreIn == .animation) {
-                Color("MediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                OuterInterpreterView().transition(.scale(scale: 0.001))
+                OuterInterpreterView().transition(scaleTransition)
+                    .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
             } else if(profile.weAreIn == .category) {
-                Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                CategoryView().transition(.scale(scale: 0.001)).clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
+                CategoryView().transition(scaleTransition)
+                    .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
             }
-//        }.edgesIgnoringSafeArea(.all)
-        }.clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
+        }
+//        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
     }
 }
 

@@ -13,28 +13,33 @@ struct SelectorView: View {
     @EnvironmentObject var profile: LighTarotModel
     var body: some View {
         ZStack(alignment: .bottom) {
+            if profile.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
+            else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
+            else if profile.weAreInSelector == .minePage { Color("LightGray") }
             // Background color: a small shade of grey, filling the whole screen
             // Adding background color for different page
-            // FIXME: should consider use more consistent color
-            // Background tidal wave as GIF, we use SDWebImageSwiftUI to load and use GIF
-
             // We're defining pages after a background color so that they can use different transition when loading
-            if (profile.weAreInSelector == SelectorSelection.mainPage) {
-                Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray")
+            // The color block sits there without any transition animation to be applied
+            if (profile.weAreInSelector == .mainPage) {
                 MainPageView(progress: $profile.energy)
+                    .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
-            } else if (profile.weAreInSelector == SelectorSelection.cardPage) {
-                Color("MediumDarkPurple")
+            } else if (profile.weAreInSelector == .cardPage) {
                 CardPageView()
+                    .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
-            } else if (profile.weAreInSelector == SelectorSelection.minePage) {
-                Color("LightGray")
+            } else if (profile.weAreInSelector == .minePage) {
                 MinePageView()
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                    .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
             }
+
+            // A small selector to navigate around our big selector where three subViews exist
             PageSelector().padding(.bottom, 50)
         }
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+
+        
         .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
     }
 }
