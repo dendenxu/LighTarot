@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct SelectorView: View {
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
     var body: some View {
         ZStack(alignment: .bottom) {
             // Background color: a small shade of grey, filling the whole screen
@@ -60,7 +60,7 @@ struct PageSelector: View {
 // Buttons in the page selector, using enum to avoid raw string
 // which could lead to typo that compiler cannot foresee
 struct PageSelectorButton: View {
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
     let whoWeAre: SelectorSelection
     var body: some View {
         Button(action: {

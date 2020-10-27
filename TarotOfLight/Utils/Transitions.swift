@@ -50,3 +50,4 @@ let fromBottomToTop = AnyTransition
 
 let springAnimation = Animation.spring(response: 0.5, dampingFraction: 1, blendDuration: 2)
 let fastSpringAnimation = Animation.spring(response: 0.2, dampingFraction: 0.7, blendDuration: 1)
+let fasterSpringAnimation = Animation.spring(response: 0.5, dampingFraction: 1, blendDuration: 1)

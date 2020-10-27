@@ -13,7 +13,7 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    var userProfile: UserProfile!
+    var userProfile: LighTarotModel!
     var contentView: AnyView!
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        userProfile = UserProfile() // default name is profile.json
+        userProfile = LighTarotModel() // default name is profile.json
         contentView = AnyView(ContentView().environmentObject(userProfile))
         
         // Use a UIHostingController as window root view controller.

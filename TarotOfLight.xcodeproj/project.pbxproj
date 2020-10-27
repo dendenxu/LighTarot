@@ -40,7 +40,7 @@
 		B970A60A24A3704700B68189 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60924A3704700B68189 /* CategoryView.swift */; };
 		B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60B24A370EE00B68189 /* SelectorView.swift */; };
 		B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60D24A3710A00B68189 /* PredictLightView.swift */; };
-		B984405B254072CD00E43C18 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B984405A254072CD00E43C18 /* UserProfile.swift */; };
+		B984405B254072CD00E43C18 /* LighTarotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B984405A254072CD00E43C18 /* LighTarotModel.swift */; };
 		B994C6552520CD6A00320750 /* cute.gif in Resources */ = {isa = PBXBuildFile; fileRef = B994C6542520CD6A00320750 /* cute.gif */; };
 		B994C6582520CF3E00320750 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B994C6572520CF3E00320750 /* Contants.swift */; };
 		B99729E32542E01300E91744 /* TideAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99729E22542E01300E91744 /* TideAnimation.swift */; };
@@ -71,6 +71,7 @@
 		B946698E24A9D19D00C8402D /* ViewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCardView.swift; sourceTree = "<group>"; };
 		B957B2272542A153007BCC81 /* CardInfo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardInfo.json; sourceTree = "<group>"; };
 		B957B2372542A728007BCC81 /* CardContent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardContent.json; sourceTree = "<group>"; };
+		B95A386E2547F11C009DC32D /* TarotOfLight.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = TarotOfLight.profdata; sourceTree = "<group>"; };
 		B9624FE82536E893005840DC /* ARCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCameraView.swift; sourceTree = "<group>"; };
 		B962500C2536EA6F005840DC /* RealityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealityKit.framework; path = System/Library/Frameworks/RealityKit.framework; sourceTree = SDKROOT; };
 		B96250102536EB04005840DC /* BasicPlant.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = BasicPlant.rcproject; sourceTree = "<group>"; };
@@ -87,7 +88,7 @@
 		B970A60924A3704700B68189 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		B970A60B24A370EE00B68189 /* SelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
 		B970A60D24A3710A00B68189 /* PredictLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictLightView.swift; sourceTree = "<group>"; };
-		B984405A254072CD00E43C18 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		B984405A254072CD00E43C18 /* LighTarotModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LighTarotModel.swift; sourceTree = "<group>"; };
 		B994C6542520CD6A00320750 /* cute.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cute.gif; sourceTree = "<group>"; };
 		B994C6572520CF3E00320750 /* Contants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
 		B99729E22542E01300E91744 /* TideAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TideAnimation.swift; sourceTree = "<group>"; };
@@ -120,6 +121,7 @@
 				34673E8A2494E8CC00712F38 /* TarotOfLight */,
 				34673E892494E8CC00712F38 /* Products */,
 				B9521E1425221B2400AC96EF /* Frameworks */,
+				B95A386D2547F11C009DC32D /* OptimizationProfiles */,
 			);
 			sourceTree = "<group>";
 		};
@@ -238,10 +240,18 @@
 				B9EE5EDA24A459F500D8C58F /* ShinyBackground.swift */,
 				B970A5F924A360A000B68189 /* ShinyStar.swift */,
 				B970A5FB24A3611A00B68189 /* Transitions.swift */,
-				B984405A254072CD00E43C18 /* UserProfile.swift */,
+				B984405A254072CD00E43C18 /* LighTarotModel.swift */,
 				B99729E22542E01300E91744 /* TideAnimation.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		B95A386D2547F11C009DC32D /* OptimizationProfiles */ = {
+			isa = PBXGroup;
+			children = (
+				B95A386E2547F11C009DC32D /* TarotOfLight.profdata */,
+			);
+			path = OptimizationProfiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -353,7 +363,7 @@
 				B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */,
 				B994C6582520CF3E00320750 /* Contants.swift in Sources */,
 				B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */,
-				B984405B254072CD00E43C18 /* UserProfile.swift in Sources */,
+				B984405B254072CD00E43C18 /* LighTarotModel.swift in Sources */,
 				B970A60024A361CD00B68189 /* CircleBackground.swift in Sources */,
 				B99729E32542E01300E91744 /* TideAnimation.swift in Sources */,
 				34673E902494E8CC00712F38 /* ContentView.swift in Sources */,
@@ -500,9 +510,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TarotOfLight/Preview Content\"";
-				DEVELOPMENT_TEAM = WAN3RVDP5M;
+				DEVELOPMENT_TEAM = 28Y62P3CPJ;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TarotOfLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -510,7 +521,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = zx.TarotOfLight;
+				PRODUCT_BUNDLE_IDENTIFIER = xz.TarotOfLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -521,9 +532,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TarotOfLight/Preview Content\"";
-				DEVELOPMENT_TEAM = WAN3RVDP5M;
+				DEVELOPMENT_TEAM = 28Y62P3CPJ;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TarotOfLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -531,7 +543,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = zx.TarotOfLight;
+				PRODUCT_BUNDLE_IDENTIFIER = xz.TarotOfLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -36,7 +36,7 @@ struct MyRecBackground: View {
 }
 
 struct MainPageView: View {
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
     var isFull: Bool {
         get {
             return progress >= 100.0
@@ -57,6 +57,8 @@ struct MainPageView: View {
                 .nanosecond
             ], from: Date())
 
+
+    let plantRadius = 350 / 414 * UIScreen.main.bounds.width
     var timer: Timer {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
 
@@ -100,7 +102,7 @@ struct MainPageView: View {
                         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                             print("Moving to the background!")
 //                            lottieView.shouldPlay = false
-                            
+
                     }
                 }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             }
@@ -169,7 +171,8 @@ struct MainPageView: View {
                 .padding(.top, 80 - 20 * CGFloat(progress) / 100)
 
 
-                AnimatingPlant(progress: progress, tideAnimating: $tideAnimating, growingAnimating: $grownAnimating, grownAnimating: $grownAnimating)
+                AnimatingPlant(progress: progress, tideAnimating: $tideAnimating, growingAnimating: $grownAnimating, grownAnimating: $grownAnimating, plantRadius: plantRadius)
+
                     .zIndex(0.5)
                 // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)
                 // FIXME: When we're using too large an offset, like .offset(y: CGFloat(progress)) directly, the Swift compiler crashes, returning non-zero value
@@ -185,11 +188,8 @@ struct MainPageView: View {
                             }
                         }
                     }) {
-                        ZStack(alignment: .center) {
-                            ComplexCircleBackground(shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false)
-                                .frame(width: 100, height: 100)
-                            ShinyText()
-                        }
+                        ShinyText(text: "解锁新牌阵").frame(width: 100, height: 100)
+                            .background(ComplexCircleBackground(shapeShift: 1.0, isCircleBorder: true, innerColor: "MediumLime", outerColor: "LightPink", isFull: false))
                     }
                 } else {
 
@@ -221,6 +221,7 @@ struct AnimatingPlant: View {
     @Binding var tideAnimating: Bool
     @Binding var growingAnimating: Bool
     @Binding var grownAnimating: Bool
+    var plantRadius: CGFloat
     var body: some View {
         ZStack {
             // Current we using one variable for both the plant and the tide
@@ -232,7 +233,7 @@ struct AnimatingPlant: View {
                 .playbackRate(1.0)
                 .retryOnAppear(true)
                 .scaledToFill()
-                .frame(width: 350, height: 350)
+                .frame(width: plantRadius, height: plantRadius)
                 .background(ComplexCircleBackground(isFull: isFull))
                 .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
             ForEach(0..<5) { number in

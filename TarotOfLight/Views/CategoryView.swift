@@ -27,10 +27,12 @@ struct CardContent {
     var decription = "过去、现在和未来状况的占卜"
     var energy = 50
     var locked = false
+    
+    static let `default` = CardContent(text: "时间之流", decription: "过去、现在和未来状况的占卜", energy: 50, locked: false)
 }
 struct Card: View {
     @State var cardContent: CardContent
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
     var imageName: String {
         get {
             if cardContent.locked { return "Gray" }
@@ -89,7 +91,7 @@ struct Card: View {
 }
 
 struct CategoryView: View {
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
     @State var texts = [
         CardContent(text: "爱之🌟占卜法", energy: 50),
         CardContent(text: "吉普赛十字法", energy: 20),
@@ -116,7 +118,7 @@ struct CategoryView: View {
                         Button(action: {
                             print("Getting back...")
                             profile.complexSuccess()
-                            withAnimation(springAnimation) {
+                            withAnimation(fasterSpringAnimation) {
                                 profile.weAreInGlobal = .selector;
                             }
                         }) {

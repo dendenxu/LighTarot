@@ -17,7 +17,7 @@ struct OuterInterpreterView: View {
             if !placerHolderDelay {
                 Button(action: {
                     if !placerHolderDelay {
-                        withAnimation(springAnimation) {
+                        withAnimation(fasterSpringAnimation) {
                             placerHolderDelay = true
                         }
                         print("Animation done, should show interpretation")
@@ -36,7 +36,8 @@ struct OuterInterpreterView: View {
                         .onAppear(perform: delay)
                 }
             } else {
-                InterpreterView()
+                // MARK: We've made sure that arbitrary number of pages are available in this Small Pager View
+                InterpreterView(currentIndex: 0, pageCount: 3)
                     .transition(fromBottomToTop)
             }
 
@@ -44,7 +45,7 @@ struct OuterInterpreterView: View {
         }
     }
     private func delay() {
-        // Delay of 3 seconds
+        // Delay of 5 seconds
         print("Playing the animation")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             if !placerHolderDelay {
@@ -86,8 +87,8 @@ struct CheckedLazyVStack<Content: View>: View {
 struct WrapScroll: View {
     var card: CardInfo
     var percentage: CGFloat
-    let baseOffset: CGFloat = 100
-    let imageOffset: CGFloat = 40
+    let baseOffset: CGFloat = 100 / 414 * UIScreen.main.bounds.width
+    let imageOffset: CGFloat = 40 / 414 * UIScreen.main.bounds.width
     let baseScale: CGFloat = 0.9
     let baseOpacity: CGFloat = 0.25
     let baseTint: CGFloat = 0.6
@@ -203,10 +204,22 @@ struct LitPentagram: View {
 }
 
 struct InterpreterView: View {
-    @EnvironmentObject var profile: UserProfile
-
-    @State var percentages: [CGFloat] = [0.0, 1.0, 2.0]
-    @State var currentIndex = 0
+    @EnvironmentObject var profile: LighTarotModel
+    @State var percentages: [CGFloat] = [CGFloat]()
+    @State var currentIndex: Int = 0
+    var pageCount: Int
+    init(currentIndex: Int = 0, pageCount: Int = 3) {
+        self._currentIndex = State(initialValue: currentIndex)
+        self.pageCount = pageCount
+        print("Getting currentIndex: \(currentIndex) and pageCount: \(pageCount)")
+        var thePercentages = [CGFloat]()
+        for i in 0..<pageCount {
+            print("CurrentValue: \(CGFloat(i))")
+            thePercentages.append(CGFloat(i))
+        }
+        _percentages = State(initialValue: thePercentages)
+        print("After initialization, pageCount: \(pageCount), percentages: \(percentages)")
+    }
     var body: some View {
         VStack {
             ZStack {
@@ -215,7 +228,7 @@ struct InterpreterView: View {
                 Spacer()
                 HStack(alignment: .center, spacing: 20) {
                     Button {
-                        withAnimation(springAnimation) {
+                        withAnimation(fasterSpringAnimation) {
                             profile.weAreIn = .category
                         }
                     } label: {
@@ -231,7 +244,7 @@ struct InterpreterView: View {
                     Button {
                         print("STUB: Should implement sharing the interpretation result here")
                         print("Currently we're using this to delete the user profile")
-                        UserProfile.deleteFile()
+                        LighTarotModel.deleteFile()
                     } label: {
                         Image("share")
                             .resizable()
@@ -256,8 +269,8 @@ struct InterpreterView: View {
                 .padding(.horizontal, 30)
 
             ZStack {
-                PagerView(pageCount: 3, currentIndex: $currentIndex, percentages: $percentages) {
-                    ForEach(0..<3) { index in
+                PagerView(pageCount: pageCount, currentIndex: $currentIndex, percentages: $percentages) {
+                    ForEach(0..<pageCount) { index in
                         WrapScroll(card: profile.cardInfos[index], percentage: percentages[index])
                     }
                 }.background(TravelingBackground(nStroke: 20, nFill: 20))
@@ -273,7 +286,7 @@ struct PagerView<Content: View>: View {
     @Binding var currentIndex: Int
     @Binding var percentages: [CGFloat] // left, right middle
     @State var translation: CGFloat = 0
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
     init(pageCount: Int, currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, @ViewBuilder content: () -> Content) {
         self.pageCount = pageCount
         self._currentIndex = currentIndex
@@ -294,7 +307,7 @@ struct PagerView<Content: View>: View {
                 percentages[index] = (translation + CGFloat(index) * width) / width
             }
         }
-        print("Paging gesture ended! Percentages are: [\(percentages[0]), \(percentages[1]), \(percentages[2])]")
+        print("Paging gesture ended! Percentages are: [\(percentages)]")
     }
 
     private func delay() {
@@ -314,17 +327,29 @@ struct PagerView<Content: View>: View {
         }
     }
 
+    func tapGesture(index: Int = 0, width: CGFloat = UIScreen.main.bounds.width) {
+        print("SMALL BUTTON PRESSED! of index \(index)")
+        onEndedAction(index: index, width: width)
+        delay()
+        if !selecting {
+            withAnimation(springAnimation) {
+                selecting = true
+            }
+        }
+    }
+
     @State var isChanging = false
     @State var selecting = false
     @State var counter: Int = 0
+    let spacing: CGFloat = 3
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 let width = geometry.size.width
                 let PagerDragGesture =
                     DragGesture(
-                        minimumDistance: 30,
-                        coordinateSpace: .global
+                        minimumDistance: 20,
+                        coordinateSpace: .local
                     )
                     .onEnded { value in
                         let offset = value.predictedEndTranslation.width / width
@@ -350,11 +375,11 @@ struct PagerView<Content: View>: View {
                         }
                 }
 
-                HStack(spacing: 3) {
+                HStack(spacing: spacing) {
                     // BUG: Setting the spacing to 0 might cause strange behavior on the opacity during animation
                     // Possibly a bug of SwiftUI
                     // Here we have 3 Paging view, so 3*2 = 2*3
-                    self.content.frame(width: geometry.size.width - 2)
+                    self.content.frame(width: geometry.size.width - CGFloat(pageCount - 1) * spacing / CGFloat(pageCount))
                 }
                     .frame(width: geometry.size.width, alignment: .leading)
                     .offset(x: translation)
@@ -372,25 +397,18 @@ struct PagerView<Content: View>: View {
                                 }) {
                                     if index == 0 {
                                         Spacer().frame(width: selecting ? 10 : 5)
+                                            .onTapGesture { tapGesture(index: index, width: width) }
                                     }
                                     Ellipse()
                                         .frame(width: 20, height: selecting ? 80 : 40)
 //                                        .scaleEffect(1.5)
 //                                        .scaleEffect(y: 2, anchor: .center)
                                     .opacity(0)
-                                        .overlay(Circle().fill(index == currentIndex ? Color.white : Color.gray).frame(width: 10, height: 10))
-                                        .onTapGesture {
-                                            print("SMALL BUTTON PRESSED! of index \(index)")
-                                            onEndedAction(index: index, width: width)
-                                            delay()
-                                            if !selecting {
-                                                withAnimation(springAnimation) {
-                                                    selecting = true
-                                                }
-                                            }
-                                    }
+                                        .overlay(Circle().fill(index == currentIndex ? Color.white.opacity(0.7) : Color.gray.opacity(0.7)).frame(width: 10, height: 10))
+                                        .onTapGesture { tapGesture(index: index, width: width) }
                                     if index == pageCount - 1 {
                                         Spacer().frame(width: selecting ? 10 : 5)
+                                            .onTapGesture { tapGesture(index: index, width: width) }
                                     }
                                 }
                                 // BUG: Cannot implement tap, I give up.
@@ -402,12 +420,12 @@ struct PagerView<Content: View>: View {
                                 geo in
                                 VStack {
                                     Capsule().foregroundColor(Color.white.opacity(0.3))
-                                        .frame(width: geo.size.width, height: geo.size.height/2)
-                                        .offset(y: geo.size.height/4)
+                                        .frame(width: geo.size.width, height: geo.size.height / 2)
+                                        .offset(y: geo.size.height / 4)
                                 }
                             }
                         )
-                    }.padding(.bottom, 50)
+                    }.padding(.bottom, selecting ? 50 : 60)
 
                 }
 

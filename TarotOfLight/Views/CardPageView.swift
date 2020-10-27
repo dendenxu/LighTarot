@@ -45,7 +45,7 @@ struct CardPageView: View {
 
 
 struct CategorySelectorView: View {
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
 
     @State var isButtonReleased = false
     var whoWeAre = CategorySelection.love

@@ -12,7 +12,7 @@ import UIKit
 
 struct ContentView: View {
 
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
 
     var body: some View {
         ZStack(alignment: .bottom) {

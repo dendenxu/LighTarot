@@ -12,7 +12,7 @@ import SDWebImageSwiftUI
 
 
 struct MinePageView: View {
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
     var image: Image {
         print("Using precomputed image to speed things up")
         return Image(uiImage: profile.avatarImage)
@@ -50,15 +50,16 @@ struct MinePageView: View {
                                 tintColor: Color("LightMediumDarkPurple").opacity(0.5)
                             )
                         )
-                        .padding(.top, 150)
+
                 }
             }.sheet(isPresented: $showImagePicker) {
                 ImagePicker(sourceType: .photoLibrary) { image in
                     profile.avatar = image.toBase64()
                     print("Avatar set to new image")
                 }
-            }
-            Spacer()
+            }.padding(.top, 115 / 896 * UIScreen.main.bounds.height)
+//                .padding(.bottom, 100)
+
             ShinyText(font: .DefaultChineseFont, size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3), editable: true, editableText: $profile.name, placeholder: profile.name)
                 .frame(width: 200, height: 40)
                 .padding(.top, 10)
@@ -82,9 +83,9 @@ struct MinePageView: View {
                 .font(.custom(.SourceHanSansMedium, size: 15))
                 .foregroundColor(Color.black.opacity(0.4))
                 .padding(.top, 30)
-                .padding(.bottom, 200)
+//                .padding(.bottom, 200)
 
-
+            Spacer()
         }
     }
 }

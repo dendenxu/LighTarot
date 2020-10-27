@@ -54,7 +54,6 @@ class LighTarotModel: ObservableObject {
     @Published var cardInfos: [CardInfo] = [CardInfo]()
     @Published var cardSets: [Card] = [Card]()
 
-
     // Convenience variable for loading JSON data
     private var json = JSON()
 
@@ -81,10 +80,34 @@ class LighTarotModel: ObservableObject {
     init(filename: String = "profile.json", cardInfoFilename: String = "CardInfo.json") {
         loadUserInfoFromFile(filename: filename)
         loadCardInfoFromFile(filename: cardInfoFilename)
-        validateCardInfo()
+        validateCardInfo(count: 5)
         prepareHaptics()
     }
 
+    func loadCardContentFromFile(filename: String = "CardContent.json") {
+        // MARK: More to be added here for loading information from the CardInfo.json profile
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: filename, ofType: "") ?? filename)
+        do {
+            json = try JSON(data: Data(contentsOf: fileURL))
+            print("CardInfo.json is successfully loaded from \(fileURL)")
+        } catch {
+            print("Cannot find user specified location for loading profile. \(error)")
+        }
+        for entry in json.array ?? [JSON()] {
+            cardInfos.append(
+                CardInfo(
+                    name: entry["name"].string ?? CardInfo.default.name,
+                    flipped: entry["flipped"].bool ?? CardInfo.default.flipped,
+                    imageName: entry["imageName"].string ?? CardInfo.default.imageName,
+                    interpretText: entry["interpretText"].string ?? CardInfo.default.interpretText,
+                    storyText: entry["storyText"].string ?? CardInfo.default.storyText,
+                    energy: entry["energy"].int ?? CardInfo.default.energy
+                )
+            )
+        }
+    }
+    
+    // Lood card info, like a full card description and some other things
     func loadCardInfoFromFile(filename: String = "CardInfo.json") {
         // MARK: More to be added here for loading information from the CardInfo.json profile
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: filename, ofType: "") ?? filename)
@@ -108,6 +131,7 @@ class LighTarotModel: ObservableObject {
         }
     }
 
+    // Make sure that the number of cards available is at least 3 or other value
     func validateCardInfo(count: Int = 3) {
         print("Current loading static information from the json file to be displayed on the screen")
 
@@ -120,6 +144,8 @@ class LighTarotModel: ObservableObject {
         }
     }
 
+    // Load use profile, including the user avatar
+    // Saved as base64jpeg data of string
     func loadUserInfoFromFile(filename: String = "profile.json") {
         var fileURL = LighTarotModel.getDocumentDirectory.appendingPathComponent(filename)
         if !FileManager.default.fileExists(atPath: fileURL.path) {
@@ -138,6 +164,8 @@ class LighTarotModel: ObservableObject {
         avatar = json["avatar"].string ?? avatar
     }
 
+    // User might have already made change to the profile, save it to profile.json under document directory
+    // which will get deleted when APP is deleted
     func saveUserInfoToFile(filename: String = "profile.json") {
         let fileURL = LighTarotModel.getDocumentDirectory.appendingPathComponent(filename)
         let json = JSON([
@@ -155,6 +183,7 @@ class LighTarotModel: ObservableObject {
         }
     }
 
+    // Developer command for deleteing the user profile to debug
     static func deleteFile(filename: String = "profile.json") {
         let fileURL = getDocumentDirectory.appendingPathComponent(filename)
         do {
@@ -164,11 +193,12 @@ class LighTarotModel: ObservableObject {
         }
     }
 
+    // The Haptic Engine to be used across all the scene
     @Published var engine: CHHapticEngine?
 
+    // The name explains itself
     func prepareHaptics() {
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-
         do {
             self.engine = try CHHapticEngine()
             try engine?.start()
@@ -177,6 +207,8 @@ class LighTarotModel: ObservableObject {
         }
     }
 
+    // A intense but short completion haptic
+    // Can happen multiple times
     func pagerSuccess(count: Int = 1) {
         // make sure that the device supports haptics
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
@@ -211,6 +243,8 @@ class LighTarotModel: ObservableObject {
         }
     }
 
+    
+    // A sharp, short burst of haptics vibration to give user some feedback of their operation
     func complexSuccess() {
         // make sure that the device supports haptics
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }

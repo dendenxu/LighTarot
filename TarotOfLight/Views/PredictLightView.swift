@@ -11,7 +11,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct PredictLightView: View {
-    @EnvironmentObject var profile: UserProfile
+    @EnvironmentObject var profile: LighTarotModel
     var body: some View {
         ZStack
         {
@@ -21,7 +21,7 @@ struct PredictLightView: View {
                 OuterInterpreterView().transition(.scale(scale: 0.001))
             } else if(profile.weAreIn == .category) {
                 Color("LightMediumDarkPurple").clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
-                CategoryView().transition(.scale(scale: 0.001))
+                CategoryView().transition(.scale(scale: 0.001)).clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
             }
 //        }.edgesIgnoringSafeArea(.all)
         }.clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
