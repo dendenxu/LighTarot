@@ -20,7 +20,6 @@
 		3473C1CA24965A5D003C7321 /* plantfull.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3473C1C924965A5D003C7321 /* plantfull.gif */; };
 		B90E08D425305AD100635B8F /* InterpreterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90E08D325305AD100635B8F /* InterpreterView.swift */; };
 		B9261EBD253EAE5E008DE393 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B9261EBC253EAE5E008DE393 /* SwiftyJSON */; };
-		B946698F24A9D19D00C8402D /* ViewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B946698E24A9D19D00C8402D /* ViewCardView.swift */; };
 		B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */; };
 		B957B2282542A153007BCC81 /* CardInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = B957B2272542A153007BCC81 /* CardInfo.json */; };
 		B957B2382542A728007BCC81 /* CardContent.json in Resources */ = {isa = PBXBuildFile; fileRef = B957B2372542A728007BCC81 /* CardContent.json */; };
@@ -33,11 +32,11 @@
 		B970A5FA24A360A000B68189 /* ShinyStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5F924A360A000B68189 /* ShinyStar.swift */; };
 		B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5FB24A3611A00B68189 /* Transitions.swift */; };
 		B970A60024A361CD00B68189 /* CircleBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A5FF24A361CD00B68189 /* CircleBackground.swift */; };
-		B970A60224A3627700B68189 /* CardPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60124A3627700B68189 /* CardPageView.swift */; };
+		B970A60224A3627700B68189 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60124A3627700B68189 /* CategoryView.swift */; };
 		B970A60424A362BF00B68189 /* MinePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60324A362BF00B68189 /* MinePageView.swift */; };
 		B970A60624A3630C00B68189 /* LittleProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60524A3630C00B68189 /* LittleProgressBar.swift */; };
 		B970A60824A3634300B68189 /* MainPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60724A3634300B68189 /* MainPageView.swift */; };
-		B970A60A24A3704700B68189 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60924A3704700B68189 /* CategoryView.swift */; };
+		B970A60A24A3704700B68189 /* CardPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60924A3704700B68189 /* CardPageView.swift */; };
 		B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60B24A370EE00B68189 /* SelectorView.swift */; };
 		B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B970A60D24A3710A00B68189 /* PredictLightView.swift */; };
 		B984405B254072CD00E43C18 /* LighTarotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B984405A254072CD00E43C18 /* LighTarotModel.swift */; };
@@ -68,7 +67,6 @@
 		34673E992494E8D300712F38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3473C1C924965A5D003C7321 /* plantfull.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = plantfull.gif; sourceTree = "<group>"; };
 		B90E08D325305AD100635B8F /* InterpreterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterView.swift; sourceTree = "<group>"; };
-		B946698E24A9D19D00C8402D /* ViewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCardView.swift; sourceTree = "<group>"; };
 		B957B2272542A153007BCC81 /* CardInfo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardInfo.json; sourceTree = "<group>"; };
 		B957B2372542A728007BCC81 /* CardContent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardContent.json; sourceTree = "<group>"; };
 		B95A386E2547F11C009DC32D /* TarotOfLight.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = TarotOfLight.profdata; sourceTree = "<group>"; };
@@ -81,11 +79,11 @@
 		B970A5F924A360A000B68189 /* ShinyStar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShinyStar.swift; sourceTree = "<group>"; };
 		B970A5FB24A3611A00B68189 /* Transitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transitions.swift; sourceTree = "<group>"; };
 		B970A5FF24A361CD00B68189 /* CircleBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleBackground.swift; sourceTree = "<group>"; };
-		B970A60124A3627700B68189 /* CardPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPageView.swift; sourceTree = "<group>"; };
+		B970A60124A3627700B68189 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		B970A60324A362BF00B68189 /* MinePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinePageView.swift; sourceTree = "<group>"; };
 		B970A60524A3630C00B68189 /* LittleProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleProgressBar.swift; sourceTree = "<group>"; };
 		B970A60724A3634300B68189 /* MainPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageView.swift; sourceTree = "<group>"; };
-		B970A60924A3704700B68189 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		B970A60924A3704700B68189 /* CardPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPageView.swift; sourceTree = "<group>"; };
 		B970A60B24A370EE00B68189 /* SelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
 		B970A60D24A3710A00B68189 /* PredictLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictLightView.swift; sourceTree = "<group>"; };
 		B984405A254072CD00E43C18 /* LighTarotModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LighTarotModel.swift; sourceTree = "<group>"; };
@@ -216,15 +214,14 @@
 			isa = PBXGroup;
 			children = (
 				B9624FE82536E893005840DC /* ARCameraView.swift */,
-				B970A60124A3627700B68189 /* CardPageView.swift */,
-				B970A60924A3704700B68189 /* CategoryView.swift */,
+				B970A60124A3627700B68189 /* CategoryView.swift */,
+				B970A60924A3704700B68189 /* CardPageView.swift */,
 				34673E8F2494E8CC00712F38 /* ContentView.swift */,
 				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B970A60724A3634300B68189 /* MainPageView.swift */,
 				B970A60324A362BF00B68189 /* MinePageView.swift */,
 				B970A60D24A3710A00B68189 /* PredictLightView.swift */,
 				B970A60B24A370EE00B68189 /* SelectorView.swift */,
-				B946698E24A9D19D00C8402D /* ViewCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -351,13 +348,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				34673E8C2494E8CC00712F38 /* AppDelegate.swift in Sources */,
-				B970A60224A3627700B68189 /* CardPageView.swift in Sources */,
+				B970A60224A3627700B68189 /* CategoryView.swift in Sources */,
 				B970A60424A362BF00B68189 /* MinePageView.swift in Sources */,
 				B99E59D5252FFEDF00F5E0A7 /* ImagePicker.swift in Sources */,
 				B970A60824A3634300B68189 /* MainPageView.swift in Sources */,
 				B9EE5EDB24A459F500D8C58F /* ShinyBackground.swift in Sources */,
 				B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */,
-				B970A60A24A3704700B68189 /* CategoryView.swift in Sources */,
+				B970A60A24A3704700B68189 /* CardPageView.swift in Sources */,
 				B96250162536EFBD005840DC /* SceneDelegate.swift in Sources */,
 				B9624FE92536E893005840DC /* ARCameraView.swift in Sources */,
 				B970A60C24A370EE00B68189 /* SelectorView.swift in Sources */,
@@ -368,7 +365,6 @@
 				B99729E32542E01300E91744 /* TideAnimation.swift in Sources */,
 				34673E902494E8CC00712F38 /* ContentView.swift in Sources */,
 				B962529324A391D4002BFE03 /* ShinyText.swift in Sources */,
-				B946698F24A9D19D00C8402D /* ViewCardView.swift in Sources */,
 				B970A60624A3630C00B68189 /* LittleProgressBar.swift in Sources */,
 				B96250112536EB05005840DC /* BasicPlant.rcproject in Sources */,
 				B90E08D425305AD100635B8F /* InterpreterView.swift in Sources */,
