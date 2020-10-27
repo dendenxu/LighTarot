@@ -90,7 +90,7 @@ struct Card: View {
     }
 }
 
-struct CategoryView: View {
+struct CardPageView: View {
     @EnvironmentObject var profile: LighTarotModel
     var lockedTexts: [CardContent] {
         var lockedContents = [CardContent]()
@@ -103,8 +103,8 @@ struct CategoryView: View {
         VStack(alignment: .center, spacing: 0) {
             VStack(spacing: 0) {
                 ZStack(alignment: .leading) {
-                    Rectangle()
-                        .foregroundColor(Color("LightMediumDarkPurple"))
+//                    Rectangle()
+//                        .foregroundColor(Color("LightMediumDarkPurple"))
                     VStack(alignment: .leading) {
                         Button(action: {
                             print("Getting back...")

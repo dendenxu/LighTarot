@@ -18,15 +18,15 @@ struct ContentView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             if (profile.weAreInGlobal == .selector) {
-//                if profile.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
-//                else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
-//                else if profile.weAreInSelector == .minePage { Color("LightGray") }
+                if profile.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
+                else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
+                else if profile.weAreInSelector == .minePage { Color("LightGray") }
                 SelectorView()
 //                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                    .transition(scaleTransition)
+                .transition(scaleTransition)
             } else if (profile.weAreInGlobal == .predictLight) {
-//                if (profile.weAreIn == .animation) { Color("MediumDarkPurple") }
-//                else if (profile.weAreIn == .category) { Color("LightMediumDarkPurple") }
+                if (profile.weAreIn == .animation) { Color("MediumDarkPurple") }
+                else if (profile.weAreIn == .category) { Color("LightMediumDarkPurple") }
                 PredictLightView()
                 // BUG: When the frame is set here, this subView will be placed a mysterious offset
                 // I ... I don't know how to fix it, temporarity I'm just ignoring it.
@@ -43,8 +43,8 @@ struct ContentView: View {
                 }
             }
         }
-//        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        .edgesIgnoringSafeArea(.all)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            .edgesIgnoringSafeArea(.all)
         // Setting frame and cornerRadius clip here is a more global approach for the who main page
         // Adding edges ignorance operations here at the rootView will rid all subViews of the safe areas
 

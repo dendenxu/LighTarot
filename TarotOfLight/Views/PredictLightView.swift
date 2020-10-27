@@ -22,7 +22,7 @@ struct PredictLightView: View {
                 OuterInterpreterView().transition(scaleTransition)
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
             } else if(profile.weAreIn == .category) {
-                CategoryView().transition(scaleTransition)
+                CardPageView().transition(scaleTransition)
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
             }
         }

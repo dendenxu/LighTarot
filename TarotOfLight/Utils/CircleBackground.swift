@@ -51,12 +51,6 @@ struct ComplexCircleBackground: View {
                     .rotationEffect(self.isAtMaxScaleOuter ? .degrees(720) : .degrees(0))
                     .onAppear() {
                         withAnimation(shineAnimationOuter) {
-                            // Should we just use isAtMaxScaleOuter?
-                            // FIXME: myth...
-                            // ? Why isn't this working?
-                            // ? Why is on appear of this small background called multiple times?
-                            // ? By who??
-                            // ! I'm literally feeling cheated by this...
                             if (self.isCircleBorder) {
                                 self.isAtMaxScaleOuter.toggle()
                             }

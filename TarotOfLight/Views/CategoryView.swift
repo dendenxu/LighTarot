@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct CardPageView: View {
+struct CategoryView: View {
     var body: some View {
         VStack() {
             VStack(alignment: .leading) {

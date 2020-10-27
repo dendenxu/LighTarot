@@ -13,19 +13,20 @@ struct SelectorView: View {
     @EnvironmentObject var profile: LighTarotModel
     var body: some View {
         ZStack(alignment: .bottom) {
-            if profile.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
-            else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
-            else if profile.weAreInSelector == .minePage { Color("LightGray") }
+//            if profile.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
+//            else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
+//            else if profile.weAreInSelector == .minePage { Color("LightGray") }
             // Background color: a small shade of grey, filling the whole screen
             // Adding background color for different page
             // We're defining pages after a background color so that they can use different transition when loading
             // The color block sits there without any transition animation to be applied
             if (profile.weAreInSelector == .mainPage) {
                 MainPageView(progress: $profile.energy)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
             } else if (profile.weAreInSelector == .cardPage) {
-                CardPageView()
+                CategoryView()
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
             } else if (profile.weAreInSelector == .minePage) {
@@ -55,7 +56,7 @@ struct PageSelector: View {
         }
             .padding()
             .background(
-                RoundedRectangle(cornerRadius: 50)
+                RoundedRectangle(cornerRadius: 40)
                     .foregroundColor(Color.white.opacity(0.3))
 //                    .shadow(radius: 5)
             )

@@ -10,7 +10,7 @@ import SwiftUI
 
 extension AnyTransition {
     static var fly: AnyTransition { get {
-        AnyTransition.modifier(active: FlyTransition(pct: 0), identity: FlyTransition(pct: 1))
+        AnyTransition.modifier(active: FlyTransition(pct: 0.001), identity: FlyTransition(pct: 1))
     }
     }
 }
