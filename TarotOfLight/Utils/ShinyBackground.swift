@@ -45,7 +45,7 @@ extension CGSize {
 }
 
 struct ShinyPentagram: View {
-    var originSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    var originSize = CGSize(width: .ScreenWidth, height: .ScreenHeight)
     var offsetView: CGSize
     var scale = CGFloat.random(in: 1..<1.2)
     var maxAngle = 360.0
@@ -126,7 +126,7 @@ struct TravelingPentagram: View {
             .rotationEffect(isAtSelfMaxAngle ? .degrees(0) : .degrees(selfMaxAngle))
             .position(x: 0, y: 0)
             .offset(x: offsetView.width, y: offsetView.height)
-            .offset(y: (isAtTheBottom ? onceZerone : -onceZerone) * UIScreen.main.bounds.height)
+            .offset(y: (isAtTheBottom ? onceZerone : -onceZerone) * .ScreenHeight)
             .onAppear {
                 withAnimation(shineAnimationSelf) {
                     isAtSelfMaxAngle.toggle()
@@ -141,10 +141,10 @@ struct TravelingPentagram: View {
 }
 
 struct ShinyBackground: View {
-    @State var originSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    @State var originSize = CGSize(width: .ScreenWidth, height: .ScreenHeight)
     var nStroke = 50
     var nFill = 50
-    var size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    var size = CGSize(width: .ScreenWidth, height: .ScreenHeight)
     var tintColor = Color.white
     var body: some View {
         GeometryReader {

@@ -145,6 +145,5 @@ Temporary Items
 .apdisk
 
 # .NET Core server SweetCloud stuff is from another git repo
-server/dotnet/SweetCloud
 # Auxiliary files like videos and images to be added to the project
-aux
+Auxiliary

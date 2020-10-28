@@ -87,8 +87,8 @@ struct CheckedLazyVStack<Content: View>: View {
 struct WrapScroll: View {
     var card: CardInfo
     var percentage: CGFloat
-    let baseOffset: CGFloat = 100 / 414 * UIScreen.main.bounds.width
-    let imageOffset: CGFloat = 40 / 414 * UIScreen.main.bounds.width
+    let baseOffset: CGFloat = 100 / 414 * .ScreenWidth
+    let imageOffset: CGFloat = 40 / 414 * .ScreenWidth
     let baseScale: CGFloat = 0.9
     let baseOpacity: CGFloat = 0.25
     let baseTint: CGFloat = 0.6

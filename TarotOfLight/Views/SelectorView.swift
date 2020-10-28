@@ -22,7 +22,7 @@ struct SelectorView: View {
             // The color block sits there without any transition animation to be applied
             if (profile.weAreInSelector == .mainPage) {
                 MainPageView(progress: $profile.energy)
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                    .frame(width: .ScreenWidth, height: .ScreenHeight)
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
             } else if (profile.weAreInSelector == .cardPage) {
@@ -31,7 +31,7 @@ struct SelectorView: View {
                     .transition(.fly)
             } else if (profile.weAreInSelector == .minePage) {
                 MinePageView()
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                    .frame(width: .ScreenWidth, height: .ScreenHeight)
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
             }

@@ -18,8 +18,8 @@ struct CategoryView: View {
                     .background(
                         ShinyBackground(
                             size: CGSize(
-                                width: UIScreen.main.bounds.width,
-                                height: UIScreen.main.bounds.height
+                                width: .ScreenWidth,
+                                height: .ScreenHeight
                             ),
                             tintColor: Color("LightMediumDarkPurple")
                         )

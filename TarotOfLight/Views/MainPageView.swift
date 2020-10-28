@@ -58,7 +58,7 @@ struct MainPageView: View {
             ], from: Date())
 
 
-    let plantRadius = 350 / 414 * UIScreen.main.bounds.width
+    let plantRadius = 350 / 414 * .ScreenWidth
     var timer: Timer {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
 
@@ -90,11 +90,11 @@ struct MainPageView: View {
             } else {
                 ZStack {
                     LottieView(name: "tide", loopMode: .loop)
-                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 2)
+                        .frame(width: .ScreenWidth, height: .ScreenHeight * 2)
                         .scaledToFit()
                         .scaleEffect(tideScale)
-                        .offset(y: UIScreen.main.bounds.height)
-                        .offset(y: -UIScreen.main.bounds.height * (CGFloat(progress)) / 100)
+                        .offset(y: .ScreenHeight)
+                        .offset(y: -.ScreenHeight * (CGFloat(progress)) / 100)
                         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                             print("Moving back to the foreground!")
 //                            lottieView.shouldPlay = true
@@ -104,7 +104,7 @@ struct MainPageView: View {
 //                            lottieView.shouldPlay = false
 
                     }
-                }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                }.frame(width: .ScreenWidth, height: .ScreenHeight)
             }
 
             // The main content of navigations, should be changed upon selecting differene pages
@@ -252,8 +252,8 @@ struct AnimatingPlant: View {
                 .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
                 .mask(
                     ZStack(alignment: .center) {
-                        Rectangle().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                            .offset(y: -UIScreen.main.bounds.height / 2)
+                        Rectangle().frame(width: .ScreenWidth, height: .ScreenHeight)
+                            .offset(y: -.ScreenHeight / 2)
                         Capsule()
                             .frame(width: plantRadius, height: plantRadius * 2)
                             .scaleEffect(globalScale, anchor: .center)

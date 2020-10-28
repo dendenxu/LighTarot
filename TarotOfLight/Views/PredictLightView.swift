@@ -26,7 +26,7 @@ struct PredictLightView: View {
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
             }
         }
-//        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+//        .frame(width: .ScreenWidth, height: .ScreenHeight)
             .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
     }
 }

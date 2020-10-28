@@ -161,17 +161,17 @@ struct CardPageView: View {
 
 
             }
-                .frame(width: UIScreen.main.bounds.width, height: 120)
+                .frame(width: .ScreenWidth, height: 120)
                 .shadow(radius: 20)
                 .zIndex(1)
 
             if profile.lockingSelection == .locked {
                 FullScroll(texts: lockedTexts)
-                    .frame(width: UIScreen.main.bounds.width)
+                    .frame(width: .ScreenWidth)
                     .zIndex(0.5)
             } else {
                 FullScroll(texts: profile.cardContents)
-                    .frame(width: UIScreen.main.bounds.width)
+                    .frame(width: .ScreenWidth)
                     .zIndex(0.5)
             }
 

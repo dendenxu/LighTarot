@@ -58,7 +58,7 @@ struct PagerView<Content: View>: View {
         }
     }
 
-    func tapGesture(index: Int = 0, width: CGFloat = UIScreen.main.bounds.width) {
+    func tapGesture(index: Int = 0, width: CGFloat = .ScreenWidth) {
         print("SMALL BUTTON PRESSED! of index \(index)")
         onEndedAction(index: index, width: width)
         delay()

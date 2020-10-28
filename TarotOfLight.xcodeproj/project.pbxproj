@@ -42,14 +42,14 @@
 		B984405B254072CD00E43C18 /* LighTarotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B984405A254072CD00E43C18 /* LighTarotModel.swift */; };
 		B994C6552520CD6A00320750 /* cute.gif in Resources */ = {isa = PBXBuildFile; fileRef = B994C6542520CD6A00320750 /* cute.gif */; };
 		B994C6582520CF3E00320750 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B994C6572520CF3E00320750 /* Contants.swift */; };
-		B99729E32542E01300E91744 /* TideAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99729E22542E01300E91744 /* TideAnimation.swift */; };
+		B99729E32542E01300E91744 /* LottieAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99729E22542E01300E91744 /* LottieAnimation.swift */; };
 		B99729E92542F0D400E91744 /* tide.json in Resources */ = {isa = PBXBuildFile; fileRef = B99729E82542F0D400E91744 /* tide.json */; };
 		B99E59D5252FFEDF00F5E0A7 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */; };
 		B9D84A7725414DBB00FAEC62 /* DefaultProfile.json in Resources */ = {isa = PBXBuildFile; fileRef = B9D84A7625414DBB00FAEC62 /* DefaultProfile.json */; };
-		B9DBD3552549151200368443 /* cardsRotation.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9DBD3532549151200368443 /* cardsRotation.gif */; };
-		B9DBD3562549151200368443 /* cardsSpread.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9DBD3542549151200368443 /* cardsSpread.gif */; };
 		B9DBD35925491FFE00368443 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBD35825491FFE00368443 /* IntroPageView.swift */; };
 		B9DBD35C254920E500368443 /* PagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBD35B254920E500368443 /* PagerView.swift */; };
+		B9DBD362254943F300368443 /* cardsSpread.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9DBD360254943F300368443 /* cardsSpread.gif */; };
+		B9DBD363254943F300368443 /* cardsRotation.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9DBD361254943F300368443 /* cardsRotation.gif */; };
 		B9ED187B24A4ED9600327351 /* tudou.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9ED187A24A4ED9600327351 /* tudou.gif */; };
 		B9EE5ED824A459AA00D8C58F /* grown.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED624A459AA00D8C58F /* grown.gif */; };
 		B9EE5ED924A459AA00D8C58F /* growing.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED724A459AA00D8C58F /* growing.gif */; };
@@ -93,14 +93,14 @@
 		B984405A254072CD00E43C18 /* LighTarotModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LighTarotModel.swift; sourceTree = "<group>"; };
 		B994C6542520CD6A00320750 /* cute.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cute.gif; sourceTree = "<group>"; };
 		B994C6572520CF3E00320750 /* Contants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
-		B99729E22542E01300E91744 /* TideAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TideAnimation.swift; sourceTree = "<group>"; };
+		B99729E22542E01300E91744 /* LottieAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimation.swift; sourceTree = "<group>"; };
 		B99729E82542F0D400E91744 /* tide.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tide.json; sourceTree = "<group>"; };
 		B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		B9D84A7625414DBB00FAEC62 /* DefaultProfile.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultProfile.json; sourceTree = "<group>"; };
-		B9DBD3532549151200368443 /* cardsRotation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = cardsRotation.gif; path = "aux/Usable Images/cardsRotation.gif"; sourceTree = SOURCE_ROOT; };
-		B9DBD3542549151200368443 /* cardsSpread.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = cardsSpread.gif; path = "aux/Usable Images/cardsSpread.gif"; sourceTree = SOURCE_ROOT; };
 		B9DBD35825491FFE00368443 /* IntroPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroPageView.swift; sourceTree = "<group>"; };
 		B9DBD35B254920E500368443 /* PagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagerView.swift; sourceTree = "<group>"; };
+		B9DBD360254943F300368443 /* cardsSpread.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cardsSpread.gif; sourceTree = "<group>"; };
+		B9DBD361254943F300368443 /* cardsRotation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cardsRotation.gif; sourceTree = "<group>"; };
 		B9ED187A24A4ED9600327351 /* tudou.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tudou.gif; sourceTree = "<group>"; };
 		B9EE5ED624A459AA00D8C58F /* grown.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = grown.gif; sourceTree = "<group>"; };
 		B9EE5ED724A459AA00D8C58F /* growing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = growing.gif; sourceTree = "<group>"; };
@@ -198,9 +198,9 @@
 			isa = PBXGroup;
 			children = (
 				B99729E82542F0D400E91744 /* tide.json */,
-				B9DBD3532549151200368443 /* cardsRotation.gif */,
-				B9DBD3542549151200368443 /* cardsSpread.gif */,
 				B9EE5ED724A459AA00D8C58F /* growing.gif */,
+				B9DBD361254943F300368443 /* cardsRotation.gif */,
+				B9DBD360254943F300368443 /* cardsSpread.gif */,
 				B9EE5ED624A459AA00D8C58F /* grown.gif */,
 				B994C6542520CD6A00320750 /* cute.gif */,
 				3422C17D2495EB9000296A18 /* plant.gif */,
@@ -249,7 +249,7 @@
 				B9EE5EDA24A459F500D8C58F /* ShinyBackground.swift */,
 				B970A5F924A360A000B68189 /* ShinyStar.swift */,
 				B970A5FB24A3611A00B68189 /* Transitions.swift */,
-				B99729E22542E01300E91744 /* TideAnimation.swift */,
+				B99729E22542E01300E91744 /* LottieAnimation.swift */,
 				B9DBD35B254920E500368443 /* PagerView.swift */,
 			);
 			path = Utils;
@@ -337,7 +337,6 @@
 				34673E982494E8D300712F38 /* LaunchScreen.storyboard in Resources */,
 				34673E952494E8D300712F38 /* Preview Assets.xcassets in Resources */,
 				3473C1CA24965A5D003C7321 /* plantfull.gif in Resources */,
-				B9DBD3552549151200368443 /* cardsRotation.gif in Resources */,
 				B9ED187B24A4ED9600327351 /* tudou.gif in Resources */,
 				B957B2382542A728007BCC81 /* CardContent.json in Resources */,
 				B9EE5ED924A459AA00D8C58F /* growing.gif in Resources */,
@@ -348,9 +347,10 @@
 				344A69B82496191D00B818A4 /* SourceHanSerif-Heavy.ttc in Resources */,
 				B994C6552520CD6A00320750 /* cute.gif in Resources */,
 				34673E922494E8D300712F38 /* Assets.xcassets in Resources */,
+				B9DBD362254943F300368443 /* cardsSpread.gif in Resources */,
 				344A69BC2496232800B818A4 /* SourceHanSans-Heavy.ttc in Resources */,
+				B9DBD363254943F300368443 /* cardsRotation.gif in Resources */,
 				B99729E92542F0D400E91744 /* tide.json in Resources */,
-				B9DBD3562549151200368443 /* cardsSpread.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,7 +378,7 @@
 				B984405B254072CD00E43C18 /* LighTarotModel.swift in Sources */,
 				B9DBD35925491FFE00368443 /* IntroPageView.swift in Sources */,
 				B970A60024A361CD00B68189 /* CircleBackground.swift in Sources */,
-				B99729E32542E01300E91744 /* TideAnimation.swift in Sources */,
+				B99729E32542E01300E91744 /* LottieAnimation.swift in Sources */,
 				34673E902494E8CC00712F38 /* ContentView.swift in Sources */,
 				B962529324A391D4002BFE03 /* ShinyText.swift in Sources */,
 				B970A60624A3630C00B68189 /* LittleProgressBar.swift in Sources */,

@@ -9,6 +9,8 @@ import Combine
 import SwiftUI
 extension CGFloat {
     public static let ScreenCornerRadius: CGFloat = 38.0
+    public static let ScreenWidth = UIScreen.main.bounds.width
+    public static let ScreenHeight = UIScreen.main.bounds.height
 }
 
 extension String {

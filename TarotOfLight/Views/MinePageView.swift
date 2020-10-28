@@ -44,8 +44,8 @@ struct MinePageView: View {
                             ShinyBackground(
                                 nStroke: 30, nFill: 15,
                                 size: CGSize(
-                                    width: UIScreen.main.bounds.width,
-                                    height: UIScreen.main.bounds.height
+                                    width: .ScreenWidth,
+                                    height: .ScreenHeight
                                 ),
                                 tintColor: Color("LightMediumDarkPurple").opacity(0.5)
                             )
@@ -57,7 +57,7 @@ struct MinePageView: View {
                     profile.avatar = image.toBase64()
                     print("Avatar set to new image")
                 }
-            }.padding(.top, 115 / 896 * UIScreen.main.bounds.height)
+            }.padding(.top, 115 / 896 * .ScreenHeight)
 //                .padding(.bottom, 100)
 
             ShinyText(font: .DefaultChineseFont, size: 30, textColor: Color.black.opacity(0.75), shadowColor: Color.black.opacity(0.3), editable: true, editableText: $profile.name, placeholder: profile.name)

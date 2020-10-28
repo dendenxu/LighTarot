@@ -22,7 +22,7 @@ struct ContentView: View {
                 else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
                 else if profile.weAreInSelector == .minePage { Color("LightGray") }
                 SelectorView()
-//                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+//                    .frame(width: .ScreenWidth, height: .ScreenHeight)
                 .transition(scaleTransition)
             } else if (profile.weAreInGlobal == .predictLight) {
                 if (profile.weAreIn == .animation) { Color("MediumDarkPurple") }
@@ -30,7 +30,7 @@ struct ContentView: View {
                 PredictLightView()
                 // BUG: When the frame is set here, this subView will be placed a mysterious offset
                 // I ... I don't know how to fix it, temporarity I'm just ignoring it.
-//                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+//                    .frame(width: .ScreenWidth, height: .ScreenHeight)
                 .transition(scaleTransition)
             } else if (profile.weAreInGlobal == .arCamera) {
                 ARCameraView()
@@ -48,7 +48,7 @@ struct ContentView: View {
                     .transition(scaleTransition)
             }
         }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            .frame(width: .ScreenWidth, height: .ScreenHeight)
             .edgesIgnoringSafeArea(.all)
         // Setting frame and cornerRadius clip here is a more global approach for the who main page
         // Adding edges ignorance operations here at the rootView will rid all subViews of the safe areas

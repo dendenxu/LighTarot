@@ -26,7 +26,7 @@ struct IntroPageView: View {
                             RoundedRectangle(cornerRadius: .ScreenCornerRadius)
                                 .foregroundColor(Color("LightGray"))
                                 .opacity(0.001)
-                                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                                .frame(width: .ScreenWidth, height: .ScreenHeight)
                             VStack(spacing: 30) {
                                 Button(action: {
                                     withAnimation(springAnimation) {
@@ -78,7 +78,7 @@ struct IntroPageView: View {
 struct InnerIntroduction<Content: View>: View {
     var percentage: CGFloat
     var content: Content
-    let baseOffset: CGFloat = 150 / 414 * UIScreen.main.bounds.width
+    let baseOffset: CGFloat = 150 / 414 * .ScreenWidth
     let baseScale: CGFloat = 0.9
     let baseOpacity: CGFloat = 0.25
     let baseTint: CGFloat = 0.6
