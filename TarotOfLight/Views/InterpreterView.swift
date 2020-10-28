@@ -25,13 +25,9 @@ struct OuterInterpreterView: View {
                         print("Not the first time called")
                     }
                 }) {
-                    WebImage(
+                    WebImage.default(
                         url: URL(fileURLWithPath: Bundle.main.path(forResource: "plantfull", ofType: "gif") ?? "plantfull.gif"),
                         isAnimating: self.$plantFullAnimating)
-                        .resizable()
-                        .playbackRate(1.0)
-                        .retryOnAppear(true)
-                        .scaledToFit()
                         .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                         .onAppear(perform: delay)
                 }
@@ -102,9 +98,7 @@ struct WrapScroll: View {
             ScrollView(showsIndicators: false) {
                 CheckedLazyVStack {
                     VStack {
-                        Image(card.imageName)
-                            .resizable()
-                            .scaledToFit()
+                        Image.default(card.imageName)
                             .rotationEffect(card.flipped ? .degrees(180) : .zero)
                             .frame(width: 270)
                             .padding(.top, 10)
@@ -135,10 +129,7 @@ struct WrapScroll: View {
                         WrapComb(title: "牌面故事", text: card.storyText)
                             .padding(.bottom, 30)
                         HStack {
-                            Image("star")
-                                .renderingMode(.original)
-                                .resizable()
-                                .scaledToFit()
+                            Image.default("star")
                                 .frame(width: 30)
                             ShinyText(text: "卜光能量", font: .DefaultChineseFont, size: 20, textColor: Color(hex: 0xF7EB2E), shadowColor: Color.black.opacity(0))
                         }
@@ -147,12 +138,8 @@ struct WrapScroll: View {
                         LitPentagram(numberOfPentagram: card.fullEnergy, numberOfLit: card.energy)
                             .frame(height: 10)
 
-                        WebImage(
+                        WebImage.default(
                             url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"), isAnimating: $isEnergyAnimating)
-                            .resizable()
-                            .playbackRate(1.0)
-                            .retryOnAppear(true)
-                            .scaledToFill()
                             .frame(width: 100, height: 100)
                             .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
                         Spacer()
@@ -227,9 +214,7 @@ struct InterpreterView: View {
                             profile.weAreIn = .category
                         }
                     } label: {
-                        Image("getback")
-                            .resizable()
-                            .scaledToFit()
+                        Image.default("getback")
                             .frame(width: 20)
                             .shadow(color: Color("Lime"), radius: 3)
                     }
@@ -241,9 +226,7 @@ struct InterpreterView: View {
                         print("Currently we're using this to delete the user profile")
                         LighTarotModel.deleteFile()
                     } label: {
-                        Image("share")
-                            .resizable()
-                            .scaledToFit()
+                        Image.default("share")
                             .frame(width: 20)
                             .shadow(color: Color("Lime"), radius: 3)
                     }
@@ -252,9 +235,7 @@ struct InterpreterView: View {
                         print("Currently we're using this to save things to user document profile so that no refreshing is needed")
                         profile.saveUserInfoToFile()
                     } label: {
-                        Image("download")
-                            .resizable()
-                            .scaledToFit()
+                        Image.default("download")
                             .frame(width: 20)
                             .shadow(color: Color("Lime"), radius: 3)
                     }
@@ -281,10 +262,7 @@ struct WrapComb: View {
     var body: some View {
         VStack(alignment: .center, spacing: 5) {
             HStack {
-                Image("star")
-                    .renderingMode(.original)
-                    .resizable()
-                    .scaledToFit()
+                Image.default("star")
                     .frame(width: 30)
                 ShinyText(text: title, font: .DefaultChineseFont, size: 20, textColor: Color(hex: 0xF7EB2E), shadowColor: Color.black.opacity(0))
             }

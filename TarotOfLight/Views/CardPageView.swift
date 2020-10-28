@@ -55,20 +55,14 @@ struct Card: View {
             }
         }) {
             ZStack(alignment: .topLeading) {
-                Image(imageName)
-                    .renderingMode(.original)
-                    .resizable()
-                    .scaledToFit()
+                Image.default(imageName)
                     .shadow(color: imageShadowColor, radius: 5)
                 if !cardContent.locked || profile.lockingSelection == .locked {
                     VStack(alignment: .leading) {
                         LightText(text: cardContent.text, font: .DefaultChineseFont, size: 20, textColor: textColor, shadowColor: shadowColor)
                             .padding(.top, 20).padding(.leading, 20)
                         HStack {
-                            Image("power")
-                                .renderingMode(.original)
-                                .resizable()
-                                .scaledToFit()
+                            Image.default("power")
                                 .frame(width: 20, height: 20)
                             LightText(text: String(format: "%.0f能量", cardContent.energy), font: .DefaultChineseFont, size: 16, textColor: textColorDesc, shadowColor: shadowColorDesc)
                         }.padding(.leading, 20)

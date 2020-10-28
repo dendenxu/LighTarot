@@ -129,7 +129,7 @@ struct PagerView<Content: View>: View {
                                 }) {
                                     ZStack {
                                         Ellipse()
-                                            .frame(width: selecting ? 20 : 15, height: selecting ? 80 : 40)
+                                            .frame(width: selecting ? 22.5 : 15, height: selecting ? 80 : 40)
                                             .hidden()
                                             .overlay(Circle().foregroundColor(dotColor(index: index)).frame(width: 9, height: 9))
                                             .padding(.leading, index == 0 ? (selecting ? 12.5 : 5) : 0)

@@ -64,10 +64,7 @@ struct CategorySelectorView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: .ScreenCornerRadius).foregroundColor(Color("LightMediumDarkPurple"))
                     VStack(alignment: .center) {
-                        Image(whoWeAre.description)
-                            .renderingMode(.original)
-                            .resizable()
-                            .scaledToFit()
+                        Image.default(whoWeAre.description)
                             .frame(width: geometry.size.width * imageScale, height: geometry.size.height * imageScale)
                             .shadow(color: Color("Lime"), radius: 5)
                             .padding(.vertical, 10)

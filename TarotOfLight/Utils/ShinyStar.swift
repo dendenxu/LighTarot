@@ -22,8 +22,6 @@ var shineAnimationConstant = Animation
     .easeInOut(duration: 1.0)
     .repeatForever(autoreverses: true)
 
-
-
 // Some randomized shiny star with shiny animations
 struct ShinyStar: View {
     let offset: CGSize
@@ -37,9 +35,7 @@ struct ShinyStar: View {
     var body: some View {
         // Note that the declarative statement takes effect one by one
         // For example we can add two rotation effect just by adding the offset before and after the offset change
-        Image("star")
-            .resizable()
-            .scaledToFit()
+        Image.default("star")
             .shadow(color: Color.purple, radius: 5)
             .opacity(isAtMaxScale ? 1 : 0)
             .scaleEffect(isAtMaxScale ? maxScale : 0.5)

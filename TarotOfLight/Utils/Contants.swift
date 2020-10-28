@@ -7,6 +7,7 @@
 //
 import Combine
 import SwiftUI
+import SDWebImageSwiftUI
 extension CGFloat {
     public static let ScreenCornerRadius: CGFloat = 38.0
     public static let ScreenWidth = UIScreen.main.bounds.width
@@ -18,6 +19,15 @@ extension String {
     public static let SourceHanSansHeavy = "Source Han Sans Heavy"
     public static let SourceHanSansMedium = "Source Han Sans Medium"
     public static let SourceHanSansLight = "Source Han Sans Light"
+}
+
+extension Image {
+    public static func `default`(_ name: String) -> some View {
+        return Image(name)
+            .renderingMode(.original)
+            .resizable()
+            .scaledToFit()
+    }
 }
 
 // Using hex directly
@@ -49,3 +59,12 @@ extension UIImage {
     }
 }
 
+extension WebImage {
+    public static func `default`(url: URL, isAnimating: Binding<Bool>) -> some View {
+        return WebImage(url: url, isAnimating: isAnimating)
+            .resizable()
+            .playbackRate(1.0)
+            .retryOnAppear(true)
+            .scaledToFill()
+    }
+}

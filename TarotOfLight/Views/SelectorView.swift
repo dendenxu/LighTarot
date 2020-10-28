@@ -75,10 +75,7 @@ struct PageSelectorButton: View {
                 profile.weAreInSelector = whoWeAre
             }
         }) {
-            Image(String(describing: whoWeAre) + ((profile.weAreInSelector == whoWeAre) ? "Material" : ""))
-                .renderingMode(.original)
-                .resizable()
-                .scaledToFit()
+            Image.default(String(describing: whoWeAre) + ((profile.weAreInSelector == whoWeAre) ? "Material" : ""))
                 .frame(height: 50)
                 .shadow(radius: 10)
         }.padding(.horizontal, 20)

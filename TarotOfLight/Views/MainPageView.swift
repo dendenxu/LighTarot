@@ -111,17 +111,11 @@ struct MainPageView: View {
             VStack {
                 HStack(spacing: 40) { // The top two objects
                     VStack(alignment: .center) { // The energy bar
-                        Image("buguang")
-                            .renderingMode(.original)
-                            .resizable()
-                            .scaledToFit()
+                        Image.default("buguang")
                             .frame(width: 120, height: 120)
                             .shadow(color: Color("MediumLime").opacity(0.3), radius: 5)
                         HStack(spacing: 0) {
-                            Image("power")
-                                .renderingMode(.original)
-                                .resizable()
-                                .scaledToFit()
+                            Image.default("power")
                                 .frame(width: 20, height: 20)
                                 .shadow(radius: 2)
                             LittleProgressBar(value: progress)
@@ -239,16 +233,11 @@ struct AnimatingPlant: View {
                     scale: CGFloat.random(in: 0.9..<1.1)
                 )
             }
-            WebImage(
+            WebImage.default(
                 url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
-                isAnimating: self.$grownAnimating)
-                .resizable()
-                .playbackRate(1.0)
-                .retryOnAppear(true)
-                .scaledToFill()
+                isAnimating: $grownAnimating)
                 .frame(width: plantRadius, height: plantRadius)
                 .scaleEffect(1.2)
-                .offset(x: -5, y: -5)
                 .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
                 .mask(
                     ZStack(alignment: .center) {
