@@ -33,6 +33,9 @@ class LighTarotModel: ObservableObject {
     }
     // Computed value (manually updated value to reserve the resource)
     var avatarImage = UIImage() // Precomputation to speed things up
+    @Published var energy = 15.0 // Max: 100.0 as Double type
+    @Published var proficientUser: Bool = false
+    @Published private var birthdayDate = Date(timeIntervalSince1970: TimeInterval(0))
     var birthday: String {
         get {
             return dateFormatter.string(from: birthdayDate)
@@ -46,9 +49,7 @@ class LighTarotModel: ObservableObject {
             }
         }
     }
-    @Published var energy = 15.0 // Max: 100.0 as Double type
-    @Published private var birthdayDate = Date(timeIntervalSince1970: TimeInterval(0))
-
+    
     // Card informations from default json file
     // Defines whether user has unlocked certain cards
     @Published var cardInfos: [CardInfo] = [CardInfo]()
@@ -161,6 +162,7 @@ class LighTarotModel: ObservableObject {
         birthday = json["birthday"].string ?? birthday
         energy = json["energy"].double ?? energy
         avatar = json["avatar"].string ?? avatar
+        proficientUser = json["proficientUser"].bool ?? proficientUser
     }
 
     // User might have already made change to the profile, save it to profile.json under document directory
@@ -172,7 +174,8 @@ class LighTarotModel: ObservableObject {
             "location": location,
             "birthday": birthday,
             "energy": energy,
-            "avatar": avatar
+            "proficientUser": proficientUser,
+            "avatar": avatar,
         ])
         do {
             try json.rawData().write(to: fileURL)
@@ -269,4 +272,7 @@ class LighTarotModel: ObservableObject {
             print("Failed to play pattern: \(error.localizedDescription).")
         }
     }
+    
+    
+    
 }
