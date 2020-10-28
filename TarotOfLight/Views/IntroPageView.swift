@@ -18,12 +18,48 @@ var fullScreenBG: some View =
 
 
 struct ThirdIntroPage: View {
+    @EnvironmentObject var profile: LighTarotModel
+    let plantRadius = 250 / 414 * .ScreenWidth
     var body: some View {
         ZStack {
             fullScreenBG
-            ShinyText(text: "Hello, world.")
-        }
+            VStack(spacing: 30) {
+                Button(action: {
+                    withAnimation(springAnimation) {
+                        profile.weAreInGlobal = .selector
+                    }
+                }) {
+                    VStack {
+                        VStack {
+                            ShinyText(text: "收集捕光能量解锁下一个新牌阵", font: .SourceHanSansHeavy, size: 16, textColor: Color("MediumLime"), shadowColor: .white)
+                            ShinyText(text: "丰富神秘的塔罗世界正等待开启", font: .SourceHanSansHeavy, size: 16, textColor: Color("MediumLime"), shadowColor: .white)
+                        }.padding(.horizontal, 40)
+                            .padding(.vertical, 20)
 
+                    }.background(
+                        Capsule()
+                            .strokeBorder(
+                                style: StrokeStyle(lineWidth: 2)
+                            )
+                            .foregroundColor(Color("MediumLime"))
+                    )
+                }
+
+                Spacer().frame(height: 30)
+
+                AnimatingPlant(isFull: false, grownAnimating: .constant(true)).frame(width: plantRadius, height: plantRadius)
+
+                HStack(spacing: 0) {
+                    Image.default("power")
+                        .frame(width: 30, height: 30)
+                        .shadow(radius: 2)
+                    LittleProgressBar(value: 100)
+                        .frame(width: 150, height: 25)
+                        .padding()
+                        .offset(x: -10)
+                }
+            }
+        }
     }
 }
 struct SecondIntroPage: View {

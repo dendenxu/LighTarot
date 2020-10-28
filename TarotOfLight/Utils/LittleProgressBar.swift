@@ -11,6 +11,10 @@ import SwiftUI
 // A small progress bar, cool, right?
 struct LittleProgressBar: View {
     var value: Double
+    var fontSize: CGFloat {
+        if value > 30 { return 12 }
+        else { return CGFloat((30 - value) / 30 * 12) }
+    }
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
@@ -21,9 +25,9 @@ struct LittleProgressBar: View {
                 ZStack {
                     Rectangle().frame(width: CGFloat(value) / 100 * width)
                         .foregroundColor(Color("Lime"))
-                    Text("\(value, specifier: "%.0f")")
+                    Text(String(format: "%.0f", value) + ((value > 30) ? "%" : ""))
                         .foregroundColor(.white)
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .font(.system(size: fontSize, weight: .bold, design: .rounded))
                 }
             }
                 .cornerRadius(45.0)

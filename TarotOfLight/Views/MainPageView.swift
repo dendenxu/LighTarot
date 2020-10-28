@@ -42,7 +42,6 @@ struct MainPageView: View {
             return progress >= 100.0
         }
     }
-    @State var tideAnimating: Bool = true
     @State var grownAnimating: Bool = true
     @Binding var progress: Double
     @State var nowDate: DateComponents = Calendar
@@ -165,9 +164,9 @@ struct MainPageView: View {
                 .padding(.top, 80 - 20 * CGFloat(progress) / 100)
 
 
-                AnimatingPlant(progress: progress, tideAnimating: $tideAnimating, growingAnimating: $grownAnimating, grownAnimating: $grownAnimating, plantRadius: plantRadius)
-
+                AnimatingPlant(isFull: isFull, grownAnimating: $grownAnimating)
                     .zIndex(0.5)
+                    .frame(width: plantRadius, height: plantRadius)
                 // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)
                 // FIXME: When we're using too large an offset, like .offset(y: CGFloat(progress)) directly, the Swift compiler crashes, returning non-zero value
                 .padding(.bottom, 20 + 10 * CGFloat(progress) / 100)
@@ -206,49 +205,44 @@ struct MainPageView: View {
 }
 
 struct AnimatingPlant: View {
-    var progress: Double
-    var isFull: Bool {
-        get {
-            return progress >= 100.0
-        }
-    }
-    @Binding var tideAnimating: Bool
-    @Binding var growingAnimating: Bool
+    let isFull: Bool
     @Binding var grownAnimating: Bool
-    var plantRadius: CGFloat = 350
     var globalScale: CGFloat = 0.95
     var shapeShift: CGFloat = 1.03
     var body: some View {
-        ZStack {
-            // Current we using one variable for both the plant and the tide
-            // FIXME: change to two
-            ComplexCircleBackground(globalScale: globalScale, shapeShift: shapeShift, isFull: isFull)
-                .frame(width: plantRadius, height: plantRadius)
-            ForEach(0..<5) { number in
-                ShinyStar(
-                    offset: randomPositionAroundCircle(
-                        size: CGSize(
-                            width: plantRadius / 2,
-                            height: plantRadius / 2)),
-                    scale: CGFloat.random(in: 0.9..<1.1)
-                )
+        GeometryReader { geo in
+
+            ZStack {
+                let plantRadius = min(geo.size.width, geo.size.height)
+                
+                ComplexCircleBackground(globalScale: globalScale, shapeShift: shapeShift, isFull: isFull)
+                    .frame(width: plantRadius, height: plantRadius)
+                ForEach(0..<5) { number in
+                    ShinyStar(
+                        offset: randomPositionAroundCircle(
+                            size: CGSize(
+                                width: plantRadius / 2,
+                                height: plantRadius / 2)),
+                        scale: CGFloat.random(in: 0.9..<1.1)
+                    )
+                }
+                WebImage.default(
+                    url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
+                    isAnimating: $grownAnimating)
+                    .frame(width: plantRadius, height: plantRadius)
+                    .scaleEffect(1.2)
+                    .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
+                    .mask(
+                        ZStack(alignment: .center) {
+                            Rectangle().frame(width: .ScreenWidth, height: .ScreenHeight)
+                                .offset(y: -.ScreenHeight / 2)
+                            Capsule()
+                                .frame(width: plantRadius, height: plantRadius * 2)
+                                .scaleEffect(globalScale, anchor: .center)
+                                .offset(y: -plantRadius / 2)
+                        }
+                    )
             }
-            WebImage.default(
-                url: URL(fileURLWithPath: Bundle.main.path(forResource: "grown", ofType: "gif") ?? "grown.gif"),
-                isAnimating: $grownAnimating)
-                .frame(width: plantRadius, height: plantRadius)
-                .scaleEffect(1.2)
-                .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 10)
-                .mask(
-                    ZStack(alignment: .center) {
-                        Rectangle().frame(width: .ScreenWidth, height: .ScreenHeight)
-                            .offset(y: -.ScreenHeight / 2)
-                        Capsule()
-                            .frame(width: plantRadius, height: plantRadius * 2)
-                            .scaleEffect(globalScale, anchor: .center)
-                            .offset(y: -plantRadius / 2)
-                    }
-                )
         }
     }
 }
