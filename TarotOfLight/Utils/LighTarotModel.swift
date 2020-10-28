@@ -18,7 +18,7 @@ class LighTarotModel: ObservableObject {
     // Navigation data, updating the view by selecting different enum value for these
     @Published var lockingSelection: LockingSelection = .unlocked
     @Published var weAreIn: PredictLightViewSelection = .category
-    @Published var weAreInGlobal: GlobalViewSelection = .selector
+    @Published var weAreInGlobal: GlobalViewSelection = .introduction
     @Published var weAreInCategory: CategorySelection = .love
     @Published var weAreInSelector: SelectorSelection = .mainPage
 
@@ -49,7 +49,7 @@ class LighTarotModel: ObservableObject {
             }
         }
     }
-    
+
     // Card informations from default json file
     // Defines whether user has unlocked certain cards
     @Published var cardInfos: [CardInfo] = [CardInfo]()
@@ -84,6 +84,15 @@ class LighTarotModel: ObservableObject {
         loadCardContentFromFile(filename: cardContentFileName)
         validateCardInfo(count: 5)
         prepareHaptics()
+        prepareView()
+    }
+
+    func prepareView() {
+        lockingSelection = .unlocked
+        weAreIn = .category
+        weAreInGlobal = proficientUser ? .selector : .introduction
+        weAreInCategory = .love
+        weAreInSelector = .mainPage
     }
 
     func loadCardContentFromFile(filename: String = "CardContent.json") {
@@ -272,7 +281,7 @@ class LighTarotModel: ObservableObject {
             print("Failed to play pattern: \(error.localizedDescription).")
         }
     }
-    
-    
-    
+
+
+
 }

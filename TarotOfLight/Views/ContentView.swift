@@ -41,6 +41,11 @@ struct ContentView: View {
                         // 1. add ARKit requirements in info.plist
                         // 2. add Privacy - ability to use camera to info.plist too
                 }
+            } else if (profile.weAreInGlobal == .introduction) {
+                // Background Rectangle
+                RoundedRectangle(cornerRadius: .ScreenCornerRadius).foregroundColor(Color("LightGray"))
+                IntroPageView()
+                    .transition(scaleTransition)
             }
         }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
@@ -58,10 +63,12 @@ enum GlobalViewSelection: CustomStringConvertible {
         case .selector: return "selector"
         case .predictLight: return "predictLight"
         case .arCamera: return "arCamera"
+        case .introduction: return "introduction"
         }
     }
 
     case selector
     case predictLight
     case arCamera
+    case introduction
 }

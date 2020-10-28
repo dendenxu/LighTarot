@@ -108,7 +108,6 @@ struct WrapScroll: View {
                             .rotationEffect(card.flipped ? .degrees(180) : .zero)
                             .frame(width: 270)
                             .padding(.top, 10)
-//                            .zIndex(1)
                         .colorMultiply(computedTintColor)
                         ZStack {
                             VStack(spacing: 5) {
@@ -126,7 +125,6 @@ struct WrapScroll: View {
                         }
                             .padding(.top, 15)
                             .padding(.bottom, 25)
-//                            .zIndex(-0.5)
                     }
                         .offset(x: -percentage * imageOffset, y: -abs(percentage) * 60)
                         .scaleEffect(computedScale)
@@ -136,9 +134,6 @@ struct WrapScroll: View {
                             .padding(.bottom, 30)
                         WrapComb(title: "牌面故事", text: card.storyText)
                             .padding(.bottom, 30)
-
-                        // TODO: add the energy
-
                         HStack {
                             Image("star")
                                 .renderingMode(.original)
@@ -277,160 +272,6 @@ struct InterpreterView: View {
             }
 
         } // VStack
-    }
-}
-
-struct PagerView<Content: View>: View {
-    let content: Content
-    let pageCount: Int
-    @Binding var currentIndex: Int
-    @Binding var percentages: [CGFloat] // left, right middle
-    @State var translation: CGFloat = 0
-    @EnvironmentObject var profile: LighTarotModel
-    init(pageCount: Int, currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, @ViewBuilder content: () -> Content) {
-        self.pageCount = pageCount
-        self._currentIndex = currentIndex
-        self._percentages = percentages
-        self.content = content()
-    }
-
-    private func onEndedAction(index: Int, width: CGFloat) {
-        let oldValue = currentIndex
-        currentIndex = index
-        isChanging = false
-        profile.pagerSuccess(count: abs(currentIndex - oldValue))
-        print("Current translation: \(translation), currentIndex: \(currentIndex)")
-        withAnimation(fastSpringAnimation) {
-            translation = -CGFloat(currentIndex) * width
-            // DUP: duplicated code fragment, consider optimization
-            for index in 0..<pageCount {
-                percentages[index] = (translation + CGFloat(index) * width) / width
-            }
-        }
-        print("Paging gesture ended! Percentages are: [\(percentages)]")
-    }
-
-    private func delay() {
-        // Delay of 3 seconds
-        counter += 1
-        print("Waiting a while... counter: \(counter)")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            counter -= 1
-            if selecting && (counter == 0) {
-                withAnimation(springAnimation) {
-                    selecting = false
-                }
-                print("Done!")
-            } else {
-                print("Not selected")
-            }
-        }
-    }
-
-    func tapGesture(index: Int = 0, width: CGFloat = UIScreen.main.bounds.width) {
-        print("SMALL BUTTON PRESSED! of index \(index)")
-        onEndedAction(index: index, width: width)
-        delay()
-        if !selecting {
-            withAnimation(springAnimation) {
-                selecting = true
-            }
-        }
-    }
-
-    @State var isChanging = false
-    @State var selecting = false
-    @State var counter: Int = 0
-    let spacing: CGFloat = 3
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                let width = geometry.size.width
-                let PagerDragGesture =
-                    DragGesture(
-                        minimumDistance: 20,
-                        coordinateSpace: .local
-                    )
-                    .onEnded { value in
-                        let offset = value.predictedEndTranslation.width / width
-                        let newIndex = (CGFloat(currentIndex) - offset).rounded()
-                        let index = min(max(Int(newIndex), 0), pageCount - 1)
-                        onEndedAction(index: index, width: width)
-                    }
-                    .onChanged { value in
-                        print("Paging gesture changing...")
-                        let translationW = value.translation.width - CGFloat(currentIndex) * width
-                        let translationH = value.translation.height
-                        if isChanging || translationH < 10 {
-                            print("Are we currently changing: \(isChanging)")
-                            isChanging = true
-                            withAnimation(fastSpringAnimation) {
-                                translation = translationW
-                                for index in 0..<pageCount {
-                                    percentages[index] = (translationW + CGFloat(index) * width) / width
-                                }
-                            }
-                        } else {
-                            isChanging = false // This bool is magically making things work
-                        }
-                }
-
-                HStack(spacing: spacing) {
-                    // BUG: Setting the spacing to 0 might cause strange behavior on the opacity during animation
-                    // Possibly a bug of SwiftUI
-                    // Here we have 3 Paging view, so 3*2 = 2*3
-                    self.content.frame(width: geometry.size.width - CGFloat(pageCount - 1) * spacing / CGFloat(pageCount))
-                }
-                    .frame(width: geometry.size.width, alignment: .leading)
-                    .offset(x: translation)
-                    .gesture(PagerDragGesture)
-//                    .zIndex(-1)
-//                Spacer()
-                VStack {
-                    Spacer()
-                    ZStack {
-                        // This is ridiculous... Adding a rectangle frame around it will make the gesture recognizable?
-
-                        HStack(spacing: 0) {
-                            ForEach(0..<pageCount) { index in
-                                Button(action: {
-                                }) {
-                                    if index == 0 {
-                                        Spacer().frame(width: selecting ? 10 : 5)
-                                            .onTapGesture { tapGesture(index: index, width: width) }
-                                    }
-                                    Ellipse()
-                                        .frame(width: 20, height: selecting ? 80 : 40)
-//                                        .scaleEffect(1.5)
-//                                        .scaleEffect(y: 2, anchor: .center)
-                                    .opacity(0)
-                                        .overlay(Circle().fill(index == currentIndex ? Color.white.opacity(0.9) : Color.gray.opacity(0.7)).frame(width: 10, height: 10))
-                                        .onTapGesture { tapGesture(index: index, width: width) }
-                                    if index == pageCount - 1 {
-                                        Spacer().frame(width: selecting ? 10 : 5)
-                                            .onTapGesture { tapGesture(index: index, width: width) }
-                                    }
-                                }
-                                // BUG: Cannot implement tap, I give up.
-                            }
-                        }
-//                            .padding(.vertical, 0)
-                        .background(
-                            GeometryReader {
-                                geo in
-                                VStack {
-                                    Capsule().foregroundColor(Color.white.opacity(0.3))
-                                        .frame(width: geo.size.width, height: geo.size.height / 2)
-                                        .offset(y: geo.size.height / 4)
-                                }
-                            }
-                        )
-                    }.padding(.bottom, selecting ? 50 : 60)
-
-                }
-
-            }
-        }
     }
 }
 

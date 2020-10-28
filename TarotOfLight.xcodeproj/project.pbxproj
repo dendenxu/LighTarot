@@ -48,6 +48,8 @@
 		B9D84A7725414DBB00FAEC62 /* DefaultProfile.json in Resources */ = {isa = PBXBuildFile; fileRef = B9D84A7625414DBB00FAEC62 /* DefaultProfile.json */; };
 		B9DBD3552549151200368443 /* cardsRotation.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9DBD3532549151200368443 /* cardsRotation.gif */; };
 		B9DBD3562549151200368443 /* cardsSpread.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9DBD3542549151200368443 /* cardsSpread.gif */; };
+		B9DBD35925491FFE00368443 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBD35825491FFE00368443 /* IntroPageView.swift */; };
+		B9DBD35C254920E500368443 /* PagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBD35B254920E500368443 /* PagerView.swift */; };
 		B9ED187B24A4ED9600327351 /* tudou.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9ED187A24A4ED9600327351 /* tudou.gif */; };
 		B9EE5ED824A459AA00D8C58F /* grown.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED624A459AA00D8C58F /* grown.gif */; };
 		B9EE5ED924A459AA00D8C58F /* growing.gif in Resources */ = {isa = PBXBuildFile; fileRef = B9EE5ED724A459AA00D8C58F /* growing.gif */; };
@@ -97,6 +99,8 @@
 		B9D84A7625414DBB00FAEC62 /* DefaultProfile.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultProfile.json; sourceTree = "<group>"; };
 		B9DBD3532549151200368443 /* cardsRotation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = cardsRotation.gif; path = "aux/Usable Images/cardsRotation.gif"; sourceTree = SOURCE_ROOT; };
 		B9DBD3542549151200368443 /* cardsSpread.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = cardsSpread.gif; path = "aux/Usable Images/cardsSpread.gif"; sourceTree = SOURCE_ROOT; };
+		B9DBD35825491FFE00368443 /* IntroPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroPageView.swift; sourceTree = "<group>"; };
+		B9DBD35B254920E500368443 /* PagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagerView.swift; sourceTree = "<group>"; };
 		B9ED187A24A4ED9600327351 /* tudou.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tudou.gif; sourceTree = "<group>"; };
 		B9EE5ED624A459AA00D8C58F /* grown.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = grown.gif; sourceTree = "<group>"; };
 		B9EE5ED724A459AA00D8C58F /* growing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = growing.gif; sourceTree = "<group>"; };
@@ -228,6 +232,7 @@
 				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B970A60724A3634300B68189 /* MainPageView.swift */,
 				B970A60324A362BF00B68189 /* MinePageView.swift */,
+				B9DBD35825491FFE00368443 /* IntroPageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -245,6 +250,7 @@
 				B970A5F924A360A000B68189 /* ShinyStar.swift */,
 				B970A5FB24A3611A00B68189 /* Transitions.swift */,
 				B99729E22542E01300E91744 /* TideAnimation.swift */,
+				B9DBD35B254920E500368443 /* PagerView.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -359,6 +365,7 @@
 				B970A60224A3627700B68189 /* CategoryView.swift in Sources */,
 				B970A60424A362BF00B68189 /* MinePageView.swift in Sources */,
 				B99E59D5252FFEDF00F5E0A7 /* ImagePicker.swift in Sources */,
+				B9DBD35C254920E500368443 /* PagerView.swift in Sources */,
 				B970A60824A3634300B68189 /* MainPageView.swift in Sources */,
 				B9EE5EDB24A459F500D8C58F /* ShinyBackground.swift in Sources */,
 				B970A60E24A3710A00B68189 /* PredictLightView.swift in Sources */,
@@ -369,6 +376,7 @@
 				B994C6582520CF3E00320750 /* Contants.swift in Sources */,
 				B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */,
 				B984405B254072CD00E43C18 /* LighTarotModel.swift in Sources */,
+				B9DBD35925491FFE00368443 /* IntroPageView.swift in Sources */,
 				B970A60024A361CD00B68189 /* CircleBackground.swift in Sources */,
 				B99729E32542E01300E91744 /* TideAnimation.swift in Sources */,
 				34673E902494E8CC00712F38 /* ContentView.swift in Sources */,
