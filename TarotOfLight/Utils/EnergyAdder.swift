@@ -21,35 +21,38 @@ struct EnergyAdderView: View {
     @State var shouldAppear = true
 
     var body: some View {
-        ZStack {
-            if shouldAppear {
-                Button(action: {
-                    print("Triggerd final action!")
+        GeometryReader {
+            geo in
 
-                    withAnimation(springAnimation) {
-                        if shouldModify {
-                            profile.energy += energy
+            ZStack {
+                if shouldAppear {
+                    Button(action: {
+                        print("Triggerd final action!")
+
+                        withAnimation(springAnimation) {
+                            if shouldModify {
+                                profile.energy += energy
+                            }
+                            shouldAppear = false
                         }
-                        shouldAppear = false
-                    }
-                }) {
-                    ShinyText(text: "+" + String(format: "%0.f", energy) + "能量", font: .SourceHanSansHeavy, size: fontSize)
-                        .background(
-                            Circle()
-                                .fill(fillColor)
-                                .scaledToFill()
-                                .scaleEffect(circleScale)
-                                .overlay(
+                    }) {
+                        ShinyText(text: "+" + String(format: "%0.f", energy) + "能量", font: .SourceHanSansHeavy, size: fontSize)
+                            .background(
+                                ZStack {
+                                    Circle()
+                                        .fill(fillColor)
                                     Circle()
                                         .stroke(strokeColor, lineWidth: 2)
-                                        .scaleEffect(circleScale)
-                                )
-                        )
 
+                                }.scaledToFill()
+                                    .scaleEffect(circleScale)
+                            )
+
+                    }
+                        .buttonStyle(LongPressButtonStyle(color: Color("LightMediumDarkPurple")))
+                        .transition(scaleTransition)
                 }
-                    .buttonStyle(LongPressButtonStyle(color: Color("LightMediumDarkPurple")))
-                    .transition(scaleTransition)
-            }
+            }.frame(width: geo.size.width, height: geo.size.height)
         }
     }
 }
@@ -93,7 +96,7 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
         @State var longPressed = false
 
         func onEndedAction() {
-            print("Timer is invalidated by tap gesture")
+            print("onEndedAction function triggerred")
             timer?.invalidate()
             withAnimation(fastSpringAnimation) {
                 longPressed = false
@@ -102,6 +105,7 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
         }
 
         func onChangedAction() {
+            print("onChangedAction function triggerred")
             withAnimation(fastSpringAnimation) {
                 longPressed = true
             }
@@ -116,47 +120,45 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
         }
 
         var body: some View {
-            GeometryReader {
-                geo in
-                return ZStack {
+            ZStack {
 
-                    let longPress = LongPressGesture(minimumDuration: timeToFulfill + 0.1, maximumDistance: .infinity)
-                        .updating($pressed) {
-                            value, state, transaction in
-                            state = value
-                            print("Messy, A night.")
-                        }
-                        .onChanged { _ in
-                            print("CHANGED: Should we start the timer?")
-                            onChangedAction()
-                        }
-                        .onEnded { _ in
-                            print("END: Timer is invalidated")
-                            onEndedAction()
+                let longPress = LongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity)
+                    .updating($pressed) {
+                        value, state, transaction in
+                        state = value
+                        print("Messy, A night.")
                     }
-
-
-
-                    configuration.label
-                        .foregroundColor(.white)
-                        .opacity(longPressed || progress >= maxProgress ? 0.75 : 1.0)
-                        .background(
-                            ZStack {
-                                if longPressed {
-                                    CircleProgress(color: color, progress: progress)
-                                        .scaledToFill()
-                                        .scaleEffect(2)
-                                }
-                            }
-                        )
-
-                        .compositingGroup()
-                        .shadow(color: Color.black.opacity(0.15), radius: 2)
-                        .gesture(longPress)
-                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.LongPressCancel)) { obj in
-                            onEndedAction()
-                    }
+                    .onChanged { _ in
+                        print("CHANGED: Should we start the timer?")
+                        onChangedAction()
                 }
+//                        .onEnded { _ in
+//                            print("END: Timer is invalidated")
+//                            onEndedAction()
+//                    }
+
+
+
+                configuration.label
+                    .foregroundColor(.white)
+                    .opacity(longPressed || progress >= maxProgress ? 0.75 : 1.0)
+                    .background(
+                        ZStack {
+                            if longPressed {
+                                CircleProgress(color: color, progress: progress)
+                                    .scaledToFill()
+                                    .scaleEffect(2)
+                            }
+                        }
+                    )
+
+                    .compositingGroup()
+                    .shadow(color: Color.black.opacity(0.15), radius: 2)
+                    .gesture(longPress)
+                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.LongPressCancel)) { obj in
+                        onEndedAction()
+                }
+
             }
         }
     }
@@ -166,24 +168,19 @@ struct CircleProgress: View {
     var color = Color.red
     var progress: CGFloat
     var body: some View {
-        GeometryReader {
-            geo in
-            ZStack {
-                Circle()
-                    .stroke(lineWidth: 12.5)
-                    .opacity(0.3)
-                    .foregroundColor(color)
+        ZStack {
+            Circle()
+                .stroke(lineWidth: 12.5)
+                .opacity(0.3)
+                .foregroundColor(color)
 
-                Circle()
-                    .trim(from: 0, to: progress)
-                    .stroke(style: StrokeStyle(lineWidth: 12.5, lineCap: .round, lineJoin: .round))
-                    .opacity(0.7)
-                    .foregroundColor(color)
-            }
-                .rotationEffect(.degrees(-90))
-                .onAppear {
-                    print("Why are you just getting a small number of width and height: \(geo.size.width), \(geo.size.height)")
-            }
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(style: StrokeStyle(lineWidth: 12.5, lineCap: .round, lineJoin: .round))
+                .opacity(0.7)
+                .foregroundColor(color)
         }
+            .rotationEffect(.degrees(-90))
+
     }
 }

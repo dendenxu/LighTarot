@@ -21,6 +21,7 @@ func randomPositionAroundCircle(radius: CGFloat) -> CGSize {
     let randAngle = CGFloat.random(in: 0..<2 * CGFloat.pi)
     let x = radius * cos(randAngle)
     let y = radius * sin(randAngle)
+
     return CGSize(width: x + radius, height: y + radius)
 }
 
@@ -65,38 +66,34 @@ extension CGPoint {
 
 struct PoppingEnergyPicker<Content: View>: View {
     var viewOffset: CGSize
-    var viewSize: CGFloat
+//    var viewSize: CGFloat
     var minScale: CGFloat
     @State var isAtMaxScale: Bool = false
     var delay: Double
     var content: Content
 
-    init(viewOffset: CGSize, viewSize: CGFloat, minScale: CGFloat, delay: Double, @ViewBuilder content: @escaping () -> Content) {
+    init(viewOffset: CGSize,
+//         viewSize: CGFloat,
+         minScale: CGFloat, delay: Double, @ViewBuilder content: @escaping () -> Content) {
         self.viewOffset = viewOffset
-        self.viewSize = viewSize
+//        self.viewSize = viewSize
         self.minScale = minScale
         self.delay = delay
         self.content = content()
     }
 
     var body: some View {
-        GeometryReader {
-            geo in
-            content
-                .scaledToFit()
-                .frame(width: viewSize, height: viewSize)
-                .scaleEffect(isAtMaxScale ? 1 : minScale)
-//                .position(x: geo.size.width/2, y: geo.size.height/2)
+        content
+            .scaleEffect(isAtMaxScale ? 1 : minScale, anchor: .center)
             .position(x: 0, y: 0)
-                .offset(viewOffset)
-                .onAppear {
-                    withAnimation(
-                        springAnimation
-                            .delay(delay)
-                    ) {
-                        isAtMaxScale.toggle()
-                    }
-            }
+            .offset(viewOffset)
+            .onAppear {
+                withAnimation(
+                    springAnimation
+                        .delay(delay)
+                ) {
+                    isAtMaxScale.toggle()
+                }
         }
     }
 }
@@ -105,8 +102,9 @@ struct SomePoppingEnergy: View {
     var energies: [Double] = [1, 1, 2, 3, 5, 8, 13, 21]
     let viewSize: CGFloat = 50
     let minScale: CGFloat = 0.001
-    let baseFontSize: CGFloat = 12
+    let baseFontSize: CGFloat = 14
     let radiusScaleDown: CGFloat = 0.95
+
     var body: some View {
         GeometryReader {
             geo in
@@ -117,16 +115,48 @@ struct SomePoppingEnergy: View {
 
                 ForEach(0..<energies.count) {
                     index in
-                    PoppingEnergyPicker(viewOffset: randomPositionAroundCircle(radius: radius * radiusScaleDown * 0.5), viewSize: viewSize, minScale: minScale, delay: .random(in: 0..<1)) {
+                    PoppingEnergyPicker(
+                        viewOffset: randomPositionAroundCircle(radius: radius * 0.5),
+//                        viewSize: viewSize,
+                        minScale: minScale,
+                        delay: .random(in: 0..<1)) {
                         EnergyAdderView(
                             energy: energies[index],
-//                            fontSize: energiesMaxScale[index] ? baseFontSize : baseFontSize * minScale
                             fontSize: baseFontSize
                         )
+
+//                        DebugCircle()
+
+                    }.scaleEffect(radiusScaleDown)
+                        .onAppear {
+                            print("Getting the width and height and radius as: [\(width), \(height), \(radius)]")
                     }
                 }
             }
+                .frame(width: geo.size.width, height: geo.size.height)
         }
+    }
+}
+
+struct DebugCircle: View {
+    // MARK: DELETE ME
+    @State var ok: Bool = true // MARK: DELETE ME
+    var body: some View {
+        GeometryReader {
+            geo in
+            ZStack {
+                if ok {
+                    Button(action: {
+                        ok.toggle()
+                    }) {
+                        Circle().frame(width: 30, height: 30)
+                    }.buttonStyle(LongPressButtonStyle())
+                        .transition(scaleTransition)
+                }
+            }
+                .frame(width: geo.size.width, height: geo.size.height)
+        }
+
     }
 }
 
