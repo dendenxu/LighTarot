@@ -119,7 +119,7 @@ struct SomePoppingEnergy: View {
 
                 ForEach(0..<energies.count) {
                     index in
-                    PoppingEnergyPicker(viewOffset: randomPositionAroundCircle(radius: radius * radiusScaleDown * 0.5), viewSize: viewSize, minScale: minScale, isAtMaxScale: $energiesMaxScale[index], delay: .random(in: 0.1..<2)) {
+                    PoppingEnergyPicker(viewOffset: randomPositionAroundCircle(radius: radius * radiusScaleDown * 0.5), viewSize: viewSize, minScale: minScale, isAtMaxScale: $energiesMaxScale[index], delay: .random(in: 0..<1)) {
                         EnergyAdderView(
                             energy: energies[index],
 //                            fontSize: energiesMaxScale[index] ? baseFontSize : baseFontSize * minScale

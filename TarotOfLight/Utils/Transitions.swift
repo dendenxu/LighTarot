@@ -10,7 +10,7 @@ import SwiftUI
 
 extension AnyTransition {
     static var fly: AnyTransition { get {
-        AnyTransition.modifier(active: FlyTransition(pct: 0.001), identity: FlyTransition(pct: 1))
+        AnyTransition.modifier(active: FlyTransition(pct: 0.001), identity: FlyTransition(pct: 1)).combined(with: .fade)
     }
     }
 }
@@ -48,7 +48,8 @@ struct FlyTransition: GeometryEffect {
 let fromBottomToTop = AnyTransition
     .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top))
 
-let scaleTransition = AnyTransition.scale(scale: 0.001)
+let scaleTransition = AnyTransition.fade.combined(with: .scale(scale: 0.001))
+
 
 let springAnimation = Animation.spring(response: 0.5, dampingFraction: 1, blendDuration: 2)
 let fastSpringAnimation = Animation.spring(response: 0.2, dampingFraction: 0.7, blendDuration: 1)
