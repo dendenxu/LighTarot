@@ -99,7 +99,7 @@ struct PoppingEnergyPicker<Content: View>: View {
 }
 
 struct SomePoppingEnergy: View {
-    var energies: [Double] = [1, 1, 2, 3, 5, 8, 13, 21]
+    var energies: [Double] = [3, 5, 8, 13, 21]
     let viewSize: CGFloat = 50
     let minScale: CGFloat = 0.001
     let baseFontSize: CGFloat = 14
