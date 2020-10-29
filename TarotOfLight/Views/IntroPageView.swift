@@ -12,7 +12,7 @@ import SDWebImageSwiftUI
 var fullScreenBG: some View =
     RoundedRectangle(cornerRadius: .ScreenCornerRadius)
     .foregroundColor(Color("LightGray"))
-//    .opacity(0.001)
+    .opacity(0.001)
 .frame(width: .ScreenWidth, height: .ScreenHeight)
     .scaleEffect(2)
 
@@ -189,7 +189,7 @@ struct InnerIntroduction<Content: View>: View {
     var content: Content
     let baseOffset: CGFloat = 150 / 414 * .ScreenWidth
     let baseScale: CGFloat = 0.75
-    let baseOpacity: CGFloat = 0.75
+    let baseOpacity: CGFloat = 0.25
     let baseTint: CGFloat = 0.75
     init(percentage: CGFloat = 0, @ViewBuilder content: @escaping () -> Content) {
         self.percentage = percentage
@@ -206,9 +206,10 @@ struct InnerIntroduction<Content: View>: View {
             .opacity(computedOpacity)
             .colorMultiply(computedTintColor)
             .zIndex(-Double(abs(percentage)))
-            .mask(RoundedRectangle(cornerRadius: .ScreenCornerRadius).frame(width: .ScreenWidth, height: .ScreenHeight)
-                .scaleEffect(y: 2)
-            )
+//            .mask(
+//                RoundedRectangle(cornerRadius: .ScreenCornerRadius).frame(width: .ScreenWidth, height: .ScreenHeight)
+//                .scaleEffect(y: 2)
+//            )
 
     }
 }

@@ -16,16 +16,8 @@ func distance(s1: CGSize, s2: CGSize) -> CGFloat {
     return sqrt((s1.width - s2.width) * (s1.width - s2.width) + (s1.height - s2.height) * (s1.height - s2.height))
 }
 
-func distance(s: CGSize) -> CGFloat {
-    return sqrt(s.width * s.width + s.height * s.height)
-}
-
-func distance(p: CGPoint) -> CGFloat {
-    return sqrt(p.x * p.x + p.y * p.y)
-}
-
 func adjustSize(toAdjust: CGSize, scale: CGFloat = 1.0, offset: CGFloat = 30) -> CGSize {
-    return toAdjust * scale + CGSize(width: toAdjust.width / distance(s: toAdjust) * offset, height: toAdjust.height / distance(s: toAdjust) * offset)
+    return toAdjust * scale + CGSize(width: toAdjust.width / toAdjust.distance * offset, height: toAdjust.height / toAdjust.distance * offset)
 //    return toAdjust
 }
 
@@ -42,21 +34,41 @@ extension CGSize {
     static func - (s1: CGSize, s2: CGSize) -> CGSize {
         return CGSize(width: s1.width - s2.width, height: s1.height - s2.height)
     }
+
+    var distance: CGFloat {
+        sqrt(self.width * self.width + self.height * self.height)
+    }
 }
 
-struct ShinyPentagram: View {
+extension CGPoint {
+    var distance: CGFloat {
+        sqrt(self.x * self.x + self.y * self.y)
+    }
+}
+
+struct ShinyPentagram<Content: View>: View {
     var originSize = CGSize(width: .ScreenWidth, height: .ScreenHeight)
     var offsetView: CGSize
-    var scale = CGFloat.random(in: 1..<1.2)
-    var maxAngle = 360.0
-    var selfMaxAngle = 1440.0
-    var viewSize: CGFloat = 30.0
-    var imageName = "starstroke"
-    var tintColor = Color.white
+    var viewSize: CGFloat
+    var scale: CGFloat
+    var maxAngle: Double
+    var selfMaxAngle: Double
+    var content: Content
+
+    init(originSize: CGSize, offsetView: CGSize, viewSize: CGFloat, scale: CGFloat = CGFloat.random(in: 1..<1.2), maxAngle: Double = 360.0, selfMaxAngle: Double = 1440.0, @ViewBuilder content: @escaping () -> Content) {
+        self.originSize = originSize
+        self.offsetView = offsetView
+        self.viewSize = viewSize
+        self.scale = scale
+        self.maxAngle = maxAngle
+        self.selfMaxAngle = selfMaxAngle
+        self.content = content()
+    }
+
     var shineAnimation: Animation {
         get {
             Animation
-                .linear(duration: 30 * Double(distance(s1: offsetView, s2: CGSize(width: 0, height: 0)) / distance(s: originSize)))
+                .linear(duration: 30 * Double(distance(s1: offsetView, s2: CGSize(width: 0, height: 0)) / originSize.distance))
                 .repeatForever(autoreverses: false)
         }
     }
@@ -72,15 +84,12 @@ struct ShinyPentagram: View {
     @State var isAtMaxScale = false
     @State var isAtSelfMaxAngle = false
     var body: some View {
-        Image(imageName)
-            .renderingMode(.template)
-            .resizable()
-            .scaledToFit()
+        content
             .frame(width: viewSize, height: viewSize)
             .scaleEffect(isAtSelfMaxAngle ? 1 / scale : scale)
             .rotationEffect(isAtSelfMaxAngle ? .degrees(0) : .degrees(selfMaxAngle))
             .position(x: 0, y: 0)
-            .offset(x: self.offsetView.width, y: self.offsetView.height)
+            .offset(x: offsetView.width, y: offsetView.height)
             .rotationEffect(isAtMaxScale ? .degrees(0) : .degrees(maxAngle), anchor: .topLeading)
             .onAppear {
                 withAnimation(shineAnimation) {
@@ -89,19 +98,32 @@ struct ShinyPentagram: View {
                 withAnimation(shineAnimationSelf) {
                     isAtSelfMaxAngle.toggle()
                 }
-            }
-            .foregroundColor(tintColor)
+        }
+
     }
 }
 
-struct TravelingPentagram: View {
+struct TravelingPentagram<Content: View>: View {
+
     var size: CGSize
     var offsetView: CGSize
-    var scale = CGFloat.random(in: 1..<1.2)
-    var selfMaxAngle = 1440.0
-    var viewSize: CGFloat = 30.0
-    var imageName = "starstroke"
-    var tintColor = Color.white
+    var viewSize: CGFloat
+    let selfMaxAngle: Double
+    let scale: CGFloat
+    var content: Content
+
+//    var imageName = "starstroke"
+//    var tintColor = Color.white
+
+    init(size: CGSize, offsetView: CGSize, viewSize: CGFloat, selfMaxAngle: Double = 1440.0, scale: CGFloat = .random(in: 1..<1.2), @ViewBuilder content: @escaping () -> Content) {
+        self.content = content()
+        self.selfMaxAngle = selfMaxAngle
+        self.scale = scale
+        self.offsetView = offsetView
+        self.viewSize = viewSize
+        self.size = size
+    }
+
 
     var shineAnimationSelf: Animation {
         Animation
@@ -113,14 +135,13 @@ struct TravelingPentagram: View {
             .linear(duration: 15 * Double.random(in: 0.5..<1))
             .repeatForever(autoreverses: true)
     }
+    // Randomly determining the traveling direction
     static func zerone() -> CGFloat { return CGFloat([-1, 1].randomElement() ?? 1) }
     @State var isAtSelfMaxAngle = false
     @State var isAtTheBottom = false
     let onceZerone = zerone()
     var body: some View {
-        Image(imageName)
-            .resizable()
-            .scaledToFit()
+        content
             .frame(width: viewSize, height: viewSize)
             .scaleEffect(isAtSelfMaxAngle ? 1 / scale : scale)
             .rotationEffect(isAtSelfMaxAngle ? .degrees(0) : .degrees(selfMaxAngle))
@@ -135,36 +156,46 @@ struct TravelingPentagram: View {
                     isAtTheBottom.toggle()
                     print("Animation started")
                 }
-            }
-            .colorMultiply(tintColor)
+        }
     }
 }
 
 struct ShinyBackground: View {
-    @State var originSize = CGSize(width: .ScreenWidth, height: .ScreenHeight)
+    var originSize = CGSize(width: .ScreenWidth, height: .ScreenHeight)
     var nStroke = 50
     var nFill = 50
     var size = CGSize(width: .ScreenWidth, height: .ScreenHeight)
     var tintColor = Color.white
+    var viewSize: CGFloat = 30
     var body: some View {
         GeometryReader {
             geometry in
             ZStack {
                 ForEach(0..<self.nStroke) { number in
                     ShinyPentagram(
-                        originSize: self.originSize,
+                        originSize: originSize,
                         offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: self.size)),
-                        imageName: "starstroke",
-                        tintColor: tintColor
-                    )
+                        viewSize: viewSize
+                    ) {
+                        Image("starstroke")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(tintColor)
+                    }
                 }
                 ForEach(0..<self.nFill) { number in
                     ShinyPentagram(
-                        originSize: self.originSize,
+                        originSize: originSize,
                         offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: self.size)),
-                        imageName: "starfull",
-                        tintColor: tintColor
-                    )
+                        viewSize: viewSize
+                    ) {
+                        Image("starfull")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(tintColor)
+                    }
                 }
             }.offset(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
@@ -175,7 +206,8 @@ struct ShinyBackground: View {
 struct TravelingBackground: View {
     var nStroke = 50
     var nFill = 50
-    var tintColor = Color.white
+    var viewSize: CGFloat = 20
+    var tintColor = Color("LightMediumDarkPurple")
     var body: some View {
         GeometryReader {
             geometry in
@@ -186,22 +218,30 @@ struct TravelingBackground: View {
                     TravelingPentagram(
                         size: size,
                         offsetView: randomPositionInDoubleRectangle(size: size),
-                        viewSize: 20.0,
-                        imageName: "starstroke",
-                        tintColor: tintColor
-                    )
+                        viewSize: viewSize
+                    ) {
+                        Image("starstroke")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(tintColor)
+                    }
                 }
                 ForEach(0..<self.nFill) { number in
                     TravelingPentagram(
                         size: size,
                         offsetView: randomPositionInDoubleRectangle(size: size),
-                        viewSize: 20.0,
-                        imageName: "starfull",
-                        tintColor: tintColor
-                    )
+                        viewSize: viewSize
+                    ) {
+                        Image("starfull")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(tintColor)
+                    }
                 }.onAppear {
                     print("Getting size \(size)")
-                }.offset(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                }.offset(x: size.width / 2, y: size.height / 2)
             }
         }
     }

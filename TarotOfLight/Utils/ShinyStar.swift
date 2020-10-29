@@ -50,9 +50,3 @@ struct ShinyStar: View {
         }
     }
 }
-
-struct ShinyStar_Previews: PreviewProvider {
-    static var previews: some View {
-        ShinyStar(offset: CGSize(width: 20, height: 20), scale: 1.5)
-    }
-}
