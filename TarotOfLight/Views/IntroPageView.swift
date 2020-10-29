@@ -86,7 +86,7 @@ struct SecondIntroPage: View {
                         .rotation3DEffect(.degrees(-20), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
                         .rotation3DEffect(.degrees(30), axis: (x: 0, y: 0, z: 1), perspective: 0.5)
                         .offset(x: 20, y: 20)
-                }
+                }.compositingGroup()
 
 
                 Spacer().frame(height: 30)

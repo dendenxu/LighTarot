@@ -13,6 +13,7 @@ import SwiftUI
 class LighTarotModel: ObservableObject {
     // Some animation configuration
     // Currently not used in the code, for lottie animation, we're using builtin settings instead
+    @Published var longPressGestureCanceled = false
     @Published var sceneAtForeground = true
 
     // Navigation data, updating the view by selecting different enum value for these
@@ -33,7 +34,15 @@ class LighTarotModel: ObservableObject {
     }
     // Computed value (manually updated value to reserve the resource)
     var avatarImage = UIImage() // Precomputation to speed things up
-    @Published var energy = 15.0 // Max: 100.0 as Double type
+    var energy: Double { // Max: 100.0 as Double type
+        get { actualEnergy }
+        set {
+            if newValue > 100 { actualEnergy = 100 }
+            else if newValue < 0 { actualEnergy = 0 }
+            else { actualEnergy = newValue }
+        }
+    }
+    @Published var actualEnergy: Double = 15.0
     @Published var proficientUser: Bool = false
     @Published private var birthdayDate = Date(timeIntervalSince1970: TimeInterval(0))
     var birthday: String {

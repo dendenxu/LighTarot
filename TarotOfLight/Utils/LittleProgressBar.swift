@@ -13,7 +13,7 @@ struct LittleProgressBar: View {
     var value: Double
     var fontSize: CGFloat {
         if value > 30 { return 12 }
-        else { return CGFloat((30 - value) / 30 * 12) }
+        else { return CGFloat(value / 30 * 12) }
     }
     var body: some View {
         GeometryReader { geo in

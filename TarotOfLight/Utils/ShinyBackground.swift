@@ -67,15 +67,14 @@ struct PoppingEnergyPicker<Content: View>: View {
     var viewOffset: CGSize
     var viewSize: CGFloat
     var minScale: CGFloat
-    @Binding var isAtMaxScale: Bool
+    @State var isAtMaxScale: Bool = false
     var delay: Double
     var content: Content
 
-    init(viewOffset: CGSize, viewSize: CGFloat, minScale: CGFloat, isAtMaxScale: Binding<Bool>, delay: Double, @ViewBuilder content: @escaping () -> Content) {
+    init(viewOffset: CGSize, viewSize: CGFloat, minScale: CGFloat, delay: Double, @ViewBuilder content: @escaping () -> Content) {
         self.viewOffset = viewOffset
         self.viewSize = viewSize
         self.minScale = minScale
-        self._isAtMaxScale = isAtMaxScale
         self.delay = delay
         self.content = content()
     }
@@ -103,9 +102,8 @@ struct PoppingEnergyPicker<Content: View>: View {
 }
 
 struct SomePoppingEnergy: View {
-    var energies: [Double] = [1, 2, 3, 4]
-    @State var energiesMaxScale: [Bool] = [false, false, false, false]
-    let viewSize: CGFloat = 40
+    var energies: [Double] = [1, 1, 2, 3, 5, 8, 13, 21]
+    let viewSize: CGFloat = 50
     let minScale: CGFloat = 0.001
     let baseFontSize: CGFloat = 12
     let radiusScaleDown: CGFloat = 0.95
@@ -119,7 +117,7 @@ struct SomePoppingEnergy: View {
 
                 ForEach(0..<energies.count) {
                     index in
-                    PoppingEnergyPicker(viewOffset: randomPositionAroundCircle(radius: radius * radiusScaleDown * 0.5), viewSize: viewSize, minScale: minScale, isAtMaxScale: $energiesMaxScale[index], delay: .random(in: 0..<1)) {
+                    PoppingEnergyPicker(viewOffset: randomPositionAroundCircle(radius: radius * radiusScaleDown * 0.5), viewSize: viewSize, minScale: minScale, delay: .random(in: 0..<1)) {
                         EnergyAdderView(
                             energy: energies[index],
 //                            fontSize: energiesMaxScale[index] ? baseFontSize : baseFontSize * minScale
