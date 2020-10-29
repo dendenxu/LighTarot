@@ -9,16 +9,13 @@
 import SwiftUI
 
 struct EnergyAdderView: View {
-    let energy = 5.0
-    let fontSize: CGFloat = 12
-    let circleScale: CGFloat = 1.2
-    let strokeColor = Color("Lime")
-    let fillColor = Color("LightGray")
+    var energy = 5.0
+    var fontSize: CGFloat = 12
+    var circleScale: CGFloat = 1.2
+    var strokeColor = Color("Lime")
+    var fillColor = Color("LightGray")
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: .ScreenCornerRadius)
-                .foregroundColor(.gray)
-                .frame(width: .ScreenWidth, height: .ScreenHeight)
             ShinyText(text: "+" + String(format: "%0.f", energy) + "能量", font: .SourceHanSansHeavy, size: fontSize)
                 .background(
                     Circle()
@@ -33,13 +30,5 @@ struct EnergyAdderView: View {
 
                 )
         }
-    }
-}
-
-struct EnergyAdderView_Previews: PreviewProvider {
-    static var previews: some View {
-        EnergyAdderView()
-            .edgesIgnoringSafeArea(.all)
-            .previewDevice("iPhone 11")
     }
 }

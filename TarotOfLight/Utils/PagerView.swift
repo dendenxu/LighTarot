@@ -26,18 +26,18 @@ struct PagerView<Content: View>: View {
     }
 
     private func onEndedAction(index: Int, width: CGFloat) {
-        let oldValue = currentIndex
-        currentIndex = index
-        isChanging = false
-        profile.pagerSuccess(count: abs(currentIndex - oldValue))
         print("Current translation: \(translation), currentIndex: \(currentIndex)")
+        let oldValue = currentIndex
         withAnimation(fastSpringAnimation) {
+            currentIndex = index
+            isChanging = false
             translation = -CGFloat(currentIndex) * width
             // DUP: duplicated code fragment, consider optimization
             for index in 0..<pageCount {
                 percentages[index] = (translation + CGFloat(index) * width) / width
             }
         }
+        profile.pagerSuccess(count: abs(currentIndex - oldValue))
         print("Paging gesture ended! Percentages are: [\(percentages)]")
     }
 

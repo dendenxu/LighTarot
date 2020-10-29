@@ -13,11 +13,12 @@ var fullScreenBG: some View =
     RoundedRectangle(cornerRadius: .ScreenCornerRadius)
     .foregroundColor(Color("LightGray"))
     .opacity(0.001)
-.frame(width: .ScreenWidth, height: .ScreenHeight)
+    .frame(width: .ScreenWidth, height: .ScreenHeight)
     .scaleEffect(2)
 
 
 struct ThirdIntroPage: View {
+    var onMe: Bool = true
     @EnvironmentObject var profile: LighTarotModel
     let plantRadius = 250 / 414 * .ScreenWidth
     var body: some View {
@@ -47,7 +48,7 @@ struct ThirdIntroPage: View {
 
                 Spacer().frame(height: 30)
 
-                AnimatingPlant(isFull: false, grownAnimating: .constant(true)).frame(width: plantRadius, height: plantRadius)
+                AnimatingPlant(isFull: false, onMe: onMe, grownAnimating: .constant(true)).frame(width: plantRadius, height: plantRadius)
 
                 HStack(spacing: 0) {
                     Image.default("power")
@@ -165,18 +166,20 @@ struct FirstIntroPage: View {
 struct IntroPageView: View {
     @State var currentIndex = 0
     @State var percentatges: [CGFloat] = [0, 1, 2]
-    var introPages: [AnyView] = [
-        AnyView(FirstIntroPage()),
-        AnyView(SecondIntroPage()),
-        AnyView(ThirdIntroPage())
-    ]
     let introductionPageCount = 3
     var body: some View {
         ZStack {
             PagerView(accentColor: .white, overlookColor: .gray, backgroundColor: Color.black.opacity(0.2), currentIndex: $currentIndex, percentages: $percentatges) {
                 ForEach(0..<introductionPageCount) { index in
                     InnerIntroduction(percentage: percentatges[index]) {
-                        introPages[index]
+                        if index == 0 {
+                            FirstIntroPage()
+                        } else if index == 1 {
+                            SecondIntroPage()
+                        } else if index == 2 {
+                            ThirdIntroPage(onMe: currentIndex == index)
+                                .onAppear { print("Is it really on me? currentIndex: \(currentIndex) and onMe: \(currentIndex == index) and index:  \(index)") }
+                        }
                     }
                 }
             }

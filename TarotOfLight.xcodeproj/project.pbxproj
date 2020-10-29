@@ -46,6 +46,7 @@
 		B99729E92542F0D400E91744 /* tide.json in Resources */ = {isa = PBXBuildFile; fileRef = B99729E82542F0D400E91744 /* tide.json */; };
 		B99E59D5252FFEDF00F5E0A7 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */; };
 		B9AB0ACC254A5ABB00943E29 /* EnergyAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB0ACB254A5ABB00943E29 /* EnergyAdder.swift */; };
+		B9AB0AD0254A6FA700943E29 /* AnimatingPlant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB0ACF254A6FA700943E29 /* AnimatingPlant.swift */; };
 		B9D84A7725414DBB00FAEC62 /* DefaultProfile.json in Resources */ = {isa = PBXBuildFile; fileRef = B9D84A7625414DBB00FAEC62 /* DefaultProfile.json */; };
 		B9DBD35925491FFE00368443 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBD35825491FFE00368443 /* IntroPageView.swift */; };
 		B9DBD35C254920E500368443 /* PagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DBD35B254920E500368443 /* PagerView.swift */; };
@@ -98,6 +99,7 @@
 		B99729E82542F0D400E91744 /* tide.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tide.json; sourceTree = "<group>"; };
 		B99E59D4252FFEDF00F5E0A7 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		B9AB0ACB254A5ABB00943E29 /* EnergyAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyAdder.swift; sourceTree = "<group>"; };
+		B9AB0ACF254A6FA700943E29 /* AnimatingPlant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatingPlant.swift; sourceTree = "<group>"; };
 		B9D84A7625414DBB00FAEC62 /* DefaultProfile.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultProfile.json; sourceTree = "<group>"; };
 		B9DBD35825491FFE00368443 /* IntroPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroPageView.swift; sourceTree = "<group>"; };
 		B9DBD35B254920E500368443 /* PagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagerView.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				B99729E22542E01300E91744 /* LottieAnimation.swift */,
 				B9DBD35B254920E500368443 /* PagerView.swift */,
 				B9AB0ACB254A5ABB00943E29 /* EnergyAdder.swift */,
+				B9AB0ACF254A6FA700943E29 /* AnimatingPlant.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 				34673E902494E8CC00712F38 /* ContentView.swift in Sources */,
 				B962529324A391D4002BFE03 /* ShinyText.swift in Sources */,
 				B970A60624A3630C00B68189 /* LittleProgressBar.swift in Sources */,
+				B9AB0AD0254A6FA700943E29 /* AnimatingPlant.swift in Sources */,
 				B96250112536EB05005840DC /* BasicPlant.rcproject in Sources */,
 				B90E08D425305AD100635B8F /* InterpreterView.swift in Sources */,
 				B970A5FA24A360A000B68189 /* ShinyStar.swift in Sources */,

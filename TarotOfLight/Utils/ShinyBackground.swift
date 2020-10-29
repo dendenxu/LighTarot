@@ -7,6 +7,23 @@
 //
 
 import SwiftUI
+
+func randomPositionInCircle(radius: CGFloat) -> CGSize {
+    let randRadius = CGFloat.random(in: 0..<radius)
+    let randAngle = CGFloat.random(in: 0..<2 * CGFloat.pi)
+    let x = randRadius * cos(randAngle)
+    let y = randRadius * sin(randAngle)
+    return CGSize(width: x + radius, height: y + radius)
+}
+
+func randomPositionAroundCircle(radius: CGFloat) -> CGSize {
+    print("Getting Radius: \(radius)")
+    let randAngle = CGFloat.random(in: 0..<2 * CGFloat.pi)
+    let x = radius * cos(randAngle)
+    let y = radius * sin(randAngle)
+    return CGSize(width: x + radius, height: y + radius)
+}
+
 func randomPositionInDoubleRectangle(size: CGSize) -> CGSize {
 //    print("We're randomly generating size for bounds: \(size.width), \(size.height)")
     return CGSize(width: 2 * size.width * CGFloat.random(in: 0..<1) - size.width, height: 2 * size.height * CGFloat.random(in: 0..<1) - size.height)
@@ -43,6 +60,75 @@ extension CGSize {
 extension CGPoint {
     var distance: CGFloat {
         sqrt(self.x * self.x + self.y * self.y)
+    }
+}
+
+struct PoppingEnergyPicker<Content: View>: View {
+    var viewOffset: CGSize
+    var viewSize: CGFloat
+    var minScale: CGFloat
+    @Binding var isAtMaxScale: Bool
+    var delay: Double
+    var content: Content
+
+    init(viewOffset: CGSize, viewSize: CGFloat, minScale: CGFloat, isAtMaxScale: Binding<Bool>, delay: Double, @ViewBuilder content: @escaping () -> Content) {
+        self.viewOffset = viewOffset
+        self.viewSize = viewSize
+        self.minScale = minScale
+        self._isAtMaxScale = isAtMaxScale
+        self.delay = delay
+        self.content = content()
+    }
+
+    var body: some View {
+        GeometryReader {
+            geo in
+            content
+                .scaledToFit()
+                .frame(width: viewSize, height: viewSize)
+                .scaleEffect(isAtMaxScale ? 1 : minScale)
+//                .position(x: geo.size.width/2, y: geo.size.height/2)
+            .position(x: 0, y: 0)
+                .offset(viewOffset)
+                .onAppear {
+                    withAnimation(
+                        springAnimation
+                            .delay(delay)
+                    ) {
+                        isAtMaxScale.toggle()
+                    }
+            }
+        }
+    }
+}
+
+struct SomePoppingEnergy: View {
+    var energies: [Double] = [1, 2, 3, 4]
+    @State var energiesMaxScale: [Bool] = [false, false, false, false]
+    let viewSize: CGFloat = 40
+    let minScale: CGFloat = 0.001
+    let baseFontSize: CGFloat = 12
+    let radiusScaleDown: CGFloat = 0.95
+    var body: some View {
+        GeometryReader {
+            geo in
+            ZStack {
+                let width = geo.size.width
+                let height = geo.size.height
+                let radius = min(width, height)
+
+                ForEach(0..<energies.count) {
+                    index in
+                    PoppingEnergyPicker(viewOffset: randomPositionAroundCircle(radius: radius * radiusScaleDown * 0.5), viewSize: viewSize, minScale: minScale, isAtMaxScale: $energiesMaxScale[index], delay: .random(in: 0.1..<2)) {
+                        EnergyAdderView(
+                            energy: energies[index],
+//                            fontSize: energiesMaxScale[index] ? baseFontSize : baseFontSize * minScale
+                            fontSize: baseFontSize
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -85,6 +171,7 @@ struct ShinyPentagram<Content: View>: View {
     @State var isAtSelfMaxAngle = false
     var body: some View {
         content
+            .scaledToFit()
             .frame(width: viewSize, height: viewSize)
             .scaleEffect(isAtSelfMaxAngle ? 1 / scale : scale)
             .rotationEffect(isAtSelfMaxAngle ? .degrees(0) : .degrees(selfMaxAngle))
@@ -112,9 +199,6 @@ struct TravelingPentagram<Content: View>: View {
     let scale: CGFloat
     var content: Content
 
-//    var imageName = "starstroke"
-//    var tintColor = Color.white
-
     init(size: CGSize, offsetView: CGSize, viewSize: CGFloat, selfMaxAngle: Double = 1440.0, scale: CGFloat = .random(in: 1..<1.2), @ViewBuilder content: @escaping () -> Content) {
         self.content = content()
         self.selfMaxAngle = selfMaxAngle
@@ -136,12 +220,12 @@ struct TravelingPentagram<Content: View>: View {
             .repeatForever(autoreverses: true)
     }
     // Randomly determining the traveling direction
-    static func zerone() -> CGFloat { return CGFloat([-1, 1].randomElement() ?? 1) }
     @State var isAtSelfMaxAngle = false
     @State var isAtTheBottom = false
-    let onceZerone = zerone()
+    let onceZerone = CGFloat([-1, 1].randomElement() ?? 1)
     var body: some View {
         content
+            .scaledToFit()
             .frame(width: viewSize, height: viewSize)
             .scaleEffect(isAtSelfMaxAngle ? 1 / scale : scale)
             .rotationEffect(isAtSelfMaxAngle ? .degrees(0) : .degrees(selfMaxAngle))
@@ -169,12 +253,12 @@ struct ShinyBackground: View {
     var viewSize: CGFloat = 30
     var body: some View {
         GeometryReader {
-            geometry in
+            geo in
             ZStack {
-                ForEach(0..<self.nStroke) { number in
+                ForEach(0..<nStroke) { _ in
                     ShinyPentagram(
                         originSize: originSize,
-                        offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: self.size)),
+                        offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: size)),
                         viewSize: viewSize
                     ) {
                         Image("starstroke")
@@ -184,10 +268,10 @@ struct ShinyBackground: View {
                             .foregroundColor(tintColor)
                     }
                 }
-                ForEach(0..<self.nFill) { number in
+                ForEach(0..<nFill) { _ in
                     ShinyPentagram(
                         originSize: originSize,
-                        offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: self.size)),
+                        offsetView: adjustSize(toAdjust: randomPositionInDoubleRectangle(size: size)),
                         viewSize: viewSize
                     ) {
                         Image("starfull")
@@ -197,7 +281,7 @@ struct ShinyBackground: View {
                             .foregroundColor(tintColor)
                     }
                 }
-            }.offset(x: geometry.size.width / 2, y: geometry.size.height / 2)
+            }.offset(x: geo.size.width / 2, y: geo.size.height / 2)
         }
     }
 }
@@ -210,9 +294,9 @@ struct TravelingBackground: View {
     var tintColor = Color("LightMediumDarkPurple")
     var body: some View {
         GeometryReader {
-            geometry in
+            geo in
             ZStack {
-                let size = CGSize(width: geometry.size.width - 30, height: geometry.size.height - 30)
+                let size = CGSize(width: geo.size.width - 30, height: geo.size.height - 30)
 
                 ForEach(0..<self.nStroke) { number in
                     TravelingPentagram(
