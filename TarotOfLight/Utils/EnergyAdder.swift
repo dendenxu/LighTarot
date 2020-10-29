@@ -20,12 +20,13 @@ struct EnergyAdderView: View {
     }
     @State var shouldDisappear = false
     @State var shouldScale = false
-    @GestureState var point = CGPoint()
+    @GestureState var isLongPressed = false
+    @State private var counter: Int
+    @State private var timer: Timer?
     var body: some View {
         ZStack {
             if !shouldDisappear {
                 ShinyText(text: "+" + String(format: "%0.f", energy) + "能量", font: .SourceHanSansHeavy, size: fontSize)
-
                     .background(
                         Circle()
                             .fill(fillColor)
@@ -40,22 +41,40 @@ struct EnergyAdderView: View {
                     .scaleEffect(shouldScale ? 1.2 : 1)
                     .transition(scaleTransition)
                     .gesture(
-                        LongPressGesture(minimumDuration: 0.001)
-                            .onEnded {
-                                thePoint in
+                        LongPressGesture(minimumDuration: 1)
+                            .updating($isLongPressed) { currentState, gestureState, transaction in
+                                print("Updating, getting state: \(currentState)")
+                                gestureState = currentState
+                            }
+                            .onChanged { _ in
+                                print("Changing, setting shouldScale to: \(shouldScale)")
                                 withAnimation(fastSpringAnimation) {
                                     shouldScale = true
                                 }
-                                print("Long press gesture changed: \(thePoint)")
-                            }.sequenced(before: TapGesture()
-                                .onEnded { thePoint in
-                                    print("Tap press gesture ended: \(thePoint)")
-                                    withAnimation(fastSpringAnimation) {
-                                        shouldScale = false
-                                        if shouldModify { profile.energy += energy }
-                                        shouldDisappear = true
-                                    }
-                            })
+                            }.onEnded { tapped in
+                                print("Ended: \(tapped)")
+//                                withAnimation(fastSpringAnimation) {
+//                                    shouldScale = false
+//                                    shouldDisappear = true
+//                                }
+                                timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { _ in
+                                    counter += 1
+                                })
+//                                withAnimation(fastSpringAnimation) {
+//                                    shouldScale = false
+//                                    if shouldModify { profile.energy += energy }
+//                                    shouldDisappear = true
+//                                }
+                        }
+//                            .sequenced(before: TapGesture()
+//                                .onEnded { tapped in
+//                                    print("Tap press gesture ended: \(tapped)")
+//                                    withAnimation(fastSpringAnimation) {
+//                                        shouldScale = false
+//                                        if shouldModify { profile.energy += energy }
+//                                        shouldDisappear = true
+//                                    }
+//                            })
                     )
             }
         }
