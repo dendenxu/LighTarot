@@ -95,11 +95,20 @@ struct PoppingEnergyPicker<Content: View>: View {
                     isAtMaxScale.toggle()
                 }
         }
+//            .onWillDisappear {
+//                withAnimation(
+//                    springAnimation
+////                        .delay(delay)
+//                ) {
+//                    isAtMaxScale.toggle()
+//                }
+//        }
     }
 }
 
 struct SomePoppingEnergy: View {
     var energies: [Double] = [3, 5, 8, 13, 21]
+    var onMe: Bool = true
     let viewSize: CGFloat = 50
     let minScale: CGFloat = 0.001
     let baseFontSize: CGFloat = 14
@@ -115,22 +124,32 @@ struct SomePoppingEnergy: View {
 
                 ForEach(0..<energies.count) {
                     index in
-                    PoppingEnergyPicker(
-                        viewOffset: randomPositionAroundCircle(radius: radius * 0.5),
-//                        viewSize: viewSize,
-                        minScale: minScale,
-                        delay: .random(in: 0..<1)) {
-                        EnergyAdderView(
-                            energy: energies[index],
-                            fontSize: baseFontSize
-                        )
 
-//                        DebugCircle()
+//                    if onMe {
+                        
+                        
+                        PoppingEnergyPicker(
+                            viewOffset: randomPositionAroundCircle(radius: radius * 0.5),
+                            //                        viewSize: viewSize,
+                            minScale: minScale,
+                            delay: .random(in: 0..<1)) {
+                            EnergyAdderView(
+                                energy: energies[index],
+                                fontSize: baseFontSize,
+                                shouldAppear: onMe
+                            )
 
-                    }.scaleEffect(radiusScaleDown)
-                        .onAppear {
-                            print("Getting the width and height and radius as: [\(width), \(height), \(radius)]")
-                    }
+                            //                        DebugCircle()
+
+                        }.scaleEffect(radiusScaleDown)
+                            .onAppear {
+                                print("Getting the width and height and radius as: [\(width), \(height), \(radius)] and onMe: \(onMe)")
+                        }
+                        
+                        
+//                    }
+
+
                 }
             }
                 .frame(width: geo.size.width, height: geo.size.height)

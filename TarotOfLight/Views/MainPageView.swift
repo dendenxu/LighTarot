@@ -17,21 +17,21 @@ func randomPositionAroundCircle(size: CGSize) -> CGSize {
     return CGSize(width: cos(angle) * radius * scale, height: sin(angle) * radius * scale)
 }
 
-struct MyRecBackground: View {
+struct RoundRecBackground: View {
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                RoundedRectangle(cornerRadius: 15)
-                    .strokeBorder(
-                        style: StrokeStyle(
-                            lineWidth: 2,
-                            dash: [2]
-                        )
+
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .strokeBorder(
+                    style: StrokeStyle(
+                        lineWidth: 2,
+                        dash: [2]
                     )
-                    .foregroundColor(Color("Lime"))
-                    .scaleEffect(x: 1.3, y: 1, anchor: .center)
-            }
+                )
+                .foregroundColor(Color("Lime"))
+                .scaleEffect(x: 1.3, y: 1, anchor: .center)
         }
+
     }
 }
 
@@ -109,35 +109,61 @@ struct MainPageView: View {
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
                 HStack(spacing: 40) { // The top two objects
-                    VStack(alignment: .center) { // The energy bar
-                        Image.default("buguang")
-                            .frame(width: 120, height: 120)
-                            .shadow(color: Color("MediumLime").opacity(0.3), radius: 5)
-                        HStack(spacing: 0) {
-                            Image.default("power")
-                                .frame(width: 20, height: 20)
-                                .shadow(radius: 2)
-                            LittleProgressBar(value: progress)
-                                .frame(width: 100, height: 15)
-                                .padding()
-                                .offset(x: -10)
-                        }.offset(x: 10, y: -30)
+                    VStack(spacing: 0) { // The energy bar
+                        Button(action: {
+
+                            withAnimation(springAnimation) {
+                                profile.shouldShowEnergy.toggle()
+                            }
+                            print("ShouldShowEnergy of the model set to \(profile.shouldShowEnergy)!")
+
+                        }) {
+//                            Image.default("buguang")
+//                                .frame(width: 120, height: 120)
+//                                .shadow(color: Color("MediumLime").opacity(0.3), radius: 5)
+
+                            ShinyText(text: "卜光", font: .DefaultChineseFont, size: 60, textColor: Color("MediumLime"), shadowColor: Color("MediumLime").opacity(0.3), shadowRadius: 5)
+//                                .background(Rectangle().opacity(0.3))
+//                                .frame(width: 120)
+//                                .padding(.bottom, 10)
+                        }.buttonStyle(LongPressButtonStyle(color: .red))
+
+//                        Button(action: {
+//
+//
+//                        }) {
+                        ZStack {
+                            if profile.proficientUser {
+                                HStack(spacing: 0) {
+                                    Image.default("power")
+                                        .frame(width: 20, height: 20)
+                                        .shadow(radius: 2)
+                                    LittleProgressBar(value: progress)
+                                        .frame(width: 100, height: 15)
+                                        .padding()
+                                        .offset(x: -10)
+                                }.offset(x: 10)
+                            }
+                            else {
+                                ShinyText(text: "AR捕光塔罗", font: .SourceHanSansLight, size: 18, textColor: Color("MediumLime"))
+//                                        .background(Rectangle().opacity(0.3))
+                            }
+                        }
+                            .offset(x: 5)
+//                        }.buttonStyle(LongPressButtonStyle(color: .red))
                     }
 
 
                     Button(action: { // The Daily
                         profile.complexSuccess()
                         withAnimation(springAnimation) {
-                            self.progress += 20
-                            if (self.progress >= 100.0) {
-                                self.progress = 100.0
-                            }
+                            progress += 20
                         }
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(isFull ? Color("MediumPurple") : .white)
-                                .shadow(radius: 10)
+                                .shadow(radius: 5)
                             VStack {
                                 Text("\(String(nowDate.year ?? 2000))年\(String(nowDate.month ?? 7))月")
                                     .onAppear(perform: {
@@ -151,10 +177,20 @@ struct MainPageView: View {
                                     .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
                                     .font(.custom(.SourceHanSansHeavy, size: 40))
 
-                                Text("日签")
-                                    .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
-                                    .font(.custom(.SourceHanSansHeavy, size: 25))
-                                    .overlay(MyRecBackground())
+                                Button(action: {
+                                    print("Am I a proficient user: \(profile.proficientUser)")
+                                    withAnimation(springAnimation) {
+                                        profile.proficientUser.toggle()
+                                    }
+                                    print("PROFICIENT: Setting you to a proficient user? : \(profile.proficientUser)")
+                                }) {
+                                    Text("日签")
+                                        .foregroundColor(isFull ? Color("Lime") : Color("LightPurple"))
+                                        .font(.custom(.SourceHanSansHeavy, size: 25))
+                                        .overlay(RoundRecBackground())
+                                }.buttonStyle(LongPressButtonStyle(color: .red))
+
+
 
                                 Spacer()
                             }
@@ -164,7 +200,7 @@ struct MainPageView: View {
                 .padding(.top, 80 - 20 * CGFloat(progress) / 100)
 
 
-                AnimatingPlant(isFull: isFull, grownAnimating: $grownAnimating)
+                AnimatingPlant(isFull: isFull, onMe: profile.shouldShowEnergy, grownAnimating: $grownAnimating)
                     .zIndex(0.5)
                     .frame(width: plantRadius, height: plantRadius)
                 // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)

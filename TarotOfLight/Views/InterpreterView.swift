@@ -102,7 +102,7 @@ struct WrapScroll: View {
                             .rotationEffect(card.flipped ? .degrees(180) : .zero)
                             .frame(width: 270)
                             .padding(.top, 10)
-                        .colorMultiply(computedTintColor)
+                            .colorMultiply(computedTintColor)
                         ZStack {
                             VStack(spacing: 5) {
                                 Spacer().frame(width: 1, height: 4)
@@ -253,6 +253,10 @@ struct InterpreterView: View {
             }
 
         } // VStack
+        .onAppear {
+            print("ShouldShowEnergy of the model set to true!")
+            profile.shouldShowEnergy = true
+        }
     }
 }
 

@@ -8,6 +8,9 @@
 
 import SwiftUI
 
+// The energy adder view, basically a button with a circle progress bar
+// MARK: We should wrap the view with a bit ZStack and set the ZStack's frame to make the if-else clause work properly
+// with the transition defined here.
 struct EnergyAdderView: View {
     @EnvironmentObject var profile: LighTarotModel
     var energy = 5.0
@@ -18,21 +21,21 @@ struct EnergyAdderView: View {
     var shouldModify: Bool {
         profile.weAreInGlobal != .introduction
     }
-    @State var shouldAppear = true
+    @State var shouldAppear: Bool = true
 
     var body: some View {
+        // MARK: Using the GeometryReader to set ZStack's frame to make the center of the scale work
         GeometryReader {
             geo in
-
             ZStack {
-                if shouldAppear {
+                if shouldAppear { // Should have a outer frame
                     Button(action: {
                         print("Triggerd final action!")
-
                         withAnimation(springAnimation) {
-                            if shouldModify {
+                            if shouldModify { // Don't modify the model if in the introduction page
                                 profile.energy += energy
                             }
+                            // Make this view disappear
                             shouldAppear = false
                         }
                     }) {
@@ -50,36 +53,46 @@ struct EnergyAdderView: View {
 
                     }
                         .buttonStyle(LongPressButtonStyle(color: Color("LightMediumDarkPurple")))
-                        .transition(scaleTransition)
+                        .transition(scaleTransition) // Scale combined with fade animation
+
                 }
-            }.frame(width: geo.size.width, height: geo.size.height)
+            }.frame(width: geo.size.width, height: geo.size.height) //MARK: Frame settings
+            .onAppear {
+                print("Should you appear: \(shouldAppear)")
+            }
         }
     }
 }
 
-extension NSNotification {
-    static let LongPressCancel = NSNotification.Name.init("LongPressCancel")
-}
-
 struct LongPressButtonStyle: PrimitiveButtonStyle {
-    var color = Color.red
+    var color = Color.red // The progress bar color
+    var timeToFulfill: Double = 0.3 // The time interval in which the progress bar will be filled
+    var timeInterval: Double = 0.001 // The time interval granularity, specifically, the timer's fire rate's reciprocal
+    var maxProgress: CGFloat = 1 // Beginning from zero, the value to reach for the progresss variable
 
+    // Build the body of the button's label
+    // Basically adding background and overlay to the current label's element
+    // A Text, a Shape, anything
     func makeBody(configuration: PrimitiveButtonStyle.Configuration) -> some View {
-        LongPressButton(configuration: configuration, color: color)
+        LongPressButton(configuration: configuration, color: color, timeToFulfill: timeToFulfill, timeInterval: timeInterval, maxProgress: maxProgress)
     }
 
-
-
+    // The innner structure of LongPressButtonStyle
     struct LongPressButton: View {
+
+        // This modify will set value to default by calling reset function (which is a closure here to act as a callback)
+        // We use NotificationCenter to make thins work
+        // MARK: This closure cannot capture anything regarding current element, although they do exist in memory at the same time
         @GestureState(
             initialValue: false,
             reset: { value, transaction in
                 print("RESET: The value is reset")
                 NotificationCenter.default.post(
-                    name: NSNotification.LongPressCancel,
-                    object: nil, userInfo: ["info": "Test"])
+                    name: NSNotification.LongPressCancel, object: nil)
             }) private var pressed
         @State var timer: Timer?
+
+        // The progress bar control state, every time things get updated, check whether the largest possible amount has been reached
         @State var progress: CGFloat = 0 {
             didSet {
                 if progress >= maxProgress {
@@ -88,12 +101,13 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
                 }
             }
         }
-        let configuration: PrimitiveButtonStyle.Configuration
-        var color = Color.red
-        let timeToFulfill: Double = 0.3
-        let timeInterval: Double = 0.01
-        let maxProgress: CGFloat = 1
-        @State var longPressed = false
+        let configuration: PrimitiveButtonStyle.Configuration // Argument from outer PrimitiveButtonStyle
+        let color: Color // Color of the progress bar
+        let timeToFulfill: Double
+        let timeInterval: Double
+        let maxProgress: CGFloat
+        @State var longPressed = false // The actual value to be updated, so that we can add more animation
+        // BUG: Adding withAnimation on the body of updating doesn't seem to work properly
 
         func onEndedAction() {
             print("onEndedAction function triggerred")
@@ -132,16 +146,10 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
                         print("CHANGED: Should we start the timer?")
                         onChangedAction()
                 }
-//                        .onEnded { _ in
-//                            print("END: Timer is invalidated")
-//                            onEndedAction()
-//                    }
-
-
-
                 configuration.label
                     .foregroundColor(.white)
                     .opacity(longPressed || progress >= maxProgress ? 0.75 : 1.0)
+                    .scaleEffect(longPressed || progress >= maxProgress ? 0.75 : 1.0)
                     .background(
                         ZStack {
                             if longPressed {

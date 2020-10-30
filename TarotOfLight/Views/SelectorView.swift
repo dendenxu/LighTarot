@@ -40,23 +40,26 @@ struct SelectorView: View {
             PageSelector().padding(.bottom, 50)
         }
 
-        
-        .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
+
+            .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
     }
 }
 
 
 // The page selector view with slightly tailored edge
 struct PageSelector: View {
+    @EnvironmentObject var profile: LighTarotModel
     var body: some View {
-        HStack {
+        HStack(spacing: 35) {
             PageSelectorButton(whoWeAre: .mainPage)
             PageSelectorButton(whoWeAre: .cardPage)
             PageSelectorButton(whoWeAre: .minePage)
         }
             .padding()
+        .padding(.horizontal, profile.proficientUser ? 30 : 32.5)
+            .padding(.vertical, profile.proficientUser ? 6.5 : 0)
             .background(
-                RoundedRectangle(cornerRadius: 40)
+                Capsule()
                     .foregroundColor(Color.white.opacity(0.3))
 //                    .shadow(radius: 5)
             )
@@ -75,10 +78,17 @@ struct PageSelectorButton: View {
                 profile.weAreInSelector = whoWeAre
             }
         }) {
-            Image.default(String(describing: whoWeAre) + ((profile.weAreInSelector == whoWeAre) ? "Material" : ""))
-                .frame(height: 50)
-                .shadow(radius: 10)
-        }.padding(.horizontal, 20)
+            //            VStack(spacing: (profile.weAreInSelector == whoWeAre) ? 5 : 0)
+            VStack
+            {
+                Image.default(String(describing: whoWeAre) + ((profile.weAreInSelector == whoWeAre) ? "Material" : ""))
+                    .frame(height: profile.proficientUser ? 50 : 40)
+                    .shadow(radius: 10)
+                if !profile.proficientUser {
+                    ShinyText(text: whoWeAre.descChinese, font: (profile.weAreInSelector == whoWeAre) ? .DefaultChineseFont : .SourceHanSansLight, size: 14, textColor: Color("MediumLime"), shadowColor: Color.black.opacity(0.3))
+                }
+            }
+        }
     }
 }
 
@@ -92,10 +102,15 @@ enum SelectorSelection: CustomStringConvertible {
         }
     }
 
+    var descChinese: String {
+        switch self {
+        case .mainPage: return "主页"
+        case .cardPage: return "捕光牌阵"
+        case .minePage: return "我的"
+        }
+    }
+
     case mainPage
     case cardPage
     case minePage
 }
-
-
-

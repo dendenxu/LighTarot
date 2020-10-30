@@ -13,7 +13,7 @@ import SwiftUI
 class LighTarotModel: ObservableObject {
     // Some animation configuration
     // Currently not used in the code, for lottie animation, we're using builtin settings instead
-    @Published var longPressGestureCanceled = false
+    @Published var shouldShowEnergy = false
     @Published var sceneAtForeground = true
 
     // Navigation data, updating the view by selecting different enum value for these

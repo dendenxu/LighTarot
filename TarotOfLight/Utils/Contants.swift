@@ -68,3 +68,7 @@ extension WebImage {
             .scaledToFill()
     }
 }
+
+extension NSNotification {
+    static let LongPressCancel = NSNotification.Name.init("LongPressCancel")
+}

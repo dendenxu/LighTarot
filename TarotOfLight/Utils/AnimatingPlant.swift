@@ -47,11 +47,12 @@ struct AnimatingPlant: View {
                         }
                     )
                 if onMe {
-                    SomePoppingEnergy()
+                    SomePoppingEnergy(onMe: onMe)
                         .frame(width: geo.size.width, height: geo.size.height)
                         .onAppear {
                             print("Some popping energy is here! onMe: \(onMe)")
                     }
+//                        .transition(scaleTransition)
                 }
             }
         }

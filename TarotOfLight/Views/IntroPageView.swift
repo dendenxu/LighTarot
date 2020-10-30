@@ -51,9 +51,20 @@ struct ThirdIntroPage: View {
                 AnimatingPlant(isFull: false, onMe: onMe, grownAnimating: .constant(true)).frame(width: plantRadius, height: plantRadius)
 
                 HStack(spacing: 0) {
-                    Image.default("power")
-                        .frame(width: 30, height: 30)
-                        .shadow(radius: 2)
+                    Button(action: {
+                        withAnimation(springAnimation) {
+                            profile.proficientUser = true
+                            profile.weAreInGlobal = .selector
+                            profile.weAreInSelector = .mainPage
+                        }
+
+                    }) {
+                        Image.default("power")
+                            .frame(width: 30, height: 30)
+                            .shadow(radius: 2)
+                    }.buttonStyle(LongPressButtonStyle(color: .red))
+
+
                     LittleProgressBar(value: 100)
                         .frame(width: 150, height: 25)
                         .padding()
@@ -156,7 +167,7 @@ struct FirstIntroPage: View {
                     Image.default("cardPage")
                         .frame(width: 60, height: 60)
 
-                    ShinyText(text: "捕光牌阵", font: .SourceHanSansLight, size: 14, textColor: Color("MediumLime"), shadowColor: .white)
+                    ShinyText(text: "捕光牌阵", font: .DefaultChineseFont, size: 14, textColor: Color("MediumLime"), shadowColor: Color.white.opacity(0.75))
                 }
             }
         }

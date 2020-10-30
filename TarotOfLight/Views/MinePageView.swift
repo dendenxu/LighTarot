@@ -91,6 +91,7 @@ struct MinePageView: View {
 }
 
 struct textField: View {
+    @EnvironmentObject var profile: LighTarotModel
     @Binding var text: String
     @State var placeholder = "Placeholder"
     var imageName = "location"
@@ -107,9 +108,20 @@ struct textField: View {
                     .foregroundColor(Color.black.opacity(0.4))
                     .padding(.leading, 10)
                 Spacer()
-                Image.default(imageName)
-                    .frame(width: (imageName == "location") ? 25 : 20, height: (imageName == "location") ? 25 : 20)
-                    .offset(x: (imageName == "location") ? 2 : 0)
+
+                Button(action: {
+                    print("PROFICIENT: And... NOT PROFICIENT ANYMORE")
+                    withAnimation(springAnimation) {
+                        profile.proficientUser = false
+                        profile.weAreInGlobal = .introduction
+                        profile.weAreInSelector = .mainPage
+                    }
+                }) {
+                    Image.default(imageName)
+//                        .frame(width: (imageName == "location") ? 25 : 20, height: (imageName == "location") ? 25 : 20)
+//                        .offset(x: (imageName == "location") ? 2 : 0)
+                }.buttonStyle(LongPressButtonStyle(color: .red))
+
             }.padding()
         }
     }
