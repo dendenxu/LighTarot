@@ -200,21 +200,26 @@ struct MainPageView: View {
                 .padding(.top, 80 - 20 * CGFloat(progress) / 100)
 
 
-                AnimatingPlant(isFull: isFull, onMe: profile.shouldShowEnergy, grownAnimating: $grownAnimating)
-                    .zIndex(0.5)
-                    .frame(width: plantRadius, height: plantRadius)
-                // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)
-                // FIXME: When we're using too large an offset, like .offset(y: CGFloat(progress)) directly, the Swift compiler crashes, returning non-zero value
-                .padding(.bottom, 20 + 10 * CGFloat(progress) / 100)
+                Button(action: {
+                    withAnimation(springAnimation) {
+                        progress -= 50
+                    }
+                }) {
+                    AnimatingPlant(isFull: isFull, onMe: profile.shouldShowEnergy, grownAnimating: $grownAnimating)
+                        .zIndex(0.5)
+                        .frame(width: plantRadius, height: plantRadius)
+                    // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)
+                    // FIXME: When we're using too large an offset, like .offset(y: CGFloat(progress)) directly, the Swift compiler crashes, returning non-zero value
+                    .padding(.bottom, 20 + 10 * CGFloat(progress) / 100)
+                }.buttonStyle(LongPressButtonStyle(color: .red))
+
+
 
 
                 if (isFull) {
                     Button(action: {
                         withAnimation(springAnimation) {
-                            self.progress -= 30;
-                            if (self.progress < 0) {
-                                self.progress = 0
-                            }
+                            progress -= 50
                         }
                     }) {
                         ShinyText(text: "解锁新牌阵").frame(width: 100, height: 100)

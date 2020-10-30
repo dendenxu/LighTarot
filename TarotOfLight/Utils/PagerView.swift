@@ -10,11 +10,12 @@ struct PagerView<Content: View>: View {
     let content: Content
     let pageCount: Int
     let hasPageDot: Bool
+    let customEnd: () -> Void
     @Binding var currentIndex: Int
     @Binding var percentages: [CGFloat] // left, right middle
     @State var translation: CGFloat = 0
     @EnvironmentObject var profile: LighTarotModel
-    init(accentColor: Color = Color.white.opacity(0.9), overlookColor: Color = Color.gray.opacity(0.7), backgroundColor: Color = Color.white.opacity(0.3), hasPageDot: Bool = true, pageCount: Int = 3, currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, @ViewBuilder content: () -> Content) {
+    init(accentColor: Color = Color.white.opacity(0.9), overlookColor: Color = Color.gray.opacity(0.7), backgroundColor: Color = Color.white.opacity(0.3), hasPageDot: Bool = true, pageCount: Int = 3, currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, customEnd: @escaping () -> Void = { }, @ViewBuilder content: () -> Content) {
         self.accentColor = accentColor
         self.overlookColor = overlookColor
         self.backgroundColor = backgroundColor
@@ -22,12 +23,14 @@ struct PagerView<Content: View>: View {
         self.pageCount = pageCount
         self._currentIndex = currentIndex
         self._percentages = percentages
+        self.customEnd = customEnd
         self.content = content()
     }
 
     private func onEndedAction(index: Int, width: CGFloat) {
         print("Current translation: \(translation), currentIndex: \(currentIndex)")
         let oldValue = currentIndex
+
         withAnimation(fastSpringAnimation) {
             currentIndex = index
             isChanging = false
@@ -37,6 +40,9 @@ struct PagerView<Content: View>: View {
                 percentages[index] = (translation + CGFloat(index) * width) / width
             }
         }
+
+        customEnd()
+
         profile.pagerSuccess(count: abs(currentIndex - oldValue))
         print("Paging gesture ended! Percentages are: [\(percentages)]")
     }

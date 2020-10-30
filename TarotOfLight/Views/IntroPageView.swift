@@ -175,12 +175,18 @@ struct FirstIntroPage: View {
 }
 
 struct IntroPageView: View {
+    @EnvironmentObject var profile: LighTarotModel
     @State var currentIndex = 0
     @State var percentatges: [CGFloat] = [0, 1, 2]
     let introductionPageCount = 3
     var body: some View {
         ZStack {
-            PagerView(accentColor: .white, overlookColor: .gray, backgroundColor: Color.black.opacity(0.2), currentIndex: $currentIndex, percentages: $percentatges) {
+            PagerView(accentColor: .white, overlookColor: .gray, backgroundColor: Color.black.opacity(0.2), currentIndex: $currentIndex, percentages: $percentatges, customEnd: {
+                withAnimation(springAnimation) {
+                    profile.shouldShowEnergy = currentIndex == 2
+                }
+                print("Changing should show energy to \(profile.shouldShowEnergy)")
+            }) {
                 ForEach(0..<introductionPageCount) { index in
                     InnerIntroduction(percentage: percentatges[index]) {
                         if index == 0 {

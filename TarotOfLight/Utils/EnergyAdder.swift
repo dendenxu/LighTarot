@@ -28,7 +28,9 @@ struct EnergyAdderView: View {
         GeometryReader {
             geo in
             ZStack {
-                if shouldAppear { // Should have a outer frame
+                if shouldAppear
+//                    && profile.shouldShowEnergy
+                    { // Should have a outer frame
                     Button(action: {
                         print("Triggerd final action!")
                         withAnimation(springAnimation) {
@@ -58,7 +60,7 @@ struct EnergyAdderView: View {
                 }
             }.frame(width: geo.size.width, height: geo.size.height) //MARK: Frame settings
             .onAppear {
-                print("Should you appear: \(shouldAppear)")
+                print("Should you appear: \(shouldAppear), should show energy: \(profile.shouldShowEnergy)")
             }
         }
     }
@@ -69,12 +71,12 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
     var timeToFulfill: Double = 0.3 // The time interval in which the progress bar will be filled
     var timeInterval: Double = 0.001 // The time interval granularity, specifically, the timer's fire rate's reciprocal
     var maxProgress: CGFloat = 1 // Beginning from zero, the value to reach for the progresss variable
-
+    var lineWidth: CGFloat = 25
     // Build the body of the button's label
     // Basically adding background and overlay to the current label's element
     // A Text, a Shape, anything
     func makeBody(configuration: PrimitiveButtonStyle.Configuration) -> some View {
-        LongPressButton(configuration: configuration, color: color, timeToFulfill: timeToFulfill, timeInterval: timeInterval, maxProgress: maxProgress)
+        LongPressButton(configuration: configuration, color: color, lineWidth: lineWidth, timeToFulfill: timeToFulfill, timeInterval: timeInterval, maxProgress: maxProgress)
     }
 
     // The innner structure of LongPressButtonStyle
@@ -103,9 +105,11 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
         }
         let configuration: PrimitiveButtonStyle.Configuration // Argument from outer PrimitiveButtonStyle
         let color: Color // Color of the progress bar
+        let lineWidth: CGFloat
         let timeToFulfill: Double
         let timeInterval: Double
         let maxProgress: CGFloat
+        var circleAway: CGFloat { lineWidth }
         @State var longPressed = false // The actual value to be updated, so that we can add more animation
         // BUG: Adding withAnimation on the body of updating doesn't seem to work properly
 
@@ -151,11 +155,16 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
                     .opacity(longPressed || progress >= maxProgress ? 0.75 : 1.0)
                     .scaleEffect(longPressed || progress >= maxProgress ? 0.75 : 1.0)
                     .background(
-                        ZStack {
-                            if longPressed {
-                                CircleProgress(color: color, progress: progress)
-                                    .scaledToFill()
-                                    .scaleEffect(2)
+                        GeometryReader {
+                            geo in
+                            ZStack {
+                                if longPressed {
+                                    CircleProgress(color: color, progress: progress, lineWidth: lineWidth)
+                                        .scaledToFill()
+//                                        .scaleEffect(2)
+                                    .frame(width: geo.size.width + circleAway, height: geo.size.height + circleAway)
+                                        .offset(x: -circleAway / 2, y: -circleAway / 2)
+                                }
                             }
                         }
                     )
@@ -175,20 +184,20 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
 struct CircleProgress: View {
     var color = Color.red
     var progress: CGFloat
+    var lineWidth: CGFloat
     var body: some View {
         ZStack {
             Circle()
-                .stroke(lineWidth: 12.5)
+                .stroke(lineWidth: lineWidth)
                 .opacity(0.3)
                 .foregroundColor(color)
 
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(style: StrokeStyle(lineWidth: 12.5, lineCap: .round, lineJoin: .round))
+                .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
                 .opacity(0.7)
                 .foregroundColor(color)
         }
             .rotationEffect(.degrees(-90))
-
     }
 }
