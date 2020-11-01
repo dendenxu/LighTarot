@@ -181,7 +181,7 @@ struct IntroPageView: View {
     let introductionPageCount = 3
     var body: some View {
         ZStack {
-            PagerView(accentColor: .white, overlookColor: .gray, backgroundColor: Color.black.opacity(0.2), currentIndex: $currentIndex, percentages: $percentatges, customEnd: {
+            PagerView(accentColor: .white, overlookColor: .gray, backgroundColor: Color.black.opacity(0.2), pageCount: introductionPageCount, currentIndex: $currentIndex, percentages: $percentatges, customEnd: {
                 withAnimation(springAnimation) {
                     profile.shouldShowEnergy = currentIndex == 2
                 }

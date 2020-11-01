@@ -52,7 +52,6 @@ struct AnimatingPlant: View {
                         .onAppear {
                             print("Some popping energy is here! onMe: \(onMe)")
                         }
-//                        .transition(scaleTransition)
                 }
             }
         }

@@ -15,10 +15,12 @@ extension CGFloat {
 }
 
 extension String {
-    public static let DefaultChineseFont = "DFPHeiW12-GB"
+//    public static let DefaultChineseFont = "DFPHeiW12-GB"
+    public static let DefaultChineseFont = String.SourceHanSansHeavy
+    public static let DFPHeiW12 = "DFPHeiW12-GB"
     public static let SourceHanSansHeavy = "Source Han Sans Heavy"
     public static let SourceHanSansMedium = "Source Han Sans Medium"
-    public static let SourceHanSansLight = "Source Han Sans Light"
+    public static let SourceHanSansLight = String.SourceHanSansMedium
 }
 
 extension Image {
@@ -71,4 +73,6 @@ extension WebImage {
 
 extension NSNotification {
     static let LongPressCancel = NSNotification.Name.init("LongPressCancel")
+    static let DragCancel = NSNotification.Name.init("LongPressCancel")
+    static let PagerTapped = NSNotification.Name.init("PaggerTapped")
 }

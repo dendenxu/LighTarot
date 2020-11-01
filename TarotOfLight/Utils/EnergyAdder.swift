@@ -72,6 +72,7 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
     var timeInterval: Double = 0.001 // The time interval granularity, specifically, the timer's fire rate's reciprocal
     var maxProgress: CGFloat = 1 // Beginning from zero, the value to reach for the progresss variable
     var lineWidth: CGFloat = 25
+
     // Build the body of the button's label
     // Basically adding background and overlay to the current label's element
     // A Text, a Shape, anything
@@ -81,7 +82,6 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
 
     // The innner structure of LongPressButtonStyle
     struct LongPressButton: View {
-
         // This modify will set value to default by calling reset function (which is a closure here to act as a callback)
         // We use NotificationCenter to make thins work
         // MARK: This closure cannot capture anything regarding current element, although they do exist in memory at the same time
@@ -139,7 +139,6 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
 
         var body: some View {
             ZStack {
-
                 let longPress = LongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity)
                     .updating($pressed) {
                         value, state, transaction in
@@ -172,10 +171,11 @@ struct LongPressButtonStyle: PrimitiveButtonStyle {
                     .compositingGroup()
                     .shadow(color: Color.black.opacity(0.15), radius: 2)
                     .gesture(longPress)
-                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.LongPressCancel)) { obj in
+                    .onReceive(
+                        // MARK: Receiving all similar Notification
+                        NotificationCenter.default.publisher(for: NSNotification.LongPressCancel)) { obj in
                         onEndedAction()
                 }
-
             }
         }
     }

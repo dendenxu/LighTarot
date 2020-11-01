@@ -85,7 +85,7 @@ struct PageSelectorButton: View {
                     .frame(height: profile.proficientUser ? 50 : 40)
                     .shadow(radius: 10)
                 if !profile.proficientUser {
-                    ShinyText(text: whoWeAre.descChinese, font: (profile.weAreInSelector == whoWeAre) ? .DefaultChineseFont : .SourceHanSansLight, size: 14, textColor: Color("MediumLime"), shadowColor: Color.black.opacity(0.3))
+                    ShinyText(text: whoWeAre.descChinese, font: (profile.weAreInSelector == whoWeAre) ? .DefaultChineseFont : .SourceHanSansLight, size: 14, textColor: Color("MediumLime"), shadowColor: Color.black.opacity(0))
                 }
             }
         }

@@ -8,6 +8,7 @@
 import SwiftUI
 struct PagerView<Content: View>: View {
     let content: Content
+    let uuid: UUID
     let pageCount: Int
     let hasPageDot: Bool
     let customEnd: () -> Void
@@ -15,12 +16,13 @@ struct PagerView<Content: View>: View {
     @Binding var percentages: [CGFloat] // left, right middle
     @State var translation: CGFloat = 0
     @EnvironmentObject var profile: LighTarotModel
-    init(accentColor: Color = Color.white.opacity(0.9), overlookColor: Color = Color.gray.opacity(0.7), backgroundColor: Color = Color.white.opacity(0.3), hasPageDot: Bool = true, pageCount: Int = 3, currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, customEnd: @escaping () -> Void = { }, @ViewBuilder content: () -> Content) {
+    init(accentColor: Color = Color.white.opacity(0.9), overlookColor: Color = Color.gray.opacity(0.7), backgroundColor: Color = Color.white.opacity(0.3), hasPageDot: Bool = true, pageCount: Int = 3, uuid: UUID = UUID(), currentIndex: Binding<Int>, percentages: Binding<[CGFloat]>, customEnd: @escaping () -> Void = { }, @ViewBuilder content: () -> Content) {
         self.accentColor = accentColor
         self.overlookColor = overlookColor
         self.backgroundColor = backgroundColor
         self.hasPageDot = hasPageDot
         self.pageCount = pageCount
+        self.uuid = uuid
         self._currentIndex = currentIndex
         self._percentages = percentages
         self.customEnd = customEnd
@@ -75,9 +77,15 @@ struct PagerView<Content: View>: View {
         }
     }
 
+    @GestureState(reset: { value, transaction in
+        // MARK: Why can't I use Class Member???
+        NotificationCenter.default.post(
+            name: NSNotification.DragCancel, object: nil)
+    }) var dragAmount = CGSize.zero
     @State var isChanging = false
     @State var selecting = false
     @State var counter: Int = 0
+//    @State var width: CGFloat = .ScreenWidth
     let spacing: CGFloat = 3
     let accentColor: Color
     let overlookColor: Color
@@ -92,12 +100,16 @@ struct PagerView<Content: View>: View {
                         minimumDistance: 20,
                         coordinateSpace: .local
                     )
-                    .onEnded { value in
-                        let offset = value.predictedEndTranslation.width / width
-                        let newIndex = (CGFloat(currentIndex) - offset).rounded()
-                        let index = min(max(Int(newIndex), 0), pageCount - 1)
-                        onEndedAction(index: index, width: width)
-                    }
+//                    .updating($dragAmount) { value, state, transaction in
+//                        state = value.translation
+//                        // Dummy code here
+//                    }
+                .onEnded { value in
+                    let offset = value.predictedEndTranslation.width / width
+                    let newIndex = (CGFloat(currentIndex) - offset).rounded()
+                    let index = min(max(Int(newIndex), 0), pageCount - 1)
+                    onEndedAction(index: index, width: width)
+                }
                     .onChanged { value in
                         print("Paging gesture changing...")
                         let translationW = value.translation.width - CGFloat(currentIndex) * width
@@ -158,6 +170,32 @@ struct PagerView<Content: View>: View {
                     }.padding(.bottom, selecting ? 50 : 60)
                 }
             }
+//                .onAppear {
+//                    print("Getting geometry width: \(width)")
+//                    width = geometry.size.width
+//                }
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.PagerTapped)) {
+                    obj in
+                    print("Received: \(obj)")
+                    if let userInfo = obj.userInfo {
+                        if userInfo["uuid"] as? UUID == uuid {
+                            print("UUID Matched")
+                            if let cI = userInfo["currentIndex"] as? Int {
+                                if let width = userInfo["width"] as? CGFloat {
+                                    tapGesture(index: cI, width: width)
+                                } else {
+                                    tapGesture(index: cI)
+                                }
+                            }
+                            print("Cannot get current Index from the publisher")
+                        }
+                    }
+            }
+//                .onReceive(NotificationCenter.default.publisher(for: NSNotification.DragCancel)) {
+//                    obj in
+//                    print("Received: \(obj)")
+//                    onEndedAction(index: currentIndex, width: width)
+//            }
         }
     }
 }
