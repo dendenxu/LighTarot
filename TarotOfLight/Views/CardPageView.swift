@@ -187,9 +187,11 @@ struct CardPageView: View {
                     FullScroll(texts: lockedTexts, locked: true)
                         .frame(width: .ScreenWidth)
                         .zIndex(0.5)
-
-
                 }
+                    .background(Rectangle()
+                        .foregroundColor(Color("LightGray"))
+                        .frame(width: .ScreenWidth * 2)
+                    )
             }
         }
     }

@@ -85,7 +85,7 @@ struct PagerView<Content: View>: View {
     @State var isChanging = false
     @State var selecting = false
     @State var counter: Int = 0
-//    @State var width: CGFloat = .ScreenWidth
+    @State var width: CGFloat = .ScreenWidth
     let spacing: CGFloat = 3
     let accentColor: Color
     let overlookColor: Color
@@ -100,16 +100,16 @@ struct PagerView<Content: View>: View {
                         minimumDistance: 20,
                         coordinateSpace: .local
                     )
-//                    .updating($dragAmount) { value, state, transaction in
-//                        state = value.translation
-//                        // Dummy code here
-//                    }
-                .onEnded { value in
-                    let offset = value.predictedEndTranslation.width / width
-                    let newIndex = (CGFloat(currentIndex) - offset).rounded()
-                    let index = min(max(Int(newIndex), 0), pageCount - 1)
-                    onEndedAction(index: index, width: width)
-                }
+                    .updating($dragAmount) { value, state, transaction in
+                        state = value.translation
+                        // Dummy code here
+                    }
+                    .onEnded { value in
+                        let offset = value.predictedEndTranslation.width / width
+                        let newIndex = (CGFloat(currentIndex) - offset).rounded()
+                        let index = min(max(Int(newIndex), 0), pageCount - 1)
+                        onEndedAction(index: index, width: width)
+                    }
                     .onChanged { value in
                         print("Paging gesture changing...")
                         let translationW = value.translation.width - CGFloat(currentIndex) * width
@@ -135,45 +135,49 @@ struct PagerView<Content: View>: View {
                     .frame(width: geometry.size.width, alignment: .leading)
                     .offset(x: translation)
                     .gesture(PagerDragGesture)
-                VStack {
-                    Spacer()
-                    ZStack {
-                        // This is ridiculous... Adding a rectangle frame around it will make the gesture recognizable?
 
-                        HStack(spacing: 0) {
-                            ForEach(0..<pageCount) { index in
-                                Button(action: {
-                                    tapGesture(index: index, width: width)
-                                }) {
-                                    ZStack {
-                                        Ellipse()
-                                            .frame(width: selecting ? 22.5 : 15, height: selecting ? 80 : 40)
-                                            .hidden()
-                                            .overlay(Circle().foregroundColor(dotColor(index: index)).frame(width: 9, height: 9))
-                                            .padding(.leading, index == 0 ? (selecting ? 12.5 : 5) : 0)
-                                            .padding(.trailing, index == pageCount - 1 ? (selecting ? 12.5 : 5) : 0)
+                if hasPageDot {
+
+                    VStack {
+                        Spacer()
+                        ZStack {
+                            // This is ridiculous... Adding a rectangle frame around it will make the gesture recognizable?
+
+                            HStack(spacing: 0) {
+                                ForEach(0..<pageCount) { index in
+                                    Button(action: {
+                                        tapGesture(index: index, width: width)
+                                    }) {
+                                        ZStack {
+                                            Ellipse()
+                                                .frame(width: selecting ? 22.5 : 15, height: selecting ? 80 : 40)
+                                                .hidden()
+                                                .overlay(Circle().foregroundColor(dotColor(index: index)).frame(width: 9, height: 9))
+                                                .padding(.leading, index == 0 ? (selecting ? 12.5 : 5) : 0)
+                                                .padding(.trailing, index == pageCount - 1 ? (selecting ? 12.5 : 5) : 0)
+                                        }
                                     }
                                 }
                             }
-                        }
-                            .background(
-                                GeometryReader {
-                                    geo in
-                                    VStack {
-                                        Capsule().foregroundColor(backgroundColor)
-                                            .frame(width: geo.size.width, height: geo.size.height / 1.75)
-                                            .offset(y: geo.size.height / 2 - geo.size.height / 1.75 / 2)
+                                .background(
+                                    GeometryReader {
+                                        geo in
+                                        VStack {
+                                            Capsule().foregroundColor(backgroundColor)
+                                                .frame(width: geo.size.width, height: geo.size.height / 1.75)
+                                                .offset(y: geo.size.height / 2 - geo.size.height / 1.75 / 2)
+                                        }
                                     }
-                                }
-//                                Capsule().foregroundColor(backgroundColor)
-                            )
-                    }.padding(.bottom, selecting ? 50 : 60)
+                                    //                                Capsule().foregroundColor(backgroundColor)
+                                )
+                        }.padding(.bottom, selecting ? 50 : 60)
+                    }
                 }
             }
-//                .onAppear {
-//                    print("Getting geometry width: \(width)")
-//                    width = geometry.size.width
-//                }
+                .onAppear {
+                    print("Getting geometry width: \(width)")
+                    width = geometry.size.width
+                }
                 .onReceive(NotificationCenter.default.publisher(for: NSNotification.PagerTapped)) {
                     obj in
                     print("Received: \(obj)")
@@ -190,12 +194,12 @@ struct PagerView<Content: View>: View {
                             print("Cannot get current Index from the publisher")
                         }
                     }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.DragCancel)) {
+                    obj in
+                    print("Received: \(obj)")
+                    onEndedAction(index: currentIndex, width: width)
             }
-//                .onReceive(NotificationCenter.default.publisher(for: NSNotification.DragCancel)) {
-//                    obj in
-//                    print("Received: \(obj)")
-//                    onEndedAction(index: currentIndex, width: width)
-//            }
         }
     }
 }
