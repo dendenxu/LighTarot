@@ -93,7 +93,7 @@ struct MainPageView: View {
                         .scaledToFit()
                         .scaleEffect(tideScale)
                         .offset(y: .ScreenHeight + 50) // MARK: Magic value
-                        .offset(y: -.ScreenHeight * (CGFloat(progress)) / 100)
+                    .offset(y: -.ScreenHeight * (CGFloat(progress)) / 100)
                         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                             print("Moving back to the foreground!")
 //                            lottieView.shouldPlay = true
@@ -108,7 +108,7 @@ struct MainPageView: View {
 
             // The main content of navigations, should be changed upon selecting differene pages
             VStack {
-                HStack(spacing: 40) { // The top two objects
+                HStack(spacing: 50) { // The top two objects
                     VStack(spacing: 0) { // The energy bar
                         Button(action: {
 
@@ -122,7 +122,9 @@ struct MainPageView: View {
 //                                .frame(width: 120, height: 120)
 //                                .shadow(color: Color("MediumLime").opacity(0.3), radius: 5)
 
-                            ShinyText(text: "卜光", font: .DefaultChineseFont, size: 60, textColor: Color("MediumLime"), shadowColor: Color("MediumLime").opacity(0.3), shadowRadius: 5)
+                            ShinyText(text: "卜光", font: .DefaultChineseFont, size: 55, textColor: Color("MediumLime"), shadowColor: Color("MediumLime").opacity(0.3), shadowRadius: 5)
+//                                .scaledToFit()
+
 //                                .background(Rectangle().opacity(0.3))
 //                                .frame(width: 120)
 //                                .padding(.bottom, 10)
@@ -197,7 +199,8 @@ struct MainPageView: View {
                         }.frame(width: 100, height: 125)
                     }
                 }.zIndex(1) // So that daily prediction won't overlay with the shadow
-                .padding(.top, 80 - 20 * CGFloat(progress) / 100)
+                .padding(.top, 90 - 20 * CGFloat(progress) / 100)
+                .padding(.bottom, 30)
 
 
                 Button(action: {

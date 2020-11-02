@@ -21,6 +21,7 @@
 		B90E08D425305AD100635B8F /* InterpreterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90E08D325305AD100635B8F /* InterpreterView.swift */; };
 		B9210B12254FFE6200471E47 /* TravelingBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9210B11254FFE6200471E47 /* TravelingBackground.swift */; };
 		B9210B15254FFE9500471E47 /* SomePoppingEnergy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9210B14254FFE9500471E47 /* SomePoppingEnergy.swift */; };
+		B9210B182550136A00471E47 /* NewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9210B172550136A00471E47 /* NewCardView.swift */; };
 		B9261EBD253EAE5E008DE393 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B9261EBC253EAE5E008DE393 /* SwiftyJSON */; };
 		B9521E1625221B2400AC96EF /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B9521E1525221B2400AC96EF /* SDWebImageSwiftUI */; };
 		B957B2282542A153007BCC81 /* CardInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = B957B2272542A153007BCC81 /* CardInfo.json */; };
@@ -78,6 +79,7 @@
 		B90E08D325305AD100635B8F /* InterpreterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterView.swift; sourceTree = "<group>"; };
 		B9210B11254FFE6200471E47 /* TravelingBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelingBackground.swift; sourceTree = "<group>"; };
 		B9210B14254FFE9500471E47 /* SomePoppingEnergy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomePoppingEnergy.swift; sourceTree = "<group>"; };
+		B9210B172550136A00471E47 /* NewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCardView.swift; sourceTree = "<group>"; };
 		B957B2272542A153007BCC81 /* CardInfo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardInfo.json; sourceTree = "<group>"; };
 		B957B2372542A728007BCC81 /* CardContent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardContent.json; sourceTree = "<group>"; };
 		B95A386E2547F11C009DC32D /* TarotOfLight.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = TarotOfLight.profdata; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				B90E08D325305AD100635B8F /* InterpreterView.swift */,
 				B970A60724A3634300B68189 /* MainPageView.swift */,
 				B970A60324A362BF00B68189 /* MinePageView.swift */,
+				B9210B172550136A00471E47 /* NewCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -395,6 +398,7 @@
 				B970A5FC24A3611A00B68189 /* Transitions.swift in Sources */,
 				B984405B254072CD00E43C18 /* LighTarotModel.swift in Sources */,
 				B9DBD35925491FFE00368443 /* IntroPageView.swift in Sources */,
+				B9210B182550136A00471E47 /* NewCardView.swift in Sources */,
 				B970A60024A361CD00B68189 /* CircleBackground.swift in Sources */,
 				B9AB0ACC254A5ABB00943E29 /* EnergyAdder.swift in Sources */,
 				B99729E32542E01300E91744 /* LottieAnimation.swift in Sources */,
@@ -545,7 +549,7 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TarotOfLight/Preview Content\"";
-				DEVELOPMENT_TEAM = 28Y62P3CPJ;
+				DEVELOPMENT_TEAM = WAN3RVDP5M;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TarotOfLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -553,7 +557,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = xz.TarotOfLight;
+				PRODUCT_BUNDLE_IDENTIFIER = zx.Personal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -567,7 +571,7 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TarotOfLight/Preview Content\"";
-				DEVELOPMENT_TEAM = 28Y62P3CPJ;
+				DEVELOPMENT_TEAM = WAN3RVDP5M;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TarotOfLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -575,7 +579,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = xz.TarotOfLight;
+				PRODUCT_BUNDLE_IDENTIFIER = zx.Personal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

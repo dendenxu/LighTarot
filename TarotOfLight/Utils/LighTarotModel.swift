@@ -15,6 +15,11 @@ class LighTarotModel: ObservableObject {
     // Currently not used in the code, for lottie animation, we're using builtin settings instead
     @Published var shouldShowEnergy = false
     @Published var sceneAtForeground = true
+    @Published var selectorShouldChange = false
+
+    var selectorIsChanged: Bool {
+        proficientUser && selectorShouldChange
+    }
 
     // Navigation data, updating the view by selecting different enum value for these
     @Published var lockingSelection: LockingSelection = .unlocked

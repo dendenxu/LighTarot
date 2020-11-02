@@ -32,6 +32,8 @@ good_keys_id = [objects[key]["overrides"]["runtimeAttributes"][0][1]["value"] fo
 good_keys = [key for key in objects.keys() if can_find(key)]
 
 
+all_keys = objects.keys()
+
 # Get orientation data and translation data from the first behavior
 # locations = [[-18.805461883544922, -2.7745513916015625, -0.000110626220703125],
 #              [39.673583984375, -7.414278984069824, -16.774169921875],
@@ -41,9 +43,9 @@ good_keys = [key for key in objects.keys() if can_find(key)]
 #                 [-5.1063850037280645e-08,  -0.3420201241970062,  1.4732336239831056e-07,  -0.9396926164627075],
 #                 [4.533262654149439e-12, 5.9117155615240335e-12, -6.650681307757145e-12, -1]]
 
-locations = [action2config(behav2action(behaviors[0], action))["location"] for action in range(1,4)]
+locations = [action2config(behav2action(behaviors[0], action))["location"] for action in range(1, 4)]
 
-orientations = [action2config(behav2action(behaviors[0], action))["orientation"] for action in range(1,4)]
+orientations = [action2config(behav2action(behaviors[0], action))["orientation"] for action in range(1, 4)]
 
 # Update the orientation and translation for all other behaviors
 for behav in range(len(good_keys)):
@@ -67,6 +69,12 @@ for index, key in enumerate(good_keys):
 for behav in range(len(good_keys_id)):
     for action in range(1, 4):
         action2config(behav2action(behaviors[behav], action))["target"] = [good_keys_id[behav]]
+
+for index, key in enumerate(all_keys):
+    try:
+        print(objects[key]["transform"]["matrix"])
+    except:
+        continue
 
 # Write to the rcproject file
 with open("com.apple.RCFoundation.Project", "w") as json_file:
