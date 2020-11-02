@@ -56,7 +56,7 @@ struct PageSelector: View {
             PageSelectorButton(whoWeAre: .minePage)
         }
             .padding()
-        .padding(.horizontal, profile.proficientUser ? 30 : 32.5)
+            .padding(.horizontal, profile.proficientUser ? 30 : 32.5)
             .padding(.vertical, profile.proficientUser ? 6.5 : 0)
             .background(
                 Capsule()
@@ -78,12 +78,12 @@ struct PageSelectorButton: View {
                 profile.weAreInSelector = whoWeAre
             }
         }) {
-            //            VStack(spacing: (profile.weAreInSelector == whoWeAre) ? 5 : 0)
             VStack
             {
                 Image.default(String(describing: whoWeAre) + ((profile.weAreInSelector == whoWeAre) ? "Material" : ""))
                     .frame(height: profile.proficientUser ? 50 : 40)
                     .shadow(radius: 10)
+                // MARK: Showing the description even if you're a proficient user
                 if !profile.proficientUser {
                     ShinyText(text: whoWeAre.descChinese, font: (profile.weAreInSelector == whoWeAre) ? .DefaultChineseFont : .SourceHanSansLight, size: 14, textColor: Color("MediumLime"), shadowColor: Color.black.opacity(0))
                 }

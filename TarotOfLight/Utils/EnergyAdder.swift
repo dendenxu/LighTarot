@@ -68,7 +68,7 @@ struct EnergyAdderView: View {
 
 struct LongPressButtonStyle: PrimitiveButtonStyle {
     var color = Color.red // The progress bar color
-    var timeToFulfill: Double = 0.3 // The time interval in which the progress bar will be filled
+    var timeToFulfill: Double = 0.2 // The time interval in which the progress bar will be filled
     var timeInterval: Double = 0.001 // The time interval granularity, specifically, the timer's fire rate's reciprocal
     var maxProgress: CGFloat = 1 // Beginning from zero, the value to reach for the progresss variable
     var lineWidth: CGFloat = 25

@@ -76,3 +76,59 @@ extension NSNotification {
     static let DragCancel = NSNotification.Name.init("LongPressCancel")
     static let PagerTapped = NSNotification.Name.init("PaggerTapped")
 }
+
+func randomPositionInCircle(radius: CGFloat) -> CGSize {
+    let randRadius = CGFloat.random(in: 0..<radius)
+    let randAngle = CGFloat.random(in: 0..<2 * CGFloat.pi)
+    let x = randRadius * cos(randAngle)
+    let y = randRadius * sin(randAngle)
+    return CGSize(width: x + radius, height: y + radius)
+}
+
+func randomPositionAroundCircle(radius: CGFloat) -> CGSize {
+    print("Getting Radius: \(radius)")
+    let randAngle = CGFloat.random(in: 0..<2 * CGFloat.pi)
+    let x = radius * cos(randAngle)
+    let y = radius * sin(randAngle)
+
+    return CGSize(width: x + radius, height: y + radius)
+}
+
+func randomPositionInDoubleRectangle(size: CGSize) -> CGSize {
+//    print("We're randomly generating size for bounds: \(size.width), \(size.height)")
+    return CGSize(width: 2 * size.width * CGFloat.random(in: 0..<1) - size.width, height: 2 * size.height * CGFloat.random(in: 0..<1) - size.height)
+}
+
+func distance(s1: CGSize, s2: CGSize) -> CGFloat {
+    return sqrt((s1.width - s2.width) * (s1.width - s2.width) + (s1.height - s2.height) * (s1.height - s2.height))
+}
+
+func adjustSize(toAdjust: CGSize, scale: CGFloat = 1.0, offset: CGFloat = 30) -> CGSize {
+    return toAdjust * scale + CGSize(width: toAdjust.width / toAdjust.distance * offset, height: toAdjust.height / toAdjust.distance * offset)
+//    return toAdjust
+}
+
+extension CGSize {
+    init(p: CGPoint) {
+        self = CGSize(width: p.x, height: p.y)
+    }
+    static func + (s1: CGSize, s2: CGSize) -> CGSize {
+        return CGSize(width: s1.width + s2.width, height: s1.height + s2.height)
+    }
+    static func * (s: CGSize, scale: CGFloat) -> CGSize {
+        return CGSize(width: s.width * scale, height: s.height * scale)
+    }
+    static func - (s1: CGSize, s2: CGSize) -> CGSize {
+        return CGSize(width: s1.width - s2.width, height: s1.height - s2.height)
+    }
+
+    var distance: CGFloat {
+        sqrt(self.width * self.width + self.height * self.height)
+    }
+}
+
+extension CGPoint {
+    var distance: CGFloat {
+        sqrt(self.x * self.x + self.y * self.y)
+    }
+}

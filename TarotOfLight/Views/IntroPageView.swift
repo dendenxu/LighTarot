@@ -21,6 +21,8 @@ struct ThirdIntroPage: View {
     var onMe: Bool = true
     @EnvironmentObject var profile: LighTarotModel
     let plantRadius = 250 / 414 * .ScreenWidth
+
+    @State var buttonBounceMax: Bool = true
     var body: some View {
         ZStack {
             fullScreenBG
@@ -50,6 +52,8 @@ struct ThirdIntroPage: View {
 
                 AnimatingPlant(isFull: false, onMe: onMe, grownAnimating: .constant(true)).frame(width: plantRadius, height: plantRadius)
 
+
+                // The false progress bar
                 HStack(spacing: 0) {
                     Button(action: {
                         withAnimation(springAnimation) {
@@ -69,6 +73,33 @@ struct ThirdIntroPage: View {
                         .frame(width: 150, height: 25)
                         .padding()
                         .offset(x: -10)
+                }
+
+
+                // The SHOULD USE button to enter the mainPage
+
+
+                if onMe {
+                    Button(action: {
+                        withAnimation(springAnimation) {
+                            profile.weAreInGlobal = .selector
+                        }
+                    }) {
+                        ShinyText(text: "进入卜光世界……", font: .SourceHanSansHeavy, size: 16, textColor: Color("MediumLime"), shadowColor: .white)
+                            .padding()
+                            .background(
+                                Capsule()
+                                    .strokeBorder(style: StrokeStyle(lineWidth: 2))
+                                    .foregroundColor(Color("MediumLime"))
+                                    .shadow(color: Color("MediumLime"), radius: 10)
+                            )
+                            .scaleEffect(buttonBounceMax ? 1.1 : 1)
+                            .onAppear {
+                                withAnimation(shineAnimationConstant.repeatForever(autoreverses: true).speed(0.5)) {
+                                    buttonBounceMax.toggle()
+                                }
+                        }
+                    }
                 }
             }
         }

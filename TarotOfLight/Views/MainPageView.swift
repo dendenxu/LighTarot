@@ -92,7 +92,7 @@ struct MainPageView: View {
                         .frame(width: .ScreenWidth, height: .ScreenHeight * 2)
                         .scaledToFit()
                         .scaleEffect(tideScale)
-                        .offset(y: .ScreenHeight)
+                        .offset(y: .ScreenHeight + 50) // MARK: Magic value
                         .offset(y: -.ScreenHeight * (CGFloat(progress)) / 100)
                         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                             print("Moving back to the foreground!")
