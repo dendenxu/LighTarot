@@ -46,6 +46,8 @@ struct ContentView: View {
                 RoundedRectangle(cornerRadius: .ScreenCornerRadius).foregroundColor(Color("LightGray"))
                 IntroPageView()
                     .transition(scaleTransition)
+            } else if (profile.weAreInGlobal == .debugger) {
+                NewCardView()
             }
         }
             .frame(width: .ScreenWidth, height: .ScreenHeight)
@@ -64,6 +66,7 @@ enum GlobalViewSelection: CustomStringConvertible {
         case .predictLight: return "predictLight"
         case .arCamera: return "arCamera"
         case .introduction: return "introduction"
+        case .debugger: return "debugger"
         }
     }
 
@@ -71,4 +74,5 @@ enum GlobalViewSelection: CustomStringConvertible {
     case predictLight
     case arCamera
     case introduction
+    case debugger
 }

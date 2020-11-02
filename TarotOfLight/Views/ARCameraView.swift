@@ -38,43 +38,54 @@ struct ARCameraView: UIViewRepresentable {
                 child.transform.rotation = simd_quatf(angle: .pi / 2, axis: SIMD3<Float>(0, 1, 0))
                 print("Getting child: \(child)")
             }
-            let physics = Physics()
-            let kinematicComponent: PhysicsBodyComponent = physics.physicsBody!
-            let motionComponent: PhysicsMotionComponent = physics.physicsMotion!
-            if let evilEye = anchor.evilEye {
 
-                let evilEyeClone = evilEye.clone(recursive: true)
-//                anchor.addChild(evilEyeClone)
-
-                evilEye.components.set(kinematicComponent)
-                evilEye.components.set(motionComponent)
-                print(evilEye)
-                if let evilEye = evilEye as? Entity & HasCollision {
-                    arView.installGestures(.all, for: evilEye)
-                    print("Has Collision")
-                }
-
-                if let evilEye = evilEyeClone as? Entity & HasCollision {
-                    arView.installGestures(.all, for: evilEye)
-                    print("Has Collision")
-                }
-
-            }
-
-
-            if let theCard = anchor.theCard as? Entity & HasCollision {
-                arView.installGestures(.all, for: theCard)
-            }
-
-
-            if let theBox = anchor.theBox as? Entity & HasCollision {
-                arView.installGestures(.all, for: theBox)
-            }
-//            if let anchor = anchor as? HasCollision & Entity {
-//                print("The anchor has collision")
-//                arView.installGestures(.all, for: anchor)
-//            }
-
+//            #if PREVIEW
+//            #else
+////            let physics = Physics()
+////            let kinematicComponent: PhysicsBodyComponent = physics.physicsBody!
+////            let motionComponent: PhysicsMotionComponent = physics.physicsMotion!
+//                if let evilEye = anchor.evilEye {
+//
+////                let evilEyeClone = evilEye.clone(recursive: true)
+////                let parentEntity = ModelEntity()
+////                parentEntity.addChild(evilEye)
+////                anchor.addChild(evilEyeClone)
+//
+////                evilEye.components.set(kinematicComponent)
+////                evilEye.components.set(motionComponent)
+//                    print(evilEye)
+//
+////                arView.installGestures(.all, for: parentEntity)
+//
+////                evilEye.setParent(parentEntity)
+////                anchor.addChild(parentEntity)
+//
+//                    if let evilEye = evilEye as? Entity & HasCollision {
+//                        arView.installGestures(.all, for: evilEye)
+//                        print("Has Collision")
+//                    }
+//
+////                if let evilEye = evilEyeClone as? Entity & HasCollision {
+////                    arView.installGestures(.all, for: evilEye)
+////                    print("Has Collision")
+////                }
+//
+//                }
+//
+//
+//                if let theCard = anchor.theCard as? Entity & HasCollision {
+//                    arView.installGestures(.all, for: theCard)
+//                }
+//
+//
+//                if let theBox = anchor.theBox as? Entity & HasCollision {
+//                    arView.installGestures(.all, for: theBox)
+//                }
+////            if let anchor = anchor as? HasCollision & Entity {
+////                print("The anchor has collision")
+////                arView.installGestures(.all, for: anchor)
+////            }
+//            #endif
             arView.scene.anchors.append(anchor)
 
 
