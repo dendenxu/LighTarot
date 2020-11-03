@@ -75,6 +75,8 @@ extension NSNotification {
     static let LongPressCancel = NSNotification.Name.init("LongPressCancel")
     static let DragCancel = NSNotification.Name.init("LongPressCancel")
     static let PagerTapped = NSNotification.Name.init("PaggerTapped")
+    static let GetWidthRequest = NSNotification.Name.init("GetWidthRequest")
+    static let GetWidthResponse = NSNotification.Name.init("GetWidthResponse")
 }
 
 func randomPositionInCircle(radius: CGFloat) -> CGSize {

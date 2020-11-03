@@ -22,16 +22,19 @@ struct ContentView: View {
                 else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
                 else if profile.weAreInSelector == .minePage { Color("LightGray") }
                 SelectorView()
-//                    .frame(width: .ScreenWidth, height: .ScreenHeight)
-                .transition(scaleTransition)
+                    .transition(scaleTransition)
+
+                if (profile.shouldShowNewCardView) {
+                    NewCardView()
+                        .frame(width: .ScreenWidth, height: .ScreenHeight)
+                        .transition(.fade)
+                }
+
             } else if (profile.weAreInGlobal == .predictLight) {
                 if (profile.weAreIn == .animation) { Color("MediumDarkPurple") }
                 else if (profile.weAreIn == .category) { Color("LightMediumDarkPurple") }
                 PredictLightView()
-                // BUG: When the frame is set here, this subView will be placed a mysterious offset
-                // I ... I don't know how to fix it, temporarity I'm just ignoring it.
-//                    .frame(width: .ScreenWidth, height: .ScreenHeight)
-                .transition(scaleTransition)
+                    .transition(scaleTransition)
             } else if (profile.weAreInGlobal == .arCamera) {
                 ARCameraView()
                     .transition(scaleTransition)

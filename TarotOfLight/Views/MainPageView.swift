@@ -56,7 +56,7 @@ struct MainPageView: View {
                 .nanosecond
             ], from: Date())
 
-
+    @State var debugTimer: Timer?
     let plantRadius = 350 / 414 * .ScreenWidth
     var timer: Timer {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
@@ -198,9 +198,10 @@ struct MainPageView: View {
                             }
                         }.frame(width: 100, height: 125)
                     }
-                }.zIndex(1) // So that daily prediction won't overlay with the shadow
+                }
+                    .zIndex(1) // So that daily prediction won't overlay with the shadow
                 .padding(.top, 90 - 20 * CGFloat(progress) / 100)
-                .padding(.bottom, 30)
+                    .padding(.bottom, 30)
 
 
                 Button(action: {
@@ -208,12 +209,35 @@ struct MainPageView: View {
                         progress -= 50
                     }
                 }) {
-                    AnimatingPlant(isFull: isFull, onMe: profile.shouldShowEnergy, grownAnimating: $grownAnimating)
-                        .zIndex(0.5)
-                        .frame(width: plantRadius, height: plantRadius)
+
+                    ZStack {
+                        AnimatingPlant(isFull: isFull, onMe: profile.shouldShowEnergy, grownAnimating: $grownAnimating)
+                            .zIndex(0.5)
+                            .frame(width: plantRadius, height: plantRadius)
+                            .padding(.bottom, 20 + 10 * CGFloat(progress) / 100)
+                        // MARK: Just using 233 as fixed value, hoping it could work
+//                            .background(
+//                                ZStack {
+//                                    GeometryReader {
+//                                        geo in
+//                                        Spacer()
+//                                            .onAppear {
+//                                                debugTimer?.invalidate()
+//                                                debugTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+//                                                    print("Currently getting size: \(geo.size) and position: \(geo.frame(in: .global)) and local: \(geo.frame(in: .local))")
+//                                                }
+//                                            }
+//                                    }
+//                                }
+//                            )
+                    }
+
+//                        .overlay()
+
+
                     // FIXME: Guess this would be a BUG of SwiftUI right? When using progress: Double directly, the Swift compiler cannot determine the return value of the whole stack(which is quite common in SwiftUI bug)
                     // FIXME: When we're using too large an offset, like .offset(y: CGFloat(progress)) directly, the Swift compiler crashes, returning non-zero value
-                    .padding(.bottom, 20 + 10 * CGFloat(progress) / 100)
+
                 }.buttonStyle(LongPressButtonStyle(color: .red))
 
 

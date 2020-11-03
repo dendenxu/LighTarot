@@ -12,16 +12,15 @@ import SwiftyJSON
 import SwiftUI
 class LighTarotModel: ObservableObject {
     // MARK: Debugger view enabled?
-    let debugger = true
+    let showDebuggerAtLaunch = false
     // Some animation configuration
     // Currently not used in the code, for lottie animation, we're using builtin settings instead
     @Published var shouldShowEnergy = false
     @Published var sceneAtForeground = true
     @Published var selectorShouldChange = false
+    @Published var shouldShowNewCardView: Bool = false
 
-    var selectorIsChanged: Bool {
-        proficientUser && selectorShouldChange
-    }
+    var selectorIsChanged: Bool { proficientUser && selectorShouldChange }
 
     // Navigation data, updating the view by selecting different enum value for these
     @Published var lockingSelection: LockingSelection = .unlocked
@@ -29,6 +28,7 @@ class LighTarotModel: ObservableObject {
     @Published var weAreInGlobal: GlobalViewSelection = .debugger
     @Published var weAreInCategory: CategorySelection = .love
     @Published var weAreInSelector: SelectorSelection = .mainPage
+
 
     // Information about the current user
     @Published var name = "Default Name"
@@ -44,9 +44,17 @@ class LighTarotModel: ObservableObject {
     var energy: Double { // Max: 100.0 as Double type
         get { actualEnergy }
         set {
-            if newValue > 100 { actualEnergy = 100 }
+            if newValue > 100 {
+                actualEnergy = 100
+                withAnimation(springAnimation) {
+                    shouldShowNewCardView = true
+                }
+            }
             else if newValue < 0 { actualEnergy = 0 }
-            else { actualEnergy = newValue }
+            else {
+                actualEnergy = newValue
+//                shouldShowNewCardView = false
+            }
         }
     }
     @Published var actualEnergy: Double = 15.0
@@ -106,7 +114,7 @@ class LighTarotModel: ObservableObject {
     func prepareView() {
         lockingSelection = .unlocked
         weAreIn = .category
-        weAreInGlobal = debugger ? .debugger : (proficientUser ? .selector : .introduction)
+        weAreInGlobal = showDebuggerAtLaunch ? .debugger : (proficientUser ? .selector : .introduction)
         weAreInCategory = .love
         weAreInSelector = .mainPage
     }
