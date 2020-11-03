@@ -46,9 +46,10 @@ class LighTarotModel: ObservableObject {
         set {
             if newValue > 100 {
                 actualEnergy = 100
-                withAnimation(springAnimation) {
-                    shouldShowNewCardView = true
-                }
+                // MARK: Or should I
+//                withAnimation(springAnimation) {
+//                    shouldShowNewCardView = true
+//                }
             }
             else if newValue < 0 { actualEnergy = 0 }
             else {

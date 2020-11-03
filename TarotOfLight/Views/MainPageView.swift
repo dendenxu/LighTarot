@@ -246,7 +246,8 @@ struct MainPageView: View {
                 if (isFull) {
                     Button(action: {
                         withAnimation(springAnimation) {
-                            progress -= 50
+//                            progress -= 50
+                            profile.shouldShowNewCardView = true
                         }
                     }) {
                         ShinyText(text: "解锁新牌阵").frame(width: 100, height: 100)

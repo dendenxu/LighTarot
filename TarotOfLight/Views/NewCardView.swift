@@ -24,9 +24,8 @@ struct NewCardView: View {
     @State var circleBounceAtMax = false
 
     var body: some View {
-        ZStack(alignment: .top) {
-            Color("LightMediumDarkPurple").opacity(0.8)
-            ZStack(alignment: .center) {
+        ZStack(alignment: .center) {
+            if profile.shouldShowNewCardView {
                 VStack {
                     HStack(spacing: 0) {
                         ShinyText(text: "解锁", font: .DefaultChineseFont, size: fontSize, textColor: Color("LightPurple"), shadowColor: Color.gray.opacity(0.3))
@@ -35,7 +34,8 @@ struct NewCardView: View {
                     }
                     ShinyText(text: "点击屏幕中央，查看新牌阵", font: .DefaultChineseFont, size: smallFontSize, textColor: .white)
                 }
-                    .offset(y: -plantRadius / 5 * 3)
+                    .offset(y: profile.shouldShowNewCardView ? -plantRadius / 5 * 3: 0)
+                    .transition(.fade)
 
                 Button(action: {
                     withAnimation(springAnimation) {
@@ -85,12 +85,10 @@ struct NewCardView: View {
                                 circleBounceAtMax.toggle()
                             }
                     }
-                } // Button
-//                .buttonStyle(ShrinkButtonStyle())
-            } // Outer ZStack
-            .frame(width: plantRadius, height: plantRadius)
-                .padding(.top, 233)
-        }
+                }.transition(scaleTransition)
+            }
+        }.frame(width: plantRadius, height: plantRadius)
+            .padding(.top, 233)
     }
 }
 

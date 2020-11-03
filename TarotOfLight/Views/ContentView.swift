@@ -25,9 +25,11 @@ struct ContentView: View {
                     .transition(scaleTransition)
 
                 if (profile.shouldShowNewCardView) {
+                    Color("LightMediumDarkPurple").opacity(0.8)
+                        .frame(width: .ScreenWidth, height: .ScreenHeight) }
+                VStack {
                     NewCardView()
-                        .frame(width: .ScreenWidth, height: .ScreenHeight)
-                        .transition(.fade)
+                    Spacer()
                 }
 
             } else if (profile.weAreInGlobal == .predictLight) {
