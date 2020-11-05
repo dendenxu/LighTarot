@@ -8,14 +8,17 @@ with open("com.apple.RCFoundation.Project", "rb") as json_file:
 behaviors = json_obj["__content"][0]["scenes"][0]["__content"][0]["behaviors"]
 objects = json_obj["__content"][0]["scenes"][0]["__content"][0]["overrides"]["children"]
 # Whether this key is what we need
+
+
 def action2config(action):
     return action["__content"][0]["configurations"][0]["__content"][0]["configurationBox"]["configuration"]
+
 
 def behav2action(behav, action):
     return behav["__content"][0]["actionGroups"][action]
 
 
-def keys_with_usdz_name(name):
+def obj_with_usdz_name(name):
     def has_name(key, name):
         try:
             return objects[key]["overrides"]["children"]["USDScene"]["overrides"]["arguments"][2][1]["value"].endswith(name)
@@ -25,11 +28,11 @@ def keys_with_usdz_name(name):
     # This is used to access the content inside the rcproject, not runtime
     keys = [key for key in objects.keys() if has_name(key, name)]
     # Note that there's a runtime identifier to be used
-    runtime_keys = [objects[key]["overrides"]["runtimeAttributes"][0][1]["value"] for key in objects.keys() if has_name(key, name)]
+    runtime_keys = [objects[key]["overrides"]["runtimeAttributes"][0][1]["value"] for key in keys]
     return keys, runtime_keys
 
 
-def keys_with_name(name):
+def obj_with_name(name):
     def has_name(key, name):
         try:
             my_name = objects[key]["overrides"]["runtimeAttributes"][1][1]["value"]
@@ -39,12 +42,35 @@ def keys_with_name(name):
             # print(e)
             return False
     keys = [key for key in objects.keys() if has_name(key, name)]
-    runtime_keys = [objects[key]["overrides"]["runtimeAttributes"][0][1]["value"] for key in objects.keys() if has_name(key, name)]
+    runtime_keys = [objects[key]["overrides"]["runtimeAttributes"][0][1]["value"] for key in keys]
     return keys, runtime_keys
 
 
-file_cards, file_cards_runtime = keys_with_usdz_name("card.usdz")
-name_cards, name_cards_runtime = keys_with_name("Card")
+def behav_custom_judge(name, func):
+    # Return the index (indices) for the behaviors of a specific name
+    def has_name(index, name):
+        try:
+            my_name = behaviors[index]["__content"][0]["name"]
+            # print(f"DEBUG: my_name: {my_name}, name: {name}")
+            return func(my_name, name)
+        except Exception as e:
+            # print(e)
+            return False
+
+    indices = [i for i in range(len(behaviors)) if has_name(i, name)]
+    return indices
+
+
+def behav_with_name(name):
+    return behav_custom_judge(name, lambda l, r: l == r)
+
+def behav_starts_with_name(name):
+    return behav_custom_judge(name, lambda l, r: l.startswith(r))
+
+
+file_cards, file_cards_runtime = obj_with_usdz_name("card.usdz")
+name_cards, name_cards_runtime = obj_with_name("Card")
+name_behavs = behav_starts_with_name("cardOperation")
 
 # Get orientation data and translation data from the first behavior
 # locations = [[-18.805461883544922, -2.7745513916015625, -0.000110626220703125],
