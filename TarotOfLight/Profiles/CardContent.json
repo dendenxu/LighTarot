@@ -3,30 +3,48 @@
         "text": "爱之🌟占卜法",
         "energy": 50,
         "description": "过去、现在和未来状况的占卜",
-        "locked": false
+        "locked": false,
+        "lockedImageName": "cardBackH",
+        "unlockedImageName": "having"
+    },
+    {
+        "text": "恋人金字塔❤️",
+        "energy": 50,
+        "description": "过去、现在和未来状况的占卜",
+        "locked": true,
+        "lockedImageName": "cardBackH",
+        "unlockedImageName": "newCard"
     },
     {
         "text": "吉普赛十字法",
         "energy": 20,
         "description": "过去、现在和未来状况的占卜",
-        "locked": true
+        "locked": true,
+        "lockedImageName": "cardBackH",
+        "unlockedImageName": "having"
     },
     {
         "text": "六芒🌟占卜法",
         "energy": 30,
         "description": "过去、现在和未来状况的占卜",
-        "locked": true
+        "locked": true,
+        "lockedImageName": "cardBackH",
+        "unlockedImageName": "having"
     },
     {
         "text": "灿烂的❤️",
         "energy": 100,
         "description": "过去、现在和未来状况的占卜",
-        "locked": true
+        "locked": true,
+        "lockedImageName": "cardBackH",
+        "unlockedImageName": "having"
     },
     {
-        "text": "时间之流",
+        "text": "时间之流⌚️",
         "energy": 10,
         "description": "过去、现在和未来状况的占卜",
-        "locked": true
+        "locked": true,
+        "lockedImageName": "cardBackH",
+        "unlockedImageName": "having"
     }
 ]

@@ -23,21 +23,24 @@ struct LightText: View {
 
 }
 struct CardContent {
+    // default values are already here
     var text = "时间之流"
     var description = "过去、现在和未来状况的占卜"
     var energy: Double = 50
     var locked = false
+    var lockedImageName = "cardBackH"
+    var unlockedImageName = "having"
 
-    static let `default` = CardContent(text: "时间之流", description: "过去、现在和未来状况的占卜", energy: 50, locked: false)
+    static let `default` = CardContent()
 }
 struct Card: View {
-    @State var cardContent: CardContent
+    let cardContent: CardContent
     let locked: Bool
     @EnvironmentObject var profile: LighTarotModel
     var imageName: String {
         get {
-            if locked { return "cardBackH" }
-            else { return (cardContent.locked) ? "Gray" : "having" }
+            if locked { return cardContent.lockedImageName }
+            else { return (cardContent.locked) ? "Gray" : cardContent.unlockedImageName }
         }
     }
     var textColor: Color { get { return (locked) ? Color("LightPink") : Color("LightGray"); } }
@@ -59,7 +62,7 @@ struct Card: View {
                 Image.default(imageName)
                     .shadow(color: imageShadowColor, radius: 5)
                 if !cardContent.locked || locked {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 5) {
                         LightText(text: cardContent.text, font: .DefaultChineseFont, size: 20, textColor: textColor, shadowColor: shadowColor)
                             .padding(.top, 20).padding(.leading, 20)
                         HStack {
@@ -87,12 +90,6 @@ struct Card: View {
 
 struct CardPageView: View {
     @EnvironmentObject var profile: LighTarotModel
-    var lockedTexts: [CardContent] {
-        var lockedContents = [CardContent]()
-        for item in profile.cardContents { if (item.locked) { lockedContents.append(item) } }
-        return lockedContents
-    }
-
     @State var currentIndex = 0
     @State var percentatges: [CGFloat] = [0, 1]
     let cardPageCount = 2
@@ -184,7 +181,7 @@ struct CardPageView: View {
                         .frame(width: .ScreenWidth)
                         .zIndex(0.5)
 
-                    FullScroll(texts: lockedTexts, locked: true)
+                    FullScroll(texts: profile.lockedTexts, locked: true)
                         .frame(width: .ScreenWidth)
                         .zIndex(0.5)
                 }

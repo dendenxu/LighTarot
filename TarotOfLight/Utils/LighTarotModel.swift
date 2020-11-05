@@ -79,6 +79,27 @@ class LighTarotModel: ObservableObject {
     // Defines whether user has unlocked certain cards
     @Published var cardInfos: [CardInfo] = [CardInfo]()
     @Published var cardContents: [CardContent] = [CardContent]()
+    var lockedTexts: [CardContent] {
+
+        var lockedContents = [CardContent]()
+        for item in cardContents { if (item.locked) { lockedContents.append(item) } }
+        return lockedContents
+
+    }
+
+    var firstLocked: Int {
+        for index in 0..<cardContents.count {
+            if cardContents[index].locked {
+                return index
+            }
+        }
+        return 0
+    }
+
+    var hasLocked: Bool {
+        let locked = firstLocked
+        return cardContents[locked].locked // traversing in firstLocked, if firstLocked is unlocked, there's no locked left
+    }
 
     // Convenience variable for loading JSON data
     private var json = JSON()
@@ -120,9 +141,38 @@ class LighTarotModel: ObservableObject {
         weAreInSelector = .mainPage
     }
 
+    func saveCardContentToFile(filename: String = "CardContent.json") {
+        print("STUB: Should implement saving cardContent here!")
+        let fileURL = LighTarotModel.getDocumentDirectory.appendingPathComponent(filename)
+        var jsonArray = [JSON]() // MARK: Or should I use array?
+        for item in cardContents {
+            jsonArray.append(JSON(
+                [
+                    "text": item.text,
+                    "energy": item.energy,
+                    "description": item.description,
+                    "locked": item.locked,
+                    "lockedImageName": item.lockedImageName,
+                    "unlockedImageName": item.unlockedImageName
+                ]
+            ))
+        }
+        let json = JSON(jsonArray)
+        do {
+            try json.rawData().write(to: fileURL)
+            print("Done! Card content data is saved now.")
+        } catch {
+            print("Ah... Something went wrong. \(error)")
+        }
+    }
+
     func loadCardContentFromFile(filename: String = "CardContent.json") {
+        var fileURL = LighTarotModel.getDocumentDirectory.appendingPathComponent(filename)
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
+            fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: filename, ofType: "") ?? filename)
+        }
         // MARK: More to be added here for loading information from the CardInfo.json profile
-        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: filename, ofType: "") ?? filename)
+//        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: filename, ofType: "") ?? filename)
         do {
             json = try JSON(data: Data(contentsOf: fileURL))
             print("CardInfo.json is successfully loaded from \(fileURL)")
@@ -135,7 +185,9 @@ class LighTarotModel: ObservableObject {
                     text: entry["text"].string ?? CardContent.default.text,
                     description: entry["description"].string ?? CardContent.default.description,
                     energy: entry["energy"].double ?? CardContent.default.energy,
-                    locked: entry["locked"].bool ?? CardContent.default.locked
+                    locked: entry["locked"].bool ?? CardContent.default.locked,
+                    lockedImageName: entry["lockedImageName"].string ?? CardContent.default.lockedImageName,
+                    unlockedImageName: entry["unlockedImageName"].string ?? CardContent.default.unlockedImageName
                 )
             )
         }
@@ -143,8 +195,11 @@ class LighTarotModel: ObservableObject {
 
     // Lood card info, like a full card description and some other things
     func loadCardInfoFromFile(filename: String = "CardInfo.json") {
+        var fileURL = LighTarotModel.getDocumentDirectory.appendingPathComponent(filename)
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
+            fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: filename, ofType: "") ?? filename)
+        }
         // MARK: More to be added here for loading information from the CardInfo.json profile
-        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: filename, ofType: "") ?? filename)
         do {
             json = try JSON(data: Data(contentsOf: fileURL))
             print("CardInfo.json is successfully loaded from \(fileURL)")
@@ -220,7 +275,7 @@ class LighTarotModel: ObservableObject {
     }
 
     // Developer command for deleteing the user profile to debug
-    static func deleteFile(filename: String = "profile.json") {
+    static func deleteDocumentFile(filename: String = "profile.json") {
         let fileURL = getDocumentDirectory.appendingPathComponent(filename)
         do {
             try FileManager.default.removeItem(at: fileURL)

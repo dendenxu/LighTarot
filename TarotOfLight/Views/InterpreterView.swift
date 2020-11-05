@@ -224,7 +224,8 @@ struct InterpreterView: View {
                     Button {
                         print("STUB: Should implement sharing the interpretation result here")
                         print("Currently we're using this to delete the user profile")
-                        LighTarotModel.deleteFile()
+                        LighTarotModel.deleteDocumentFile(filename: "profile.json")
+                        LighTarotModel.deleteDocumentFile(filename: "CardContent.json")
                     } label: {
                         Image.default("share")
                             .frame(width: 20)
@@ -234,6 +235,7 @@ struct InterpreterView: View {
                         print("STUB: Should implement downloading the interpretation result here")
                         print("Currently we're using this to save things to user document profile so that no refreshing is needed")
                         profile.saveUserInfoToFile()
+                        profile.saveCardContentToFile()
                     } label: {
                         Image.default("download")
                             .frame(width: 20)

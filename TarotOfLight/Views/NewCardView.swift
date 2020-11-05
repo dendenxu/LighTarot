@@ -19,8 +19,6 @@ struct NewCardView: View {
     let imageWidth: CGFloat = 60 / 414 * .ScreenWidth
     let fontSize: CGFloat = 20
     let smallFontSize: CGFloat = 14
-
-
     @State var circleBounceAtMax = false
 
     var body: some View {
@@ -29,7 +27,7 @@ struct NewCardView: View {
                 VStack {
                     HStack(spacing: 0) {
                         ShinyText(text: "解锁", font: .DefaultChineseFont, size: fontSize, textColor: Color("LightPurple"), shadowColor: Color.gray.opacity(0.3))
-                        ShinyText(text: "恋人金字塔", font: .DefaultChineseFont, size: fontSize, textColor: Color("MediumLime"), shadowColor: Color.gray.opacity(0.3))
+                        ShinyText(text: profile.cardContents[profile.firstLocked].text, font: .DefaultChineseFont, size: fontSize, textColor: Color("MediumLime"), shadowColor: Color.gray.opacity(0.3))
                         ShinyText(text: "排阵！", font: .DefaultChineseFont, size: fontSize, textColor: Color("LightPurple"), shadowColor: Color.gray.opacity(0.3))
                     }
                     ShinyText(text: "点击屏幕中央，查看新牌阵", font: .DefaultChineseFont, size: smallFontSize, textColor: .white)
@@ -37,13 +35,18 @@ struct NewCardView: View {
                     .offset(y: profile.shouldShowNewCardView ? -plantRadius / 5 * 3: 0)
                     .transition(.fade)
 
+                // The whole section is selected as a big button to navigate directly to .predictLight view
+                // And we should enable our new card, and save things to json file here
                 Button(action: {
+                    profile.cardContents[profile.firstLocked].locked = false
+                    
                     withAnimation(springAnimation) {
                         profile.shouldShowNewCardView = false
                         profile.weAreInSelector = .cardPage
                         profile.weAreInGlobal = .predictLight
                         profile.weAreIn = .category
                     }
+
                 }) {
                     ZStack {
                         Circle()
@@ -53,6 +56,7 @@ struct NewCardView: View {
                                 withAnimation(Animation.linear(duration: 1).repeatForever(autoreverses: false)) {
                                     atMaxAngle.toggle()
                                 }
+                                if !profile.hasLocked { print("WARNING: No locked card here!") }
                         }
                         Circle()
                             .strokeBorder(style: StrokeStyle(lineWidth: 4, lineCap: .round, dash: [4, 8]))
