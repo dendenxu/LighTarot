@@ -1,3 +1,4 @@
+import numpy as np
 import json
 
 # Load from rcproject file, which is a json file
@@ -64,6 +65,7 @@ def behav_custom_judge(name, func):
 def behav_with_name(name):
     return behav_custom_judge(name, lambda l, r: l == r)
 
+
 def behav_starts_with_name(name):
     return behav_custom_judge(name, lambda l, r: l.startswith(r))
 
@@ -71,6 +73,70 @@ def behav_starts_with_name(name):
 file_cards, file_cards_runtime = obj_with_usdz_name("card.usdz")
 name_cards, name_cards_runtime = obj_with_name("Card")
 name_behavs = behav_starts_with_name("cardOperation")
+
+
+def update_action_base_on(base_behavior, focused_action):
+    # Update the last call's relative location, let's first inspect them
+    # The third of them is the last one
+    # Here if we use -1, for the first behavior, we'll errornously try to get the location attributes of the "bounce" action
+
+    # focused_action = 3 # The focused action in the action group of a behavior
+    # base_behavior = 0 # The first one is the base here
+
+    new_location = action2config(behav2action(behaviors[name_behavs[base_behavior]], focused_action))["location"]
+    new_orientation = action2config(behav2action(behaviors[name_behavs[base_behavior]], focused_action))["orientation"]
+    for index in range(len(name_behavs)):
+        print(f"Behavior starting with cardOperation, index: {index}")
+        print(f"Location: {action2config(behav2action(behaviors[index], focused_action))['location']}")
+        print(f"Orientation: {action2config(behav2action(behaviors[index], focused_action))['orientation']}")
+        action2config(behav2action(behaviors[index], focused_action))['location'] = new_location
+        action2config(behav2action(behaviors[index], focused_action))['orientation'] = new_orientation
+        print(f"New location: {action2config(behav2action(behaviors[index], focused_action))['location']}")
+        print(f"New orientation: {action2config(behav2action(behaviors[index], focused_action))['orientation']}")
+        print("")
+
+
+action_indices = list(range(1, 4))  # three actions to copy
+base_behavior = 0
+for index in action_indices:
+    print(f"Update action: {index}")
+    update_action_base_on(base_behavior, index)
+
+# The orientation array is a quaternion, laying in 4d space, stating the rotation
+# I'm guess Apple is is using format [x sin(0), y sin(0), z sin(0), cos(0)], here we use 0 to represent theta
+# The y axis is the one actually pointing up
+# So our interpolation should like
+epsilon = 1e-7
+# start_ori = np.array([epsilon, epsilon, epsilon, 1-3*epsilon**2]) # let's just not use a zero starter, avoiding deviding by zero
+start_ori = np.array([-1.12839841e-08,  2.58818920e-01, -4.21123740e-08,  9.65925826e-01])
+end_ori = np.array([1.12839960e-08, -2.58819193e-01,  4.21124184e-08,  9.65925753e-01])
+
+
+def deform_ori(ori, epsilon=1e-7):
+    # epsilon = 1e-7 # a small number should not be used to represent sign
+    signs = [1 if abs(e) <= epsilon else (-1 if e < 0 else 1) for e in ori[0:-1]]  # except the last one
+    sign = np.prod(signs)
+    theta = sign * np.arccos(ori[3])  # Getting the angle, assuming a positive axis, so the orientation can be
+    # in the previous example, we should get a -15 degress because we're specifying a -30 degree rotation around the y axis
+    the_sin = np.sin(theta)
+    axis = ori[0:-1]/the_sin
+    return theta * 2, axis
+
+
+def form_ori(theta, axis):
+    theta /= 2
+    return np.concatenate([axis * np.sin(theta), [np.cos(theta)]])
+
+
+start_theta, start_axis = deform_ori(start_ori, epsilon) # Overlooking the original axis
+end_theta, end_axis = deform_ori(end_ori, epsilon)
+
+granularity = 18
+
+for t in np.linspace(start_theta, end_theta, granularity):
+    print(f"The angle to rotate around the axis {end_axis} is: {t}")
+    print(f"The quaternion formed by it is: {form_ori(t, end_axis)}")
+
 
 # Get orientation data and translation data from the first behavior
 # locations = [[-18.805461883544922, -2.7745513916015625, -0.000110626220703125],
@@ -80,32 +146,27 @@ name_behavs = behav_starts_with_name("cardOperation")
 # orientations = [[8.526512829121202e-13,  0.1736510843038559,  -5.936584557275637e-12,  -0.9848071932792664],
 #                 [-5.1063850037280645e-08,  -0.3420201241970062,  1.4732336239831056e-07,  -0.9396926164627075],
 #                 [4.533262654149439e-12, 5.9117155615240335e-12, -6.650681307757145e-12, -1]]
-
-locations = [action2config(behav2action(behaviors[0], action))["location"] for action in range(1, 4)]
-orientations = [action2config(behav2action(behaviors[0], action))["orientation"] for action in range(1, 4)]
-
-# Update the orientation and translation for all other behaviors
-for behav in range(len(file_cards)):
-    for action in range(1, 4):
-        print(f"Behavior #{behav}, Action #{action}")
-        action2config(behav2action(behaviors[behav], action))["orientation"] = orientations[action-1]
-        action2config(behav2action(behaviors[behav], action))["location"] = locations[action-1]
-
+# locations = [action2config(behav2action(behaviors[0], action))["location"] for action in range(1, 4)]
+# orientations = [action2config(behav2action(behaviors[0], action))["orientation"] for action in range(1, 4)]
+# # Update the orientation and translation for all other behaviors
+# for behav in range(len(name_cards)):
+#     for action in range(1, 4):
+#         print(f"Behavior #{behav}, Action #{action}")
+#         action2config(behav2action(behaviors[behav], action))["orientation"] = orientations[action-1]
+#         action2config(behav2action(behaviors[behav], action))["location"] = locations[action-1]
 # Update the duration of the first action, which is wait in our case
-for behav in range(len(file_cards)):
+for behav in range(len(name_cards)):
     action2config(behav2action(behaviors[behav], 0))["duration"] = 0.05 * (behav)
-
-for behav in range(len(file_cards)):
     print(action2config(behav2action(behaviors[behav], 0))["duration"])
 
 # The cards are arranged in an upside down order
-for index, key in enumerate(file_cards):
-    objects[key]["transform"]["matrix"][13] = (len(file_cards) - index - 1) * 0.005
+for index, key in enumerate(name_cards):
+    objects[key]["transform"]["matrix"][13] = (len(name_cards) - index - 1) * 0.005
 
 # Redefine the affected objects
-for behav in range(len(file_cards_runtime)):
+for behav in range(len(name_cards_runtime)):
     for action in range(1, 4):
-        action2config(behav2action(behaviors[behav], action))["target"] = [file_cards_runtime[behav]]
+        action2config(behav2action(behaviors[behav], action))["target"] = [name_cards_runtime[behav]]
 
 for index, key in enumerate(objects.keys()):
     try:
