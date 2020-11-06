@@ -1,6 +1,7 @@
 import uuid
-import numpy as np
+import copy
 import json
+import numpy as np
 
 # Load from rcproject file, which is a json file
 with open("com.apple.RCFoundation.Project", "rb") as json_file:
@@ -16,8 +17,12 @@ def action2config(action):
     return action["__content"][0]["configurations"][0]["__content"][0]["configurationBox"]["configuration"]
 
 
+def behav2actionGroup(behav):
+    return behav["__content"][0]["actionGroups"]
+
+
 def behav2action(behav, action):
-    return behav["__content"][0]["actionGroups"][action]
+    return behav2actionGroup(behav)[action]
 
 
 def obj_with_usdz_name(name):
@@ -209,7 +214,9 @@ for behav in name_behavs:
 
 # The cards are arranged in an upside down order
 for index, key in enumerate(name_cards):
-    objects[key]["transform"]["matrix"][13] = (len(name_cards) - index - 1) * 0.0005
+    objects[key]["transform"]["matrix"][13] = \
+        (len(name_cards) - index - 1) * 0.0005
+    # index * 0.0005
 
 # Redefine the affected objects
 for behav in range(len(name_cards_runtime)):
@@ -222,8 +229,34 @@ for index, key in enumerate(objects.keys()):
     except:
         continue
 
+
 def upuuid():
     return str(uuid.uuid4()).upper()
+
+
+def change_action(index, the_action):
+    action2config(the_action)["duration"] = 0.05 * (len(name_behavs) - index - 1)
+
+
+def change_transform(index, the_action):
+    action2config(the_action)["location"] = [0, 10, 0]
+    action2config(the_action)["orientation"] = [0, 0, 0, 1]
+
+
+def do_insertion(src, dst, func):
+    for index in name_behavs:
+        print(f"length of behavior #{index} before insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
+        the_action = copy.deepcopy(behav2action(behaviors[index], src))  # the first waiting action
+        the_action["__content"][0]["identifier"] = upuuid()
+        the_action["__content"][0]["configurations"][0]["__content"][0]["identifier"] = upuuid()
+        func(index, the_action)
+        print(the_action)
+        behav2actionGroup(behaviors[index]).insert(dst, the_action)
+        print(f"length of behavior #{index} after insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
+
+
+do_insertion(0, 4, change_action)
+do_insertion(1, 5, change_transform)
 
 # Write to the rcproject file
 with open("com.apple.RCFoundation.Project", "w") as json_file:

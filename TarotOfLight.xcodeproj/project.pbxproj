@@ -83,7 +83,6 @@
 		B9210B172550136A00471E47 /* NewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCardView.swift; sourceTree = "<group>"; };
 		B957B2272542A153007BCC81 /* CardInfo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardInfo.json; sourceTree = "<group>"; };
 		B957B2372542A728007BCC81 /* CardContent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CardContent.json; sourceTree = "<group>"; };
-		B95A386E2547F11C009DC32D /* TarotOfLight.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = TarotOfLight.profdata; sourceTree = "<group>"; };
 		B9624FE82536E893005840DC /* ARCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCameraView.swift; sourceTree = "<group>"; };
 		B962500C2536EA6F005840DC /* RealityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealityKit.framework; path = System/Library/Frameworks/RealityKit.framework; sourceTree = SDKROOT; };
 		B96250102536EB04005840DC /* BasicPlant.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = BasicPlant.rcproject; sourceTree = "<group>"; };
@@ -141,7 +140,6 @@
 				34673E8A2494E8CC00712F38 /* TarotOfLight */,
 				34673E892494E8CC00712F38 /* Products */,
 				B9521E1425221B2400AC96EF /* Frameworks */,
-				B95A386D2547F11C009DC32D /* OptimizationProfiles */,
 			);
 			sourceTree = "<group>";
 		};
@@ -274,14 +272,6 @@
 				B9B0A0242551A0BA00D879E2 /* LongPressButtonStyle.swift */,
 			);
 			path = Utils;
-			sourceTree = "<group>";
-		};
-		B95A386D2547F11C009DC32D /* OptimizationProfiles */ = {
-			isa = PBXGroup;
-			children = (
-				B95A386E2547F11C009DC32D /* TarotOfLight.profdata */,
-			);
-			path = OptimizationProfiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

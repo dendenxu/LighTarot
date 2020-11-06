@@ -88,12 +88,14 @@ struct WrapScroll: View {
     let baseScale: CGFloat = 0.9
     let baseOpacity: CGFloat = 0.25
     let baseTint: CGFloat = 0.6
+    let baseBlur: CGFloat = 3
     @State var isEnergyAnimating = true
     var body: some View {
         let computedScale = (1.0 - abs(percentage)) * (1 - baseScale) + baseScale
         let computedOpacity = Double((1.0 - abs(percentage)) * (1 - baseOpacity) + baseOpacity)
         let computedTint = Double((1.0 - abs(percentage)) * (1 - baseTint) + baseTint)
         let computedTintColor = Color(red: computedTint, green: computedTint, blue: computedTint)
+        let computedBlur = (abs(percentage)) * baseBlur
         return ZStack {
             ScrollView(showsIndicators: false) {
                 CheckedLazyVStack {
@@ -153,6 +155,7 @@ struct WrapScroll: View {
         .offset(x: -percentage * baseOffset)
             .scaleEffect(x: computedScale)
             .zIndex(-2 + Double(abs(percentage)))
+            .blur(radius: computedBlur)
     }
 }
 

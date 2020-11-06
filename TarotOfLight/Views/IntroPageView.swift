@@ -113,26 +113,6 @@ struct SecondIntroPage: View {
         ZStack {
             fullScreenBG
             VStack(spacing: 30) {
-                ZStack {
-                    Image
-                        .default("scene")
-                        .frame(width: 350, height: 350)
-                    WebImage
-                        .default(
-                            url: URL(fileURLWithPath: Bundle.main.path(forResource: "cardsRotation.gif", ofType: "") ?? "cardsRotation.gif"),
-                            isAnimating: $isCardRotateAnimating
-                        )
-                        .frame(width: 175, height: 175)
-                        .colorMultiply(Color(hex: 0xcccccc))
-                        .rotation3DEffect(.degrees(20), axis: (x: 1, y: 0, z: 0), perspective: 0.5)
-                        .rotation3DEffect(.degrees(-20), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
-                        .rotation3DEffect(.degrees(30), axis: (x: 0, y: 0, z: 1), perspective: 0.5)
-                        .offset(x: 20, y: 20)
-                }.compositingGroup()
-
-
-                Spacer().frame(height: 30)
-
                 Button(action: {
                     withAnimation(springAnimation) {
                         profile.weAreInGlobal = .selector
@@ -153,6 +133,25 @@ struct SecondIntroPage: View {
                             .foregroundColor(Color("MediumLime"))
                     )
                 }
+
+                Spacer().frame(height: 30)
+
+                ZStack {
+                    Image
+                        .default("scene")
+                        .frame(width: 350, height: 350)
+                    WebImage
+                        .default(
+                            url: URL(fileURLWithPath: Bundle.main.path(forResource: "cardsRotation.gif", ofType: "") ?? "cardsRotation.gif"),
+                            isAnimating: $isCardRotateAnimating
+                        )
+                        .frame(width: 175, height: 175)
+                        .colorMultiply(Color(hex: 0xcccccc))
+                        .rotation3DEffect(.degrees(20), axis: (x: 1, y: 0, z: 0), perspective: 0.5)
+                        .rotation3DEffect(.degrees(-20), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
+                        .rotation3DEffect(.degrees(30), axis: (x: 0, y: 0, z: 1), perspective: 0.5)
+                        .offset(x: 20, y: 20)
+                }.compositingGroup()
             }
         }
     }
@@ -242,6 +241,7 @@ struct InnerIntroduction<Content: View>: View {
     let baseScale: CGFloat = 0.75
     let baseOpacity: CGFloat = 0.25
     let baseTint: CGFloat = 0.75
+    let baseBlur: CGFloat = 3
     init(percentage: CGFloat = 0, @ViewBuilder content: @escaping () -> Content) {
         self.percentage = percentage
         self.content = content()
@@ -251,12 +251,14 @@ struct InnerIntroduction<Content: View>: View {
         let computedOpacity = Double((1.0 - abs(percentage)) * (1 - baseOpacity) + baseOpacity)
         let computedTint = Double((1.0 - abs(percentage)) * (1 - baseTint) + baseTint)
         let computedTintColor = Color(red: computedTint, green: computedTint, blue: computedTint)
+        let computedBlur = (abs(percentage)) * baseBlur
         return content
             .scaleEffect(computedScale, anchor: .center)
             .offset(x: -percentage * baseOffset)
             .opacity(computedOpacity)
             .colorMultiply(computedTintColor)
             .zIndex(-Double(abs(percentage)))
+            .blur(radius: computedBlur)
 //            .mask(
 //                RoundedRectangle(cornerRadius: .ScreenCornerRadius).frame(width: .ScreenWidth, height: .ScreenHeight)
 //                .scaleEffect(y: 2)
