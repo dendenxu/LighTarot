@@ -1,3 +1,4 @@
+import uuid
 import numpy as np
 import json
 
@@ -108,8 +109,8 @@ for index in action_indices:
 # So our interpolation should like
 epsilon = 1e-7
 # start_ori = np.array([epsilon, epsilon, epsilon, 1-3*epsilon**2]) # let's just not use a zero starter, avoiding deviding by zero
-start_ori = np.array([-1.12839841e-08,  2.58818920e-01, -4.21123740e-08,  9.65925826e-01])
-end_ori = np.array([1.12839960e-08, -2.58819193e-01,  4.21124184e-08,  9.65925753e-01])
+end_ori = np.array([-1.12839841e-08,  2.58818920e-01, -4.21123740e-08,  9.65925826e-01])
+start_ori = np.array([1.12839960e-08, -2.58819193e-01,  4.21124184e-08,  9.65925753e-01])
 
 
 def deform_ori(ori, epsilon=1e-7):
@@ -128,15 +129,62 @@ def form_ori(theta, axis):
     return np.concatenate([axis * np.sin(theta), [np.cos(theta)]])
 
 
-start_theta, start_axis = deform_ori(start_ori, epsilon) # Overlooking the original axis
+start_theta, start_axis = deform_ori(start_ori, epsilon)  # Overlooking the original axis
 end_theta, end_axis = deform_ori(end_ori, epsilon)
 
-granularity = 18
+# ! Manually defining the starting and ending angle
+start_theta = -50 / 180 * np.pi
+end_theta = 20 / 180 * np.pi
+
+granularity = len(name_behavs)
 
 for t in np.linspace(start_theta, end_theta, granularity):
     print(f"The angle to rotate around the axis {end_axis} is: {t}")
     print(f"The quaternion formed by it is: {form_ori(t, end_axis)}")
 
+# Interpolate the new actions
+new_orientation = [form_ori(t, end_axis) for t in np.linspace(start_theta, end_theta, granularity)]
+focused_action = 3
+for index in name_behavs:
+    # Note that numpy array is not JSON serializable
+    action2config(behav2action(behaviors[index], focused_action))['orientation'] = list(new_orientation[index])
+
+start_location = np.array([-40, 0, -5], dtype="double")
+middle_location = np.array([-20, 0, 10], dtype="double")
+end_location = np.array([0, 0, 5], dtype="double")
+
+theY = start_location[1]
+
+x, y, z = start_location[0] + start_location[2]*1j, middle_location[0] + middle_location[2]*1j, end_location[0] + end_location[2]*1j
+
+# from three points on the complex plane, gives a center and a radius
+
+
+def form_circle(x, y, z):
+    w = z-x
+    w /= y-x
+    c = (x-y)*(w-abs(w)**2)/2j/w.imag-x
+    return -c, abs(c+x)
+
+
+def around_circle(a, c, r):
+    return r*(np.cos(a) + np.sin(a)*1j) + c
+
+
+c, r = form_circle(x, y, z)
+
+for a in np.linspace(0, np.pi * 2, 100):
+    print(around_circle(a, c, r))
+
+start_angle = np.arctan2((x-c).imag, (x-c).real)
+end_angle = np.arctan2((z-c).imag, (z-c).real)
+
+new_locations = [around_circle(t, c, r) for t in np.linspace(start_angle, end_angle, granularity)]
+new_locations = [[n.real, theY, n.imag] for n in new_locations]
+focused_action = 3
+for index in name_behavs:
+    # Note that numpy array is not JSON serializable
+    action2config(behav2action(behaviors[index], focused_action))['location'] = new_locations[index]
 
 # Get orientation data and translation data from the first behavior
 # locations = [[-18.805461883544922, -2.7745513916015625, -0.000110626220703125],
@@ -155,13 +203,13 @@ for t in np.linspace(start_theta, end_theta, granularity):
 #         action2config(behav2action(behaviors[behav], action))["orientation"] = orientations[action-1]
 #         action2config(behav2action(behaviors[behav], action))["location"] = locations[action-1]
 # Update the duration of the first action, which is wait in our case
-for behav in range(len(name_cards)):
+for behav in name_behavs:
     action2config(behav2action(behaviors[behav], 0))["duration"] = 0.05 * (behav)
     print(action2config(behav2action(behaviors[behav], 0))["duration"])
 
 # The cards are arranged in an upside down order
 for index, key in enumerate(name_cards):
-    objects[key]["transform"]["matrix"][13] = (len(name_cards) - index - 1) * 0.005
+    objects[key]["transform"]["matrix"][13] = (len(name_cards) - index - 1) * 0.0005
 
 # Redefine the affected objects
 for behav in range(len(name_cards_runtime)):
@@ -173,6 +221,9 @@ for index, key in enumerate(objects.keys()):
         print(objects[key]["transform"]["matrix"])
     except:
         continue
+
+def upuuid():
+    return str(uuid.uuid4()).upper()
 
 # Write to the rcproject file
 with open("com.apple.RCFoundation.Project", "w") as json_file:
