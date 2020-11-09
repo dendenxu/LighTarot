@@ -13,9 +13,10 @@ import ARKit
 
 struct ARCameraView: View {
     @EnvironmentObject var profile: LighTarotModel
+    @State var experienceStarted: Bool = false
     var body: some View {
         ZStack {
-            ARCameraInnerView()
+            ARCameraInnerView(experienceStarted: $experienceStarted)
             VStack {
                 HStack {
                     Button(action: {
@@ -42,12 +43,14 @@ struct ARCameraView: View {
                 }
                 Spacer()
             }
+            
+            
         }
     }
 }
 
 struct ARCameraInnerView: UIViewRepresentable {
-
+    @Binding var experienceStarted: Bool
     func makeUIView(context: Context) -> ARView {
 
         let arView = ARView(frame: .zero)
@@ -59,7 +62,7 @@ struct ARCameraInnerView: UIViewRepresentable {
     }
 
     func updateUIView(_ arView: ARView, context: Context) {
-
+        print("[AR] ExperienceStarted: \(experienceStarted)")
     }
 
 }
@@ -139,4 +142,6 @@ extension ARView: ARCoachingOverlayViewDelegate {
         print("[AR] Overlay did deactivated, adding objects")
         self.addObjects()
     }
+    
+    
 }
