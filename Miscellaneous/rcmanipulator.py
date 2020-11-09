@@ -103,20 +103,11 @@ def update_action_base_on(base_behavior, focused_action):
         print("")
 
 
-action_indices = list(range(1, 4))  # three actions to copy
-base_behavior = 0
-for index in action_indices:
-    print(f"Update action: {index}")
-    update_action_base_on(base_behavior, index)
-
-# The orientation array is a quaternion, laying in 4d space, stating the rotation
-# I'm guess Apple is is using format [x sin(0), y sin(0), z sin(0), cos(0)], here we use 0 to represent theta
-# The y axis is the one actually pointing up
-# So our interpolation should like
-epsilon = 1e-7
-# start_ori = np.array([epsilon, epsilon, epsilon, 1-3*epsilon**2]) # let's just not use a zero starter, avoiding deviding by zero
-end_ori = np.array([-1.12839841e-08,  2.58818920e-01, -4.21123740e-08,  9.65925826e-01])
-start_ori = np.array([1.12839960e-08, -2.58819193e-01,  4.21124184e-08,  9.65925753e-01])
+# action_indices = list(range(1, 4))  # three actions to copy
+# base_behavior = 0
+# for index in action_indices:
+#     print(f"Update action: {index}")
+#     update_action_base_on(base_behavior, index)
 
 # pass in a len 4 quaternion
 # spits out the theta and the axis
@@ -136,6 +127,78 @@ def form_ori(theta, axis):
     theta /= 2
     return np.concatenate([axis * np.sin(theta), [np.cos(theta)]])
 
+# from three points on the complex plane, gives a center and a radius
+def form_circle(x, y, z):
+    w = z-x
+    w /= y-x
+    c = (x-y)*(w-abs(w)**2)/2j/w.imag-x
+    return -c, abs(c+x)
+
+# Get the coordinate around a circle
+# a: angle, starting from right direction
+# c: center of the circle
+# r: radius of the circle
+def around_circle(a, c, r):
+    return r*(np.cos(a) + np.sin(a)*1j) + c
+
+
+# Generate upper case uuid version 4, which is used
+# in swift and Reality Composer to identify objects
+def upuuid():
+    return str(uuid.uuid4()).upper()
+
+# index: current action index in behavior chain
+# the_action: the action to be updated
+# Passed by reference, changes are made in place, so maybe we want to make a copy first
+def change_duration(index, the_action):
+    action2config(the_action)["duration"] = 0.05 * (len(name_behavs) - index - 1)
+
+# Similarly, but this time we update the newly added actions' transform
+def change_transform(index, the_action):
+    action2config(the_action)["location"] = [0, 10, 0]
+    action2config(the_action)["orientation"] = [0, 0, 0, 1]
+
+# Insert an action to all the named_behaviors
+def insert_in_place(src, dst, func):
+    for index in name_behavs:
+        print(f"length of behavior #{index} before insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
+        the_action = copy.deepcopy(behav2action(behaviors[index], src))  # the first waiting action
+        the_action["__content"][0]["identifier"] = upuuid()
+        the_action["__content"][0]["configurations"][0]["__content"][0]["identifier"] = upuuid()
+        func(index, the_action)
+        print(the_action)
+        behav2actionGroup(behaviors[index]).insert(dst, the_action)
+        print(f"length of behavior #{index} after insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
+
+
+def do_nothing(index, dst_action):
+    pass
+
+def insert_action(src_aciton, dst, func, behavs, cards):
+    for index in behavs:
+        print(f"length of behavior #{index} before insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
+        dst_action = copy.deepcopy(src_aciton)
+        # for all possible target settings
+        dst_action["__content"][0]["identifier"] = upuuid()
+        for config in dst_action["__content"][0]["configurations"]:
+            config["__content"][0]["identifier"] = upuuid()
+            if "target" in config["__content"][0]["configurationBox"]["configuration"]:
+                # Possibly no target at all!
+                config["__content"][0]["configurationBox"]["configuration"]["target"] = [cards[index]]
+        func(index, dst_action)
+        behav2actionGroup(behaviors[index]).insert(dst, dst_action)
+        print(f"length of behavior #{index} after insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
+
+
+
+# The orientation array is a quaternion, laying in 4d space, stating the rotation
+# I'm guess Apple is is using format [x sin(0), y sin(0), z sin(0), cos(0)], here we use 0 to represent theta
+# The y axis is the one actually pointing up
+# So our interpolation should like
+epsilon = 1e-7
+# start_ori = np.array([epsilon, epsilon, epsilon, 1-3*epsilon**2]) # let's just not use a zero starter, avoiding deviding by zero
+end_ori = np.array([-1.12839841e-08,  2.58818920e-01, -4.21123740e-08,  9.65925826e-01])
+start_ori = np.array([1.12839960e-08, -2.58819193e-01,  4.21124184e-08,  9.65925753e-01])
 
 start_theta, start_axis = deform_ori(start_ori, epsilon)  # Overlooking the original axis
 end_theta, end_axis = deform_ori(end_ori, epsilon)
@@ -167,20 +230,6 @@ end_location = np.array([0, 0, 5], dtype="double")
 theY = start_location[1]
 
 x, y, z = start_location[0] + start_location[2]*1j, middle_location[0] + middle_location[2]*1j, end_location[0] + end_location[2]*1j
-
-# from three points on the complex plane, gives a center and a radius
-def form_circle(x, y, z):
-    w = z-x
-    w /= y-x
-    c = (x-y)*(w-abs(w)**2)/2j/w.imag-x
-    return -c, abs(c+x)
-
-# Get the coordinate around a circle
-# a: angle, starting from right direction
-# c: center of the circle
-# r: radius of the circle
-def around_circle(a, c, r):
-    return r*(np.cos(a) + np.sin(a)*1j) + c
 
 
 c, r = form_circle(x, y, z)
@@ -237,62 +286,17 @@ for index, key in enumerate(objects.keys()):
     except:
         continue
 
-
-# Generate upper case uuid version 4, which is used
-# in swift and Reality Composer to identify objects
-def upuuid():
-    return str(uuid.uuid4()).upper()
-
-# index: current action index in behavior chain
-# the_action: the action to be updated
-# Passed by reference, changes are made in place, so maybe we want to make a copy first
-def change_duration(index, the_action):
-    action2config(the_action)["duration"] = 0.05 * (len(name_behavs) - index - 1)
-
-# Similarly, but this time we update the newly added actions' transform
-def change_transform(index, the_action):
-    action2config(the_action)["location"] = [0, 10, 0]
-    action2config(the_action)["orientation"] = [0, 0, 0, 1]
-
-# Insert an action to all the named_behaviors
-def insert_in_place(src, dst, func):
-    for index in name_behavs:
-        print(f"length of behavior #{index} before insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
-        the_action = copy.deepcopy(behav2action(behaviors[index], src))  # the first waiting action
-        the_action["__content"][0]["identifier"] = upuuid()
-        the_action["__content"][0]["configurations"][0]["__content"][0]["identifier"] = upuuid()
-        func(index, the_action)
-        print(the_action)
-        behav2actionGroup(behaviors[index]).insert(dst, the_action)
-        print(f"length of behavior #{index} after insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
-
-
 # insert_in_place(0, 4, change_duration)
 # insert_in_place(1, 5, change_transform)
 
-def do_nothing(index, dst_action):
-    pass
+# shuffle_behavs = behav_starts_with_name("shuffleOperation")
+# first_shuffle_actions = behav2actionGroup(behaviors[shuffle_behavs[0]])
+# for action in first_shuffle_actions:
+    # insert_action(action, 0, do_nothing, name_behavs, name_cards_runtime) # Should use runtime identifiers
 
-def insert_action(src_aciton, dst, func, behavs, cards):
-    for index in behavs:
-        print(f"length of behavior #{index} before insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
-        dst_action = copy.deepcopy(src_aciton)
-        # for all possible target settings
-        dst_action["__content"][0]["identifier"] = upuuid()
-        for config in dst_action["__content"][0]["configurations"]:
-            config["__content"][0]["identifier"] = upuuid()
-            if "target" in config["__content"][0]["configurationBox"]["configuration"]:
-                # Possibly no target at all!
-                config["__content"][0]["configurationBox"]["configuration"]["target"] = [cards[index]]
-        func(index, dst_action)
-        behav2actionGroup(behaviors[index]).insert(dst, dst_action)
-        print(f"length of behavior #{index} after insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
-
-shuffle_behavs = behav_starts_with_name("shuffleOperation")
-first_shuffle_actions = behav2actionGroup(behaviors[shuffle_behavs[0]])
-for action in first_shuffle_actions:
-    insert_action(action, 0, do_nothing, name_behavs, name_cards_runtime) # Should use runtime identifiers
-
+# # !deleting behaviors
+# for index in name_behavs:
+#     del behav2actionGroup(behaviors[index])[0:11]
 
 # MARK: Write to the rcproject file
 with open("com.apple.RCFoundation.Project", "w") as json_file:

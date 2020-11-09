@@ -1,0 +1,576 @@
+[
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "axis": [
+                      0,
+                      1,
+                      0
+                    ],
+                    "direction": "clockwise",
+                    "duration": 1,
+                    "iterations": 1,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "type": "spin"
+                  }
+                },
+                "identifier": "2355248E-5A76-4037-805C-B10582C3E3F0",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "E2DE7E69-605D-4FC4-84FB-A70A22A56849",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "duration": 1,
+                    "isTransformInitKeyPath": true,
+                    "linearCoefficient": 1,
+                    "location": [
+                      -8.13492202758789,
+                      -2.384185791015625e-06,
+                      -8.045656204223633
+                    ],
+                    "moveEase": "easeInOut",
+                    "orientation": [
+                      1.6974865957308793e-11,
+                      -1.1920928955078125e-07,
+                      1.1226150217757969e-12,
+                      -1
+                    ],
+                    "respectPhysics": false,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "arguments": "local",
+                    "type": "transform"
+                  }
+                },
+                "identifier": "79DA5CAE-77CF-4A89-AB7B-33D3E43EB4F3",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "55A2D9E9-D9A6-4265-A73B-B8C5C429313C",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "duration": 1,
+                    "isTransformInitKeyPath": true,
+                    "linearCoefficient": 1,
+                    "location": [
+                      11.241406440734863,
+                      -4.93176794052124,
+                      15.534494400024414
+                    ],
+                    "moveEase": "easeInOut",
+                    "orientation": [
+                      1.0455636356709874e-10,
+                      -1.1920928955078125e-07,
+                      7.204192103982265e-12,
+                      -1
+                    ],
+                    "respectPhysics": false,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "arguments": "local",
+                    "type": "transform"
+                  }
+                },
+                "identifier": "DD191563-4455-401E-8ED5-F326EAD2DEA2",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "948DF2E9-3484-4A0B-977A-328AE72DA566",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "duration": 1,
+                    "isTransformInitKeyPath": true,
+                    "linearCoefficient": 1,
+                    "location": [
+                      15.77539348602295,
+                      -4.76837158203125e-07,
+                      -10.682900428771973
+                    ],
+                    "moveEase": "easeInOut",
+                    "orientation": [
+                      1.3997691894473974e-11,
+                      -8.940696716308594e-08,
+                      9.503287913548153e-13,
+                      -0.9999999403953552
+                    ],
+                    "respectPhysics": false,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "arguments": "local",
+                    "type": "transform"
+                  }
+                },
+                "identifier": "58DF191B-8069-4CDE-ABE8-4DBE940AC4D6",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "16218D16-54E4-4393-9963-73E3A85F353E",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "duration": 1,
+                    "isTransformInitKeyPath": true,
+                    "linearCoefficient": 1,
+                    "location": [
+                      -15,
+                      4,
+                      1
+                    ],
+                    "moveEase": "easeInOut",
+                    "orientation": [
+                      4.092441940883873e-10,
+                      -2.9802322387695312e-08,
+                      2.8064342516564977e-11,
+                      -0.9999999403953552
+                    ],
+                    "respectPhysics": false,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "arguments": "local",
+                    "type": "transform"
+                  }
+                },
+                "identifier": "A7374C98-F58B-412F-BE4C-DCB499A7CC97",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "EEA5DE99-D89F-4316-A389-A7D78EE6C10B",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "axis": [
+                      0,
+                      1,
+                      0
+                    ],
+                    "direction": "clockwise",
+                    "duration": 1,
+                    "iterations": 1,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "type": "spin"
+                  }
+                },
+                "identifier": "C084D957-48B1-4F30-91A3-18FB8D7F12FC",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "9C4E1234-0EFE-4DF8-8DF7-2D78098A4659",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "axis": [
+                      0,
+                      1,
+                      0
+                    ],
+                    "direction": "clockwise",
+                    "duration": 1,
+                    "iterations": 1,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "type": "spin"
+                  }
+                },
+                "identifier": "0557157F-AA72-4EE9-A640-0CC98A75CD74",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          },
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "direction": "clockwise",
+                    "duration": 1,
+                    "linearCoefficient": 1,
+                    "orbitalAxis": [
+                      -0.014492509886622429,
+                      -0.9971489906311035,
+                      -0.07405267655849457
+                    ],
+                    "orientToPath": false,
+                    "pivotTarget": "3F0AA3F1-D9F1-4ABE-AE66-77439F451EE9",
+                    "respectPhysics": false,
+                    "rotations": 1,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "type": "orbitEntity"
+                  }
+                },
+                "identifier": "C1EAA029-A474-4D01-9CDF-1FEB73490D22",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "0C626E41-B4D3-4937-9FCE-4B5C372E8555",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "direction": "clockwise",
+                    "duration": 1,
+                    "linearCoefficient": 1,
+                    "orbitalAxis": [
+                      -0.014492509886622429,
+                      -0.9971489906311035,
+                      -0.07405267655849457
+                    ],
+                    "orientToPath": false,
+                    "pivotTarget": "D6EF7940-802A-4FF1-B6F8-BA568661BA23",
+                    "respectPhysics": false,
+                    "rotations": 1,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "type": "orbitEntity"
+                  }
+                },
+                "identifier": "5C59EF3F-BE2D-4F17-A687-9247B341C69F",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          },
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "axis": [
+                      0,
+                      1,
+                      0
+                    ],
+                    "direction": "clockwise",
+                    "duration": 1,
+                    "iterations": 1,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "type": "spin"
+                  }
+                },
+                "identifier": "73D9F255-FA86-4387-93AB-8DF9E27228E9",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "7123D280-F984-4155-BF0B-57F3DCA768E8",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "direction": "clockwise",
+                    "duration": 1,
+                    "linearCoefficient": 1,
+                    "orbitalAxis": [
+                      -0.014492509886622429,
+                      -0.9971489906311035,
+                      -0.07405267655849457
+                    ],
+                    "orientToPath": false,
+                    "pivotTarget": "AB3F49F4-1992-4EA7-915F-875955C04B77",
+                    "respectPhysics": false,
+                    "rotations": 1,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "type": "orbitEntity"
+                  }
+                },
+                "identifier": "A4E0AA2D-1390-40FE-B376-2B0ED0B015C0",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          },
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "axis": [
+                      0,
+                      1,
+                      0
+                    ],
+                    "direction": "clockwise",
+                    "duration": 1,
+                    "iterations": 1,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "type": "spin"
+                  }
+                },
+                "identifier": "923380CA-92BA-4B74-9290-C6211AA7FE51",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "D9BF6139-9BE6-4006-B7F2-285DFB7BE3C5",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "duration": 1,
+                    "isTransformInitKeyPath": true,
+                    "linearCoefficient": 1,
+                    "location": [
+                      -14.183143615722656,
+                      -1.9073486328125e-06,
+                      -13.391156196594238
+                    ],
+                    "moveEase": "easeInOut",
+                    "orientation": [
+                      -4.554578936222242e-12,
+                      4.470348358154297e-06,
+                      -1.0483473464328874e-11,
+                      -1
+                    ],
+                    "respectPhysics": false,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "arguments": "local",
+                    "type": "transform"
+                  }
+                },
+                "identifier": "1F64B9DA-55AB-4BAC-A86B-E621BACC62FB",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "A5D44186-CCCC-4D4C-BAA7-6F24F3D5E439",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  },
+  {
+    "__content": [
+      {
+        "configurations": [
+          {
+            "__content": [
+              {
+                "configurationBox": {
+                  "configuration": {
+                    "angularCoefficient": 1,
+                    "duration": 1,
+                    "isTransformInitKeyPath": true,
+                    "linearCoefficient": 1,
+                    "location": [
+                      17.342254638671875,
+                      4.76837158203125e-07,
+                      -2.0155837535858154
+                    ],
+                    "moveEase": "easeInOut",
+                    "orientation": [
+                      -3.0595970201829914e-11,
+                      3.209710121154785e-05,
+                      -7.815802172128627e-11,
+                      -1
+                    ],
+                    "respectPhysics": false,
+                    "target": [
+                      "4B481A47-EC65-4EFF-B6A9-4B84BC99C182"
+                    ]
+                  },
+                  "name": {
+                    "arguments": "local",
+                    "type": "transform"
+                  }
+                },
+                "identifier": "512F381E-67C8-445A-BACA-CD4716800AF2",
+                "isEnabled": true
+              }
+            ],
+            "__version": 1
+          }
+        ],
+        "identifier": "CE1F93A2-8887-422C-8AEA-B51981F2F517",
+        "isEnabled": true
+      }
+    ],
+    "__version": 1
+  }
+]
