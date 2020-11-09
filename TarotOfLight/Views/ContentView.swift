@@ -55,7 +55,8 @@ struct ContentView: View {
                 NewCardView()
             }
         }
-            .frame(width: .ScreenWidth, height: .ScreenHeight)
+//            .frame(width: profile.isLandScape ? .ScreenHeight : .ScreenWidth, height: profile.isLandScape ? .ScreenWidth : .ScreenHeight)
+        .frame(width: .ScreenWidth, height: .ScreenHeight)
             .edgesIgnoringSafeArea(.all)
         // Setting frame and cornerRadius clip here is a more global approach for the who main page
         // Adding edges ignorance operations here at the rootView will rid all subViews of the safe areas

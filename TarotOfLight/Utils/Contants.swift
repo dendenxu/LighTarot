@@ -10,8 +10,8 @@ import SwiftUI
 import SDWebImageSwiftUI
 extension CGFloat {
     public static let ScreenCornerRadius: CGFloat = 38.0
-    public static let ScreenWidth = UIScreen.main.bounds.width
-    public static let ScreenHeight = UIScreen.main.bounds.height
+    @State public static var ScreenWidth = UIScreen.main.bounds.width
+    @State public static var ScreenHeight = UIScreen.main.bounds.height
 }
 
 extension String {

@@ -19,6 +19,7 @@ class LighTarotModel: ObservableObject {
     @Published var sceneAtForeground = true
     @Published var selectorShouldChange = false
     @Published var shouldShowNewCardView: Bool = false
+    @Published var isLandScape: Bool = false
 
     var selectorIsChanged: Bool { proficientUser && selectorShouldChange }
 

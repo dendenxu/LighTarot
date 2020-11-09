@@ -57,7 +57,7 @@ struct ARCameraView: UIViewRepresentable {
                     arView.installGestures(.all, for: theBox)
                     print("[AR] theBox has collision")
                 }
-                arView.environment.sceneUnderstanding.options = [.occlusion, .physics]
+//                arView.environment.sceneUnderstanding.options = [.occlusion, .physics]
             #endif
             arView.scene.anchors.append(anchor)
 

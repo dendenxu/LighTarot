@@ -273,12 +273,17 @@ def insert_in_place(src, dst, func):
 def do_nothing(index, dst_action):
     pass
 
-def insert_action(src_aciton, dst, func, behavs):
+def insert_action(src_aciton, dst, func, behavs, cards):
     for index in behavs:
         print(f"length of behavior #{index} before insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
         dst_action = copy.deepcopy(src_aciton)
+        # for all possible target settings
         dst_action["__content"][0]["identifier"] = upuuid()
-        dst_action["__content"][0]["configurations"][0]["__content"][0]["identifier"] = upuuid()
+        for config in dst_action["__content"][0]["configurations"]:
+            config["__content"][0]["identifier"] = upuuid()
+            if "target" in config["__content"][0]["configurationBox"]["configuration"]:
+                # Possibly no target at all!
+                config["__content"][0]["configurationBox"]["configuration"]["target"] = [cards[index]]
         func(index, dst_action)
         behav2actionGroup(behaviors[index]).insert(dst, dst_action)
         print(f"length of behavior #{index} after insertion: {len(behav2actionGroup(behaviors[index]))}")  # get all the action group concerning this problem
@@ -286,9 +291,9 @@ def insert_action(src_aciton, dst, func, behavs):
 shuffle_behavs = behav_starts_with_name("shuffleOperation")
 first_shuffle_actions = behav2actionGroup(behaviors[shuffle_behavs[0]])
 for action in first_shuffle_actions:
-    insert_action(action, 0, do_nothing, name_behavs)
+    insert_action(action, 0, do_nothing, name_behavs, name_cards_runtime) # Should use runtime identifiers
 
 
-# Write to the rcproject file
+# MARK: Write to the rcproject file
 with open("com.apple.RCFoundation.Project", "w") as json_file:
     json.dump(json_obj, json_file)
