@@ -77,6 +77,7 @@ extension NSNotification {
     static let PagerTapped = NSNotification.Name.init("PaggerTapped")
     static let GetWidthRequest = NSNotification.Name.init("GetWidthRequest")
     static let GetWidthResponse = NSNotification.Name.init("GetWidthResponse")
+    static let DebugNotification = NSNotification.Name.init("DebuggerNotification")
 }
 
 func randomPositionInCircle(radius: CGFloat) -> CGSize {

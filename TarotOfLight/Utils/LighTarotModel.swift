@@ -11,8 +11,10 @@ import CoreHaptics
 import SwiftyJSON
 import SwiftUI
 
-class ViewNavigation {
-    @Published var shouldScale = false
+struct ViewNavigation {
+    var shouldScale = false
+    var shouldStartExperience = false
+    var anchorAdded = false
 }
 
 class LighTarotModel: ObservableObject {
