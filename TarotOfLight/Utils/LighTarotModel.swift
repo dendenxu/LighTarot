@@ -10,7 +10,15 @@ import Foundation
 import CoreHaptics
 import SwiftyJSON
 import SwiftUI
+
+class ViewNavigation {
+    @Published var shouldScale = false
+}
+
 class LighTarotModel: ObservableObject {
+    
+    @Published var viewNavigator = ViewNavigation()
+    
     // MARK: Debugger view enabled?
     let showDebuggerAtLaunch = false
     // Some animation configuration

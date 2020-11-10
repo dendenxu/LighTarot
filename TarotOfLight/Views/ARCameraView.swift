@@ -17,7 +17,7 @@ struct ARCameraView: View {
     @State var experienceStarted: Bool = false
     var body: some View {
         ZStack {
-            ARCameraInnerView(experienceStarted: $experienceStarted)
+            ARCameraInnerView(navigator: $profile.viewNavigator)
             VStack {
                 HStack {
                     Button(action: {
@@ -39,44 +39,61 @@ struct ARCameraView: View {
                             .frame(width: 30, height: 30)
                             .padding(.top, 60)
                             .padding(.leading, 30)
+                            .scaleEffect(profile.viewNavigator.shouldScale ? 2 : 1)
                     }
                     Spacer()
                 }
                 Spacer()
             }
-
-
         }
     }
 }
 
 struct ARCameraInnerView: UIViewRepresentable {
-    @Binding var experienceStarted: Bool
+    @Binding var navigator: ViewNavigation
     func makeUIView(context: Context) -> ARView {
-        let arView = CustomARView(frame: .zero)
+        let arView = CustomARView(frame: .zero, navigator: $navigator)
         arView.addAnchor()
         arView.addCoaching()
         return arView
     }
 
     func updateUIView(_ arView: ARView, context: Context) {
-        print("[AR] ExperienceStarted: \(experienceStarted)")
+//        print("[AR] ExperienceStarted: \(experienceStarted)")
     }
 }
 
 class CustomARView: ARView, ARCoachingOverlayViewDelegate, ARSessionDelegate {
+    @Binding var navigator: ViewNavigation
+
     var anchor = BasicPlant.BasicPlantScene()
     var collisions: [Cancellable] = []
+
+    // MARK: Custom profile
+    init(frame frameRect: CGRect, navigator: Binding<ViewNavigation>) {
+        self._navigator = navigator
+        super.init(frame: frameRect)
+    }
+
+    @objc required dynamic init(frame frameRect: CGRect) {
+        fatalError("init(frame:) has not been implemented")
+    }
+
+    @objc required dynamic init?(coder decoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func addCollisions() {
         let beginSub = self.scene.subscribe(to: CollisionEvents.Began.self, on: anchor.goldenBox) {
             event in
-            print(event)
+
+            print("\(event.entityA) collided with \(event.entityB)")
         }
 
         let endSub = self.scene.subscribe(to: CollisionEvents.Ended.self, on: anchor.goldenBox) {
             event in
-            print(event)
+            self.navigator.shouldScale = true
+            print("\(event.entityA)'s collision with \(event.entityB) ended")
         }
         collisions.append(beginSub)
         collisions.append(endSub)
@@ -114,12 +131,12 @@ class CustomARView: ARView, ARCoachingOverlayViewDelegate, ARSessionDelegate {
         coachingOverlay.delegate = self
 
         self.session.delegate = self
-        
+
         print("[AR] Adding coaching")
         self.addSubview(coachingOverlay)
     }
 
-    
+
     func addObjects() {
         print("[ARCoaching] Getting \(self.scene.anchors.count) anchors")
         anchor.generateCollisionShapes(recursive: true)
@@ -174,13 +191,13 @@ class CustomARView: ARView, ARCoachingOverlayViewDelegate, ARSessionDelegate {
             } else { print("[ARBAD] A Card doesn't have collision, check whether physics is enabled in reality kit") }
         }
     }
-    
+
     public func coachingOverlayViewDidDeactivate(_ coachingOverlayView: ARCoachingOverlayView) {
         print("[COACHING] Deactivated")
         addObjects()
         addCollisions()
     }
-    
+
 }
 
 //class CustomBox: Entity, HasCollision {
