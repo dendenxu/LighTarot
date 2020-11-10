@@ -9,6 +9,7 @@
 import SwiftUI
 import RealityKit
 import ARKit
+import Combine
 
 
 struct ARCameraView: View {
@@ -43,8 +44,8 @@ struct ARCameraView: View {
                 }
                 Spacer()
             }
-            
-            
+
+
         }
     }
 }
@@ -52,57 +53,37 @@ struct ARCameraView: View {
 struct ARCameraInnerView: UIViewRepresentable {
     @Binding var experienceStarted: Bool
     func makeUIView(context: Context) -> ARView {
-
-        let arView = ARView(frame: .zero)
-//        arView.addObjects()
+        let arView = CustomARView(frame: .zero)
         arView.addAnchor()
         arView.addCoaching()
-
         return arView
     }
 
     func updateUIView(_ arView: ARView, context: Context) {
         print("[AR] ExperienceStarted: \(experienceStarted)")
     }
-
 }
 
+class CustomARView: ARView, ARCoachingOverlayViewDelegate, ARSessionDelegate {
+    var anchor = BasicPlant.BasicPlantScene()
+    var collisions: [Cancellable] = []
 
-extension ARView: ARCoachingOverlayViewDelegate {
-    
-    func addObjects() {
-        if let anchor = self.scene.anchors.first as? BasicPlant.BasicPlantScene {
-            print("[ARCoaching] Getting \(self.scene.anchors.count) anchors")
-            anchor.generateCollisionShapes(recursive: true)
-
-            if let evilEye = anchor.evilEye as? Entity & HasCollision {
-                self.installGestures(.all, for: evilEye)
-                print("[AR] evilEye has collision")
-            } else { print("[ARBAD] evilEye doesn't have collision, check whether physics is enabled in reality kit") }
-
-
-            if let theCard = anchor.theCard as? Entity & HasCollision {
-                self.installGestures(.all, for: theCard)
-                print("[AR] theCard has collision")
-            } else { print("[ARBAD] theCard doesn't have collision, check whether physics is enabled in reality kit") }
-
-
-            if let theBox = anchor.goldenBox as? Entity & HasCollision {
-                self.installGestures(.all, for: theBox)
-                print("[AR] theBox has collision")
-            } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
-
-            for card in anchor.cardEntities {
-                if let card = card as? Entity & HasCollision {
-                    self.installGestures(.all, for: card)
-                    print("[AR] the card has collistion")
-                } else { print("[ARBAD] A Card doesn't have collision, check whether physics is enabled in reality kit") }
-            }
+    func addCollisions() {
+        let beginSub = self.scene.subscribe(to: CollisionEvents.Began.self, on: anchor.goldenBox) {
+            event in
+            print(event)
         }
+
+        let endSub = self.scene.subscribe(to: CollisionEvents.Ended.self, on: anchor.goldenBox) {
+            event in
+            print(event)
+        }
+        collisions.append(beginSub)
+        collisions.append(endSub)
+        print("[CAMERA] Now subscriptions are added")
     }
-    
+
     func addAnchor() {
-        let anchor: BasicPlant.BasicPlantScene
         do {
             try anchor = BasicPlant.loadBasicPlantScene()
             print("Information about anchor: \(anchor)")
@@ -132,16 +113,84 @@ extension ARView: ARCoachingOverlayViewDelegate {
         // Set the delegate for any callbacks
         coachingOverlay.delegate = self
 
+        self.session.delegate = self
+        
         print("[AR] Adding coaching")
         self.addSubview(coachingOverlay)
     }
-    // Example callback for the delegate object
-    public func coachingOverlayViewDidDeactivate(
-        _ coachingOverlayView: ARCoachingOverlayView
-    ) {
-        print("[AR] Overlay did deactivated, adding objects")
-        self.addObjects()
+
+    
+    func addObjects() {
+        print("[ARCoaching] Getting \(self.scene.anchors.count) anchors")
+        anchor.generateCollisionShapes(recursive: true)
+
+        if let evilEye = anchor.evilEye as? Entity & HasCollision {
+            self.installGestures(.all, for: evilEye)
+            print("[AR] evilEye has collision")
+        } else { print("[ARBAD] evilEye doesn't have collision, check whether physics is enabled in reality kit") }
+
+
+        if let theCard = anchor.theCard as? Entity & HasCollision {
+            self.installGestures(.all, for: theCard)
+            print("[AR] theCard has collision")
+        } else { print("[ARBAD] theCard doesn't have collision, check whether physics is enabled in reality kit") }
+
+
+        if let theBox = anchor.goldenBox as? Entity & HasCollision {
+            self.installGestures(.all, for: theBox)
+            print("[AR] theBox has collision")
+        } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
+
+        if let theBox = anchor.goldenBoxLeft as? Entity & HasCollision {
+            self.installGestures(.all, for: theBox)
+            print("[AR] theBox has collision")
+        } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
+
+        if let theBox = anchor.goldenBoxMiddle as? Entity & HasCollision {
+            self.installGestures(.all, for: theBox)
+            print("[AR] theBox has collision")
+        } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
+
+        if let theBox = anchor.goldenBoxRight as? Entity & HasCollision {
+            self.installGestures(.all, for: theBox)
+            print("[AR] theBox has collision")
+        } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
+
+
+        // MARK: desparate
+
+//        if let customBox = anchor.goldenBox?.clone(recursive: true) as? CustomBox, let oldBox = anchor.goldenBox {
+//            anchor.removeChild(oldBox)
+//            anchor.addChild(customBox)
+//            print("[AR] Adding new custom box to the scene, check it's position")
+//        } else { print("[ARBAD] cannot assign to CustomBox") }
+
+
+
+        for card in anchor.cardEntities {
+            if let card = card as? Entity & HasCollision {
+                self.installGestures(.all, for: card)
+                print("[AR] the card has collistion")
+            } else { print("[ARBAD] A Card doesn't have collision, check whether physics is enabled in reality kit") }
+        }
     }
     
+    public func coachingOverlayViewDidDeactivate(_ coachingOverlayView: ARCoachingOverlayView) {
+        print("[COACHING] Deactivated")
+        addObjects()
+        addCollisions()
+    }
     
 }
+
+//class CustomBox: Entity, HasCollision {
+//    var sub: [Cancellable] = []
+//
+//    init(entity: Entity) {
+//        print("[CustomBox] Calling init")
+//    }
+//
+//    required init() {
+//        fatalError("init() has not been implemented")
+//    }
+//}
