@@ -16,6 +16,8 @@ struct ViewNavigation {
     var shouldStartExperience = false
     var anchorAdded = false
     var cardsShuffled = false
+    var tooDark = false
+    var sceneLoaded = false
 }
 
 class LighTarotModel: ObservableObject {

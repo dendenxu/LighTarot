@@ -82,39 +82,61 @@ import Combine
 
                 }
 
-                // Centered text
-                if !profile.navigator.anchorAdded && profile.navigator.shouldStartExperience {
-                    ShinyText(text: "正在寻找有光的平面……", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
-                        .transition(scaleTransition)
-                } else if profile.navigator.anchorAdded && !profile.navigator.cardsShuffled {
-                    // On appear, move to the lower right corner
-                    // to not disturb the user
-                    ShinyText(text: "触摸塔罗牌，开始洗牌", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
-                        .transition(scaleTransition)
-//                        .offset(x: animationFinished ?
-//                                    .ScreenWidth / 2 - 100
-//                        0
-//                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
-                    .onAppear {
-                        withAnimation(springAnimation) {
-                            animationFinished = true
-                        }
+                VStack {
+                    // Don't place the words in the center plz...
+                    Spacer().frame(height: 300)
 
-                    }
-                } else if profile.navigator.cardsShuffled {
-                    ShinyText(text: "凝神静气，选择三张塔罗牌", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
-                        .transition(scaleTransition)
-//                        .offset(x: animationFinished ?
-//                                    .ScreenWidth / 2 - 100
-//                        0
-//                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
-                    .onAppear {
-                        animationFinished = false
-                        withAnimation(springAnimation) {
-                            animationFinished = true
+                    // Centered text
+                    if !profile.navigator.shouldStartExperience {
+                        ShinyText(text: "点击屏幕下方按钮\n开始卜光体验", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
+                            .transition(scaleTransition)
+                    } else if !profile.navigator.anchorAdded && profile.navigator.shouldStartExperience {
+                        if profile.navigator.sceneLoaded {
+                            ShinyText(text: "即将进入AR塔罗世界", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
+                                .transition(scaleTransition)
+                        } else {
+                            if profile.navigator.tooDark {
+                                ShinyText(text: "环境有些暗哦～\n可以试着走到阳光下\n或站在室内灯下", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
+                                    .transition(scaleTransition)
+                            } else {
+                                ShinyText(text: "正在寻找有光的平面……\n请缓慢平移设备……", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
+                                    .transition(scaleTransition)
+                            }
+                        }
+                        
+                    } else if profile.navigator.anchorAdded && !profile.navigator.cardsShuffled {
+                        // On appear, move to the lower right corner
+                        // to not disturb the user
+                        ShinyText(text: "触摸塔罗牌，开始洗牌", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
+                            .transition(scaleTransition)
+                        //                        .offset(x: animationFinished ?
+                        //                                    .ScreenWidth / 2 - 100
+                        //                        0
+                        //                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
+                        .onAppear {
+                            withAnimation(springAnimation) {
+                                animationFinished = true
+                            }
+
+                        }
+                    } else if profile.navigator.cardsShuffled {
+                        ShinyText(text: "凝神静气，选择三张塔罗牌\n拖动到紫色圆圈内\n", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
+                            .transition(scaleTransition)
+                        //                        .offset(x: animationFinished ?
+                        //                                    .ScreenWidth / 2 - 100
+                        //                        0
+                        //                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
+                        .onAppear {
+                            animationFinished = false
+                            withAnimation(springAnimation) {
+                                animationFinished = true
+                            }
                         }
                     }
+
+                    Spacer()
                 }
+
             }
         }
     }
@@ -129,11 +151,8 @@ import Combine
 
         func updateUIView(_ arView: CustomARView, context: Context) {
             if navigator.shouldStartExperience && !arView.started {
-                arView.addAnchor()
-//            arView.addCoaching()
-                arView.addCollisions()
-                arView.started = true
-                print("[AR] ExperienceStarted: \(arView.started)")
+                print("View updated, session should start!")
+                arView.addSession()
             }
         }
     }
@@ -146,6 +165,19 @@ import Combine
         var notifications: [Cancellable] = []
         var started: Bool = false
         var anchored: Bool = false
+        var loaded: Bool = false
+
+        var shouldCapture: Bool = false
+        let maxSelection = 3
+        let targetLuminence: CGFloat = 1000
+
+        var selectionCounter = 0 {
+            didSet {
+                if selectionCounter == maxSelection {
+                    print("[NAVIGATION] User has set all three cards, should navigate to interpretation")
+                }
+            }
+        }
 
         // MARK: Custom profile
         init(frame frameRect: CGRect, navigator: Binding<ViewNavigation>) {
@@ -161,7 +193,38 @@ import Combine
             fatalError("init(coder:) has not been implemented")
         }
 
+        func sessionWasInterrupted(_ session: ARSession) {
+            started = false
+        }
+
+        func sessionInterruptionEnded(_ session: ARSession) {
+            started = true
+        }
+
+        // MARK: Kind of like the unity equavalancy?
+        // Update? FixedUpdate?
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
+            print("Da! This is convenient: \(String(describing: frame.lightEstimate?.ambientIntensity))")
+            if let currentLight = frame.lightEstimate?.ambientIntensity {
+                if currentLight >= targetLuminence {
+                    if navigator.shouldStartExperience && !loaded {
+                        print("Target lunimance reached, started capturing anchor")
+                        addAnchor()
+                        addNotifications()
+                        addCollisions()
+                        // Don't add gestures yet since the user might be dragging things around... you know
+                        loaded = true
+                        navigator.sceneLoaded = true
+                        print("[AR] ExperienceStarted: \(loaded)")
+                    }
+                }
+            } else {
+                if !navigator.tooDark {
+                    withAnimation(springAnimation) {
+                        navigator.tooDark = true
+                    }
+                }
+            }
             if anchor.isAnchored {
                 if !anchored {
                     anchored = true
@@ -175,14 +238,12 @@ import Combine
             }
         }
 
-
-
         func addAnchor() {
             do {
                 try anchor = BasicPlant.loadBasicPlantScene()
 
                 print("[NAME] anchor's ID: \(String(describing: anchor.anchorIdentifier))")
-                print("Information about anchor: \(anchor)")
+//                print("Information about anchor: \(anchor)")
                 for child in anchor.children {
                     child.transform.rotation = simd_quatf(angle: .pi / 2, axis: SIMD3<Float>(0, 1, 0))
                     print("Getting child: \(child)")
@@ -201,10 +262,12 @@ import Combine
         func addCoaching() {
             // Create a ARCoachingOverlayView object
             let coachingOverlay = ARCoachingOverlayView(frame: .zero)
-//        // Make sure it rescales if the device orientation changes
-//        coachingOverlay.autoresizingMask = [
-//                .flexibleWidth, .flexibleHeight
-//        ]
+            // Make sure it rescales if the device orientation changes
+            // Strange error, the coach can't seem to be able to find a good place to place itself in the view's frame
+            // I'm NOT CALLING ADDCOACH ANYMORE
+            coachingOverlay.autoresizingMask = [
+                    .flexibleWidth, .flexibleHeight
+            ]
             // Set the Augmented Reality goal
             coachingOverlay.goal = .horizontalPlane
             // Set the ARSession
@@ -216,11 +279,8 @@ import Combine
             self.addSubview(coachingOverlay)
         }
 
-
-        func addCollisions() {
-            print("[ARCoaching] Getting \(self.scene.anchors.count) anchors")
-            anchor.generateCollisionShapes(recursive: true)
-
+        func addGestures() {
+            // MARK: Debugger draggable things
             if let evilEye = anchor.evilEye as? Entity & HasCollision {
                 self.installGestures(.all, for: evilEye)
                 print("[AR] evilEye has collision")
@@ -239,6 +299,28 @@ import Combine
             } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
 
 
+            for card in anchor.cardEntities {
+                if let card = card as? Entity & HasCollision {
+                    // MARK: I'm literally.... Errrrr....
+                    // BUT I think this card model is made by me.... So I guess there's no one else is to blame...
+                    if let cardModel = card.children.first?.children.first?.children.first?.children.first?.children.first as? ModelEntity {
+
+                        // MARK: Collision seems only to be able to work with entityB being some ModelEntity inside the original one
+                        print("[NAME] Changing card name \(cardModel.name) to cardModel")
+                        cardModel.name = "CardModel"
+                    }
+                    print("So the card is like: \(card)")
+                    // Only rotation and transition is allowed here in case user want to do something nasty
+                    self.installGestures([.rotation, .translation], for: card)
+                    print("[AR] the card has collistion")
+                } else { print("[ARBAD] A Card doesn't have collision, check whether physics is enabled in reality kit") }
+            }
+        }
+
+        func addCollisions() {
+            print("[ARCoaching] Getting \(self.scene.anchors.count) anchors")
+            anchor.generateCollisionShapes(recursive: true)
+
             // MARK: Is it OK to generate ModelEntity?
             let emptyMesh = MeshResource.generateBox(size: 0)
             let boxes = [anchor.goldenBoxLeft, anchor.goldenBoxMiddle, anchor.goldenBoxRight]
@@ -253,6 +335,8 @@ import Combine
                         print("[MODEL] Has components: \(String(describing: theModelBox.components))")
 
                         // There might just exist a better way to do it
+                        // MARK: Note that making the model invisible will still somehow block user's drag action
+                        // Guess we should add some kind of hint: DON'T LET GO UNLESS YOU"RE SURE, because you're not gonna drag it back
                         if theModelBox.model == nil {
                             print("[MODELWARN] No model in theBox, check again pls")
                         } else {
@@ -269,6 +353,9 @@ import Combine
                         event in
                         print("[BOX] The box: \(event.entityA.name) has collide with \(event.entityB.name)")
                         print("[BOX] So what's event.entityB again? \(event.entityB)")
+
+                        self.selectionCounter += 1
+
                         if event.entityB.name == "CardModel" {
                             print("Entity")
                             // On collision, we scale the chosen object
@@ -276,6 +363,7 @@ import Combine
 //                            event.entityB.scale *= 1.2
                             let theCard = event.entityB
                             let scaleTransform = Transform(scale: SIMD3<Float>.one * 1.5, rotation: simd_quatf(angle: 0, axis: SIMD3<Float>.zero), translation: SIMD3<Float>.zero)
+                            // Ah! the animation
                             theCard.move(to: scaleTransform, relativeTo: theCard, duration: 0.2, timingFunction: .easeInOut)
                         }
                     }
@@ -283,7 +371,7 @@ import Combine
                     let endSub = scene.subscribe(to: CollisionEvents.Ended.self, on: theBox) {
                         event in
                         print("[BOX] The box: \(event.entityA.name)'s collision with \(event.entityB.name) ended")
-
+                        self.selectionCounter -= 1
                         if event.entityB.name == "CardModel" {
                             // On collision, we scale the chosen object
                             // MARK: But only the cards for now!
@@ -298,36 +386,6 @@ import Combine
                     collisions.append(endSub)
 
                 }
-            }
-
-//            if let theBox = anchor.goldenBoxLeft as? Entity & HasCollision {
-//                self.installGestures(.all, for: theBox)
-//                print("[AR] theBox has collision")
-//            } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
-//
-//            if let theBox = anchor.goldenBoxMiddle as? Entity & HasCollision {
-//                self.installGestures(.all, for: theBox)
-//                print("[AR] theBox has collision")
-//            } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
-//
-//            if let theBox = anchor.goldenBoxRight as? Entity & HasCollision {
-//                self.installGestures(.all, for: theBox)
-//                print("[AR] theBox has collision")
-//            } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
-
-            for card in anchor.cardEntities {
-                if let card = card as? Entity & HasCollision {
-                    // MARK: I'm literally.... Errrrr....
-                    if let cardModel = card.children.first?.children.first?.children.first?.children.first?.children.first as? ModelEntity {
-
-                        // MARK: Collision seems only to be able to work with entityB being some ModelEntity inside the original one
-                        print("[NAME] Changing card name \(cardModel.name) to cardModel")
-                        cardModel.name = "CardModel"
-                    }
-                    print("So the card is like: \(card)")
-                    self.installGestures(.all, for: card)
-                    print("[AR] the card has collistion")
-                } else { print("[ARBAD] A Card doesn't have collision, check whether physics is enabled in reality kit") }
             }
 
             let beginSub = self.scene.subscribe(to: CollisionEvents.Began.self, on: anchor.goldenBox) {
@@ -350,10 +408,19 @@ import Combine
             collisions.append(endSub)
             print("[CAMERA] Now subscriptions are added")
 
+        }
 
+        func addNotifications() {
             anchor.actions.cardOperation1.onAction = handleShuffleEnd
             print("[NOTIFICATION] Notification handler for \(anchor.actions.cardOperation1.identifier) registered as \(String(describing: handleShuffleEnd))")
+        }
 
+        func addSession() {
+//            let config = ARWorldTrackingConfiguration()
+//            config.planeDetection = .horizontal
+//            session.run(config)
+//            started = true
+            session.delegate = self
         }
 
         func handleShuffleEnd(entity: Entity?) {
@@ -361,11 +428,9 @@ import Combine
             withAnimation(springAnimation) {
                 navigator.cardsShuffled = true
             }
-        }
 
-        public func coachingOverlayViewDidDeactivate(_ coachingOverlayView: ARCoachingOverlayView) {
-            print("[COACHING] Deactivated")
-            addCollisions()
+            // Don't drag around before you should OKAY???
+            addGestures()
         }
 
     }

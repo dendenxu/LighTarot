@@ -27,7 +27,7 @@ struct PredictLightView: View {
             }
         }
 //        .frame(width: .ScreenWidth, height: .ScreenHeight)
-            .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
+        .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
     }
 }
 
@@ -37,11 +37,11 @@ enum PredictLightViewSelection: CustomStringConvertible {
         switch self {
         case .animation: return "animation"
         case .category: return "category"
-        case .arCamera: return "arCamera"
+//        case .arCamera: return "arCamera"
         }
     }
 
     case animation
     case category
-    case arCamera
+//    case arCamera
 }
