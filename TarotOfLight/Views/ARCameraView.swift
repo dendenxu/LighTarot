@@ -23,7 +23,9 @@ import Combine
         @State var animationFinished = false
         var body: some View {
             ZStack {
+
                 ARCameraInnerView(navigator: $profile.navigator)
+
 //                .frame(width: .ScreenWidth, height: .ScreenHeight)
 
                 if !profile.navigator.anchorAdded {
@@ -40,6 +42,8 @@ import Combine
                                 profile.navigator.anchorAdded = false
                                 profile.navigator.cardsShuffled = false
                                 profile.navigator.shouldScale = false
+                                profile.navigator.sceneLoaded = false
+                                profile.navigator.tooDark = false
                             }
                         }) {
                             ZStack {
@@ -92,7 +96,7 @@ import Combine
                             .transition(scaleTransition)
                     } else if !profile.navigator.anchorAdded && profile.navigator.shouldStartExperience {
                         if profile.navigator.sceneLoaded {
-                            ShinyText(text: "即将进入AR塔罗世界", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
+                            ShinyText(text: "即将进入AR塔罗世界……\n请继续缓慢平移设备……", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                                 .transition(scaleTransition)
                         } else {
                             if profile.navigator.tooDark {
@@ -103,7 +107,7 @@ import Combine
                                     .transition(scaleTransition)
                             }
                         }
-                        
+
                     } else if profile.navigator.anchorAdded && !profile.navigator.cardsShuffled {
                         // On appear, move to the lower right corner
                         // to not disturb the user
@@ -153,6 +157,7 @@ import Combine
             if navigator.shouldStartExperience && !arView.started {
                 print("View updated, session should start!")
                 arView.addSession()
+
             }
         }
     }
@@ -169,13 +174,13 @@ import Combine
 
         var shouldCapture: Bool = false
         let maxSelection = 3
-        let targetLuminence: CGFloat = 1000
+        let targetLuminence: CGFloat = 1050
 
-        var selectionCounter = 0 {
-            didSet {
-                if selectionCounter == maxSelection {
-                    print("[NAVIGATION] User has set all three cards, should navigate to interpretation")
-                }
+        var selectionCounter = 0
+        
+        func checkSelectionCount() {
+            if selectionCounter == maxSelection {
+                print("[NAVIGATION] User has set all three cards, should navigate to interpretation")
             }
         }
 
@@ -185,6 +190,22 @@ import Combine
             super.init(frame: frameRect)
         }
 
+        // MARK: Is this OK?
+        // MARK: TRY TO RECOGNIZE END
+        @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+            guard let touchInView = sender?.location(in: self) else {
+              return
+            }
+            guard let hitEntity = self.entity(
+              at: touchInView
+            ) else {
+              // no entity was hit
+              return
+            }
+            
+            print("Getting hitEntity: \(hitEntity)")
+        }
+        
         @objc required dynamic init(frame frameRect: CGRect) {
             fatalError("init(frame:) has not been implemented")
         }
@@ -194,17 +215,24 @@ import Combine
         }
 
         func sessionWasInterrupted(_ session: ARSession) {
-            started = false
+            // MARK: BUG HERE
+            started = true
+            loaded = true
+            anchored = false
         }
 
-        func sessionInterruptionEnded(_ session: ARSession) {
-            started = true
-        }
+//        func sessionInterruptionEnded(_ session: ARSession) {
+//            started = true
+//        }
+
+        var shouldCheckDarkness: Bool = false
+
 
         // MARK: Kind of like the unity equavalancy?
         // Update? FixedUpdate?
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
-            print("Da! This is convenient: \(String(describing: frame.lightEstimate?.ambientIntensity))")
+
+
             if let currentLight = frame.lightEstimate?.ambientIntensity {
                 if currentLight >= targetLuminence {
                     if navigator.shouldStartExperience && !loaded {
@@ -217,12 +245,14 @@ import Combine
                         navigator.sceneLoaded = true
                         print("[AR] ExperienceStarted: \(loaded)")
                     }
-                }
-            } else {
-                if !navigator.tooDark {
-                    withAnimation(springAnimation) {
-                        navigator.tooDark = true
+                } else if shouldCheckDarkness {
+                    if !navigator.tooDark {
+                        withAnimation(springAnimation) {
+                            navigator.tooDark = true
+                        }
                     }
+                } else {
+                    print("Da! This is convenient: \(String(describing: frame.lightEstimate?.ambientIntensity))")
                 }
             }
             if anchor.isAnchored {
@@ -289,6 +319,7 @@ import Combine
 
             if let theCard = anchor.theCard as? Entity & HasCollision {
                 self.installGestures(.all, for: theCard)
+                
                 print("[AR] theCard has collision")
             } else { print("[ARBAD] theCard doesn't have collision, check whether physics is enabled in reality kit") }
 
@@ -315,6 +346,16 @@ import Combine
                     print("[AR] the card has collistion")
                 } else { print("[ARBAD] A Card doesn't have collision, check whether physics is enabled in reality kit") }
             }
+
+
+            let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+            addGestureRecognizer(tap)
+            
+            print("[GESTURE] Currently getting gestures: \(String(describing: gestureRecognizers))")
+            print("An example: \(String(describing: gestureRecognizers?.first))")
+            
+            
+            
         }
 
         func addCollisions() {
@@ -421,6 +462,10 @@ import Combine
 //            session.run(config)
 //            started = true
             session.delegate = self
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                print("Should check darkness added to true")
+                self.shouldCheckDarkness = true
+            }
         }
 
         func handleShuffleEnd(entity: Entity?) {
