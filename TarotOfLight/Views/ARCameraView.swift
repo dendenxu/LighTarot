@@ -177,7 +177,7 @@ import Combine
         let targetLuminence: CGFloat = 1050
 
         var selectionCounter = 0
-        
+
         func checkSelectionCount() {
             if selectionCounter == maxSelection {
                 print("[NAVIGATION] User has set all three cards, should navigate to interpretation")
@@ -194,18 +194,19 @@ import Combine
         // MARK: TRY TO RECOGNIZE END
         @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
             guard let touchInView = sender?.location(in: self) else {
-              return
+                return
             }
             guard let hitEntity = self.entity(
-              at: touchInView
+                at: touchInView
             ) else {
-              // no entity was hit
-              return
+                // no entity was hit
+                return
             }
-            
+
             print("Getting hitEntity: \(hitEntity)")
+            print("Getting State: \(String(describing: sender?.state))")
         }
-        
+
         @objc required dynamic init(frame frameRect: CGRect) {
             fatalError("init(frame:) has not been implemented")
         }
@@ -319,7 +320,7 @@ import Combine
 
             if let theCard = anchor.theCard as? Entity & HasCollision {
                 self.installGestures(.all, for: theCard)
-                
+
                 print("[AR] theCard has collision")
             } else { print("[ARBAD] theCard doesn't have collision, check whether physics is enabled in reality kit") }
 
@@ -350,12 +351,9 @@ import Combine
 
             let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
             addGestureRecognizer(tap)
-            
+
             print("[GESTURE] Currently getting gestures: \(String(describing: gestureRecognizers))")
             print("An example: \(String(describing: gestureRecognizers?.first))")
-            
-            
-            
         }
 
         func addCollisions() {
