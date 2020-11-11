@@ -27,7 +27,7 @@ import Combine
 //                .frame(width: .ScreenWidth, height: .ScreenHeight)
 
                 if !profile.navigator.anchorAdded {
-                    Color.black.opacity(0.5) // Black mask if not currently in an ARScene
+                    Color.black.opacity(0.8) // Black mask if not currently in an ARScene
                 }
 
                 VStack {
@@ -37,6 +37,9 @@ import Combine
                                 profile.weAreInGlobal = .predictLight
                                 profile.weAreIn = .category
                                 profile.navigator.shouldStartExperience = false
+                                profile.navigator.anchorAdded = false
+                                profile.navigator.cardsShuffled = false
+                                profile.navigator.shouldScale = false
                             }
                         }) {
                             ZStack {
@@ -88,28 +91,28 @@ import Combine
                     // to not disturb the user
                     ShinyText(text: "触摸塔罗牌，开始洗牌", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                         .transition(scaleTransition)
-                        .offset(x: animationFinished ?
+//                        .offset(x: animationFinished ?
 //                                    .ScreenWidth / 2 - 100
-                        0
-                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
-                        .onAppear {
-                            withAnimation(springAnimation) {
-                                animationFinished = true
-                            }
+//                        0
+//                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
+                    .onAppear {
+                        withAnimation(springAnimation) {
+                            animationFinished = true
+                        }
 
                     }
                 } else if profile.navigator.cardsShuffled {
                     ShinyText(text: "凝神静气，选择三张塔罗牌", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                         .transition(scaleTransition)
-                        .offset(x: animationFinished ?
+//                        .offset(x: animationFinished ?
 //                                    .ScreenWidth / 2 - 100
-                        0
-                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
-                        .onAppear {
-                            animationFinished = false
-                            withAnimation(springAnimation) {
-                                animationFinished = true
-                            }
+//                        0
+//                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
+                    .onAppear {
+                        animationFinished = false
+                        withAnimation(springAnimation) {
+                            animationFinished = true
+                        }
                     }
                 }
             }
@@ -240,20 +243,61 @@ import Combine
             let emptyMesh = MeshResource.generateBox(size: 0)
             let boxes = [anchor.goldenBoxLeft, anchor.goldenBoxMiddle, anchor.goldenBoxRight]
             for box in boxes {
-                if let theBox = box as? ModelEntity & HasCollision {
-                    self.installGestures(.all, for: theBox)
-                    print("[MODEL] Has model: \(String(describing: theBox.model))")
-                    print("[MODEL] Has components: \(String(describing: theBox.components))")
+                if let theBox = box as? Entity & HasCollision {
+                    if let theModelBox = theBox.children.first as? ModelEntity {
+                        print("[AR] theModelBox has collision, can be viewed as ModelEntity")
+                        // The boxes should not be able to be draged anymore...
+                        //                    self.installGestures(.all, for: theBox)
+                        // Instead we'll be wanting to make them invisible by setting the mesh to 0 depth cube
+                        print("[MODEL] Has model: \(String(describing: theModelBox.model))")
+                        print("[MODEL] Has components: \(String(describing: theModelBox.components))")
 
-                    // There might just exist a better way to do it
-                    if theBox.model == nil {
-                        print("[MODELWARN] No model in theBox, check again pls")
+                        // There might just exist a better way to do it
+                        if theModelBox.model == nil {
+                            print("[MODELWARN] No model in theBox, check again pls")
+                        } else {
+                            theModelBox.model?.mesh = emptyMesh
+                        }
                     } else {
-                        theBox.model?.mesh = emptyMesh
+                        print("[ARBAD] GoldenBox doesn't have collision or cannot be viewed as model entity, check whether physics is enabled in reality kit")
+                        print("Then what on earth is it?: \(String(describing: box))")
+
                     }
 
-                    print("[AR] theBox has collision")
-                } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
+                    // MARK: Fingers crossed
+                    let beginSub = scene.subscribe(to: CollisionEvents.Began.self, on: theBox) {
+                        event in
+                        print("[BOX] The box: \(event.entityA.name) has collide with \(event.entityB.name)")
+                        print("[BOX] So what's event.entityB again? \(event.entityB)")
+                        if event.entityB.name == "CardModel" {
+                            print("Entity")
+                            // On collision, we scale the chosen object
+                            // MARK: But only the cards for now!
+//                            event.entityB.scale *= 1.2
+                            let theCard = event.entityB
+                            let scaleTransform = Transform(scale: SIMD3<Float>.one * 1.5, rotation: simd_quatf(angle: 0, axis: SIMD3<Float>.zero), translation: SIMD3<Float>.zero)
+                            theCard.move(to: scaleTransform, relativeTo: theCard, duration: 0.2, timingFunction: .easeInOut)
+                        }
+                    }
+
+                    let endSub = scene.subscribe(to: CollisionEvents.Ended.self, on: theBox) {
+                        event in
+                        print("[BOX] The box: \(event.entityA.name)'s collision with \(event.entityB.name) ended")
+
+                        if event.entityB.name == "CardModel" {
+                            // On collision, we scale the chosen object
+                            // MARK: But only the cards for now!
+                            let theCard = event.entityB
+                            let scaleTransform = Transform(scale: SIMD3<Float>.one / 1.5, rotation: simd_quatf(angle: 0, axis: SIMD3<Float>.zero), translation: SIMD3<Float>.zero)
+                            theCard.move(to: scaleTransform, relativeTo: theCard, duration: 0.2, timingFunction: .easeInOut)
+                        }
+                    }
+
+                    // Save the subscription to an array
+                    collisions.append(beginSub)
+                    collisions.append(endSub)
+
+                }
             }
 
 //            if let theBox = anchor.goldenBoxLeft as? Entity & HasCollision {
@@ -273,6 +317,14 @@ import Combine
 
             for card in anchor.cardEntities {
                 if let card = card as? Entity & HasCollision {
+                    // MARK: I'm literally.... Errrrr....
+                    if let cardModel = card.children.first?.children.first?.children.first?.children.first?.children.first as? ModelEntity {
+
+                        // MARK: Collision seems only to be able to work with entityB being some ModelEntity inside the original one
+                        print("[NAME] Changing card name \(cardModel.name) to cardModel")
+                        cardModel.name = "CardModel"
+                    }
+                    print("So the card is like: \(card)")
                     self.installGestures(.all, for: card)
                     print("[AR] the card has collistion")
                 } else { print("[ARBAD] A Card doesn't have collision, check whether physics is enabled in reality kit") }
@@ -299,12 +351,12 @@ import Combine
             print("[CAMERA] Now subscriptions are added")
 
 
-            anchor.actions.cardOperation1.onAction = handleEnd
-            print("[NOTIFICATION] Notification handler for \(anchor.actions.cardOperation1.identifier) registered as \(String(describing: handleEnd))")
+            anchor.actions.cardOperation1.onAction = handleShuffleEnd
+            print("[NOTIFICATION] Notification handler for \(anchor.actions.cardOperation1.identifier) registered as \(String(describing: handleShuffleEnd))")
 
         }
 
-        func handleEnd(entity: Entity?) {
+        func handleShuffleEnd(entity: Entity?) {
             print("[NOTIFICATION] Notification from reality kit received")
             withAnimation(springAnimation) {
                 navigator.cardsShuffled = true
