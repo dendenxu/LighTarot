@@ -307,6 +307,37 @@
                             }
                           ],
                           "__version" : 1
+                        },
+                        {
+                          "__content" : [
+                            {
+                              "configurations" : [
+                                {
+                                  "__content" : [
+                                    {
+                                      "configurationBox" : {
+                                        "configuration" : {
+                                          "target" : [
+
+                                          ],
+                                          "userIdentifier" : "cardOperation 1"
+                                        },
+                                        "name" : {
+                                          "type" : "custom"
+                                        }
+                                      },
+                                      "identifier" : "26688182-A4B4-426D-A569-6551FA42A8EA",
+                                      "isEnabled" : true
+                                    }
+                                  ],
+                                  "__version" : 1
+                                }
+                              ],
+                              "identifier" : "9B38FFEC-8B58-46DB-96AD-6897C26B06F5",
+                              "isEnabled" : true
+                            }
+                          ],
+                          "__version" : 1
                         }
                       ],
                       "color" : [
@@ -327,7 +358,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -622,7 +654,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -917,7 +950,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -1212,7 +1246,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -1507,7 +1542,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -1802,7 +1838,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -2097,7 +2134,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -2392,7 +2430,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -2687,7 +2726,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -2982,7 +3022,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -3277,7 +3318,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -3572,7 +3614,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -3867,7 +3910,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -4162,7 +4206,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -4457,7 +4502,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -4752,7 +4798,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -5047,7 +5094,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -5342,7 +5390,8 @@
                               "configurationBox" : {
                                 "configuration" : {
                                   "target" : [
-                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291"
+                                    "2B05E56E-0796-430A-8AE4-DAC4387A1291",
+                                    "B2132C89-CE8B-4B91-B385-E7E281B619A9"
                                   ]
                                 },
                                 "name" : "tapTarget"
@@ -7086,7 +7135,7 @@
                           "width",
                           {
                             "typeName" : "Double",
-                            "value" : 0.10000000000000001
+                            "value" : 0.14999999999999999
                           }
                         ]
                       ],
@@ -7132,9 +7181,9 @@
                         0,
                         0.35395744442939758,
                         0,
-                        -0.15954533219337463,
-                        0.017697868868708611,
-                        0.048018161207437515,
+                        -0.15708421170711517,
+                        0,
+                        0.052235078066587448,
                         1
                       ]
                     }
@@ -7422,7 +7471,7 @@
                           "width",
                           {
                             "typeName" : "Double",
-                            "value" : 0.10000000000000001
+                            "value" : 0.14999999999999999
                           }
                         ]
                       ],
@@ -7468,9 +7517,9 @@
                         0,
                         0.35395744442939758,
                         0,
-                        -0.15241733193397522,
-                        0.01769787073135376,
-                        0.15551319718360901,
+                        -0.15653663873672485,
+                        0,
+                        0.15097050368785858,
                         1
                       ]
                     }
@@ -7853,7 +7902,7 @@
                           "width",
                           {
                             "typeName" : "Double",
-                            "value" : 0.10000000000000001
+                            "value" : 0.14999999999999999
                           }
                         ]
                       ],
@@ -7907,7 +7956,7 @@
                         0.35395744442939758,
                         0,
                         -0.15708412230014801,
-                        0.017697868868708611,
+                        0,
                         -0.047765869647264481,
                         1
                       ]
@@ -9571,21 +9620,21 @@
               "title" : "BasicPlantScene",
               "viewTransform" : {
                 "cameraTransform" : [
-                  0.14504007995128632,
-                  1.7881392011531716e-07,
-                  0.98942571878433228,
+                  -0.0035176873207092285,
+                  1.8253922462463379e-07,
+                  0.99999374151229858,
                   0,
-                  0.34738406538963318,
-                  0.93633913993835449,
-                  -0.050923246890306473,
+                  0.97495514154434204,
+                  0.22237499058246613,
+                  0.0034296631347388029,
                   0,
-                  -0.92643815279006958,
-                  0.35109665989875793,
-                  0.13580659031867981,
+                  -0.22237396240234375,
+                  0.97496110200881958,
+                  -0.00078249763464555144,
                   0,
-                  -0.4661504328250885,
-                  0.2121724933385849,
-                  0.16107781231403351,
+                  -0.18886014819145203,
+                  0.56305032968521118,
+                  0.11494036018848419,
                   1
                 ],
                 "sceneTransform" : [

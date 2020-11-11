@@ -298,6 +298,11 @@ for index, key in enumerate(objects.keys()):
 # for index in name_behavs:
 #     del behav2actionGroup(behaviors[index])[0:11]
 
+target_to_add = name_cards_runtime[0]
+for index in name_behavs:
+    behaviors[index]["__content"][0]["triggers"][0]["__content"][0]["configurationBox"]["configuration"]["target"].append(target_to_add)
+
+
 # MARK: Write to the rcproject file
 with open("com.apple.RCFoundation.Project", "w") as json_file:
     json.dump(json_obj, json_file)

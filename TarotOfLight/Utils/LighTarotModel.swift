@@ -15,11 +15,12 @@ struct ViewNavigation {
     var shouldScale = false
     var shouldStartExperience = false
     var anchorAdded = false
+    var cardsShuffled = false
 }
 
 class LighTarotModel: ObservableObject {
     
-    @Published var viewNavigator = ViewNavigation()
+    @Published var navigator = ViewNavigation()
     
     // MARK: Debugger view enabled?
     let showDebuggerAtLaunch = false
