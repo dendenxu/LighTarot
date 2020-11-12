@@ -154,9 +154,10 @@ import Combine
         }
 
         func updateUIView(_ arView: CustomARView, context: Context) {
-            if navigator.shouldStartExperience && !arView.started {
+            if navigator.shouldStartExperience && !arView.firstStarted {
                 print("View updated, session should start!")
                 arView.addSession()
+                arView.firstStarted = true
             }
         }
     }
@@ -167,18 +168,36 @@ import Combine
         var anchor = BasicPlant.BasicPlantScene()
         var collisions: [Cancellable] = []
         var notifications: [Cancellable] = []
-        var started: Bool = false
+        var firstStarted: Bool = false
         var firstTimeAnchored: Bool = false
         var loaded: Bool = false
+
+        let uuid = UUID()
 
         let maxSelection = 3
         let targetLuminence: CGFloat = 1050
 
         var selectionCounter = 0
 
+        class GestureDelegate: NSObject, UIGestureRecognizerDelegate {
+            func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//                if let arView = gestureRecognizer.view as? CustomARView, let otherArView = gestureRecognizer.view as? CustomARView {
+
+//                }
+                return true
+            }
+        }
+
+        let gestureDelegate = GestureDelegate()
+
         func checkSelectionCount() {
+            print("[NAVIGATION] Checking navigation: \(selectionCounter)/\(maxSelection)")
             if selectionCounter == maxSelection {
                 print("[NAVIGATION] User has set all three cards, should navigate to interpretation")
+                withAnimation(springAnimation) {
+                    navigator.weAreInGlobal = .predictLight
+                    navigator.weAreIn = .animation
+                }
             }
         }
 
@@ -191,7 +210,7 @@ import Combine
 
         // MARK: Is this OK?
         // MARK: TRY TO RECOGNIZE END
-        @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        @objc func handleGesture(_ sender: UIPanGestureRecognizer? = nil) {
             guard let touchInView = sender?.location(in: self) else {
                 return
             }
@@ -204,6 +223,12 @@ import Combine
 
             print("[TOUCH] Getting hitEntity: \(hitEntity)")
             print("[TOUCH] Getting State: \(String(describing: sender?.state))")
+            if let state = sender?.state {
+                if state == .ended || state == .cancelled {
+                    checkSelectionCount()
+                }
+            }
+
         }
 
         @objc required dynamic init(frame frameRect: CGRect) {
@@ -216,6 +241,7 @@ import Combine
 
         func sessionWasInterrupted(_ session: ARSession) {
             print("[SESSION] Interrupted")
+            removeAnchor()
             // MARK: BUG HERE, SHOULD WE DO ANYTHING HERE?
 //            started = true
 //            loaded = true
@@ -224,6 +250,7 @@ import Combine
 
         func sessionInterruptionEnded(_ session: ARSession) {
             print("[SESSION] Interruption Ended")
+            addAnchor()
 //            started = true
         }
 
@@ -352,11 +379,16 @@ import Combine
             }
 
 
-            let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
-            addGestureRecognizer(tap)
+            let gesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture(_:)))
+            addGestureRecognizer(gesture)
 
             print("[GESTURE] Currently getting gestures: \(String(describing: gestureRecognizers))")
             print("An example: \(String(describing: gestureRecognizers?.first))")
+
+
+            for gesture in gestureRecognizers ?? [] {
+                gesture.delegate = gestureDelegate
+            }
         }
 
         func addCollisions() {
@@ -396,10 +428,11 @@ import Combine
                         print("[BOX] The box: \(event.entityA.name) has collide with \(event.entityB.name)")
                         print("[BOX] So what's event.entityB again? \(event.entityB)")
 
-                        self.selectionCounter += 1
+
 
                         if event.entityB.name == "CardModel" {
-                            print("Entity")
+
+                            self.selectionCounter += 1
                             // On collision, we scale the chosen object
                             // MARK: But only the cards for now!
 //                            event.entityB.scale *= 1.2
@@ -413,8 +446,9 @@ import Combine
                     let endSub = scene.subscribe(to: CollisionEvents.Ended.self, on: theBox) {
                         event in
                         print("[BOX] The box: \(event.entityA.name)'s collision with \(event.entityB.name) ended")
-                        self.selectionCounter -= 1
+
                         if event.entityB.name == "CardModel" {
+                            self.selectionCounter -= 1
                             // On collision, we scale the chosen object
                             // MARK: But only the cards for now!
                             let theCard = event.entityB
