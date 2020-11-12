@@ -23,8 +23,6 @@ import Combine
         @State var animationFinished = false
         var body: some View {
             ZStack {
-
-//                ARCameraInnerViewDebug(navigator: $profile.navigator)
                 // So the bug comes from some of the code inside the block
                 ARCameraInnerView(navigator: $profile.navigator)
 
@@ -108,10 +106,6 @@ import Combine
                         // to not disturb the user
                         ShinyText(text: "触摸塔罗牌，开始洗牌", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                             .transition(scaleTransition)
-                        //                        .offset(x: animationFinished ?
-                        //                                    .ScreenWidth / 2 - 100
-                        //                        0
-                        //                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
                         .onAppear {
                             withAnimation(springAnimation) {
                                 animationFinished = true
@@ -121,10 +115,6 @@ import Combine
                     } else if profile.navigator.cardsShuffled {
                         ShinyText(text: "凝神静气，选择三张塔罗牌\n拖动到紫色圆圈内\n", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                             .transition(scaleTransition)
-                        //                        .offset(x: animationFinished ?
-                        //                                    .ScreenWidth / 2 - 100
-                        //                        0
-                        //                            : 0, y: animationFinished ? -.ScreenHeight / 2 - 100: 0)
                         .onAppear {
                             animationFinished = false
                             withAnimation(springAnimation) {
@@ -149,251 +139,6 @@ import Combine
         }
     }
 
-    // MARK: WTF? Are the shader just dead?
-    struct ARCameraInnerViewDebug: UIViewRepresentable {
-        @Binding var navigator: ViewNavigation
-        func makeUIView(context: Context) -> ARView {
-            print("[ARVIEW] MAKEUIVIEW CALLED")
-            let arView = CustomARViewDebug(frame: .zero, navigator: $navigator)
-
-//            let anchor = try! BasicPlant.loadBasicPlantScene()
-//            arView.scene.anchors.append(anchor)
-            navigator.shouldStartExperience = true
-            navigator.anchorAttached = true
-            navigator.cardsShuffled = true
-            navigator.sceneTooDark = true
-            navigator.anchorAdded = true
-            navigator.shouldScale = true
-            return arView
-        }
-        func updateUIView(_ uiView: ARView, context: Context) {
-
-        }
-        static func dismantleUIView(_ uiView: ARView, coordinator: ()) {
-
-        }
-    }
-
-    class CustomARViewDebug: ARView, ARCoachingOverlayViewDelegate, ARSessionDelegate {
-        @Binding var navigator: ViewNavigation
-        var anchor: BasicPlant.BasicPlantScene!
-        var collisions: [Cancellable] = []
-        var notifications: [Cancellable] = []
-        init(frame frameRect: CGRect, navigator: Binding<ViewNavigation>) {
-            self._navigator = navigator
-
-            super.init(frame: frameRect)
-            environment.sceneUnderstanding.options = [.occlusion]
-            loadAnchor()
-            addSession()
-            addCollisions()
-            addGestures()
-            addNotifications()
-        }
-
-        @objc required dynamic init?(coder decoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-
-        @objc required dynamic init(frame frameRect: CGRect) {
-            fatalError("init(frame:) has not been implemented")
-        }
-
-        func loadAnchor() {
-            anchor = try! BasicPlant.loadBasicPlantScene()
-            for child in anchor.children {
-                child.transform.rotation = simd_quatf(angle: .pi / 2, axis: SIMD3<Float>(0, 1, 0))
-            }
-            scene.anchors.append(anchor)
-        }
-
-        let gestureDelegate = GestureDelegate()
-        // MARK: Is this OK?
-        // MARK: TRY TO RECOGNIZE END
-        @objc func handleGesture(_ sender: UIPanGestureRecognizer? = nil) {
-            guard let touchInView = sender?.location(in: self) else {
-                return
-            }
-            guard let hitEntity = self.entity(
-                at: touchInView
-            ) else {
-                // no entity was hit
-                return
-            }
-
-            print("[TOUCH] Getting hitEntity: \(hitEntity)")
-            print("[TOUCH] Getting State: \(String(describing: sender?.state))")
-            if let state = sender?.state {
-                if state == .ended || state == .cancelled {
-//                    checkSelectionCount()
-                }
-            }
-
-        }
-        func addGestures() {
-            // MARK: Debugger draggable things
-            if let evilEye = anchor.evilEye as? Entity & HasCollision {
-                self.installGestures(.all, for: evilEye)
-                print("[AR] evilEye has collision")
-            } else { print("[ARBAD] evilEye doesn't have collision, check whether physics is enabled in reality kit") }
-
-
-            if let theCard = anchor.theCard as? Entity & HasCollision {
-                self.installGestures(.all, for: theCard)
-
-                print("[AR] theCard has collision")
-            } else { print("[ARBAD] theCard doesn't have collision, check whether physics is enabled in reality kit") }
-
-
-            if let theBox = anchor.goldenBox as? Entity & HasCollision {
-                self.installGestures(.all, for: theBox)
-                print("[AR] theBox has collision")
-            } else { print("[ARBAD] GoldenBox doesn't have collision, check whether physics is enabled in reality kit") }
-
-
-            for card in anchor.cardEntities {
-                if let card = card as? Entity & HasCollision {
-                    // MARK: I'm literally.... Errrrr....
-                    // BUT I think this card model is made by me.... So I guess there's no one else is to blame...
-                    if let cardModel = card.children.first?.children.first?.children.first?.children.first?.children.first as? ModelEntity {
-
-                        // MARK: Collision seems only to be able to work with entityB being some ModelEntity inside the original one
-                        print("[NAME] Changing card name \(cardModel.name) to cardModel")
-                        cardModel.name = "CardModel"
-                    }
-                    print("So the card is like: \(card)")
-                    // Only rotation and transition is allowed here in case user want to do something nasty
-                    self.installGestures([.rotation, .translation], for: card)
-                    print("[AR] the card has collistion")
-                } else { print("[ARBAD] A Card doesn't have collision, check whether physics is enabled in reality kit") }
-            }
-
-
-            let gesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture(_:)))
-            addGestureRecognizer(gesture)
-
-            print("[GESTURE] Currently getting gestures: \(String(describing: gestureRecognizers))")
-            print("An example: \(String(describing: gestureRecognizers?.first))")
-
-
-            for gesture in gestureRecognizers ?? [] {
-                gesture.delegate = gestureDelegate
-            }
-        }
-
-
-        class GestureDelegate: NSObject, UIGestureRecognizerDelegate {
-            func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//                if let arView = gestureRecognizer.view as? CustomARView, let otherArView = gestureRecognizer.view as? CustomARView {
-
-//                }
-                return true
-            }
-        }
-
-        func addCollisions() {
-            anchor.generateCollisionShapes(recursive: true)
-
-            // MARK: Is it OK to generate ModelEntity?
-            let emptyMesh = MeshResource.generateBox(size: 0)
-            let boxes = [anchor.goldenBoxLeft, anchor.goldenBoxMiddle, anchor.goldenBoxRight]
-            for box in boxes {
-                if let theBox = box as? Entity & HasCollision {
-                    if let theModelBox = theBox.children.first as? ModelEntity {
-                        if theModelBox.model == nil {
-                        } else {
-                            theModelBox.model?.mesh = emptyMesh
-                        }
-                    }
-
-                    // MARK: Fingers crossed
-                    let beginSub = scene.subscribe(to: CollisionEvents.Began.self, on: theBox) {
-                        event in
-                        if event.entityB.name == "CardModel" {
-
-
-                            // On collision, we scale the chosen object
-                            // MARK: But only the cards for now!
-//                            event.entityB.scale *= 1.2
-                            let theCard = event.entityB
-                            let scaleTransform = Transform(scale: SIMD3<Float>.one * 1.5, rotation: simd_quatf(angle: 0, axis: SIMD3<Float>.zero), translation: SIMD3<Float>.zero)
-                            // Ah! the animation
-                            theCard.move(to: scaleTransform, relativeTo: theCard, duration: 0.2, timingFunction: .easeInOut)
-                        }
-                    }
-
-                    let endSub = scene.subscribe(to: CollisionEvents.Ended.self, on: theBox) {
-                        event in
-                        if event.entityB.name == "CardModel" {
-
-                            // On collision, we scale the chosen object
-                            // MARK: But only the cards for now!
-                            let theCard = event.entityB
-                            let scaleTransform = Transform(scale: SIMD3<Float>.one / 1.5, rotation: simd_quatf(angle: 0, axis: SIMD3<Float>.zero), translation: SIMD3<Float>.zero)
-                            theCard.move(to: scaleTransform, relativeTo: theCard, duration: 0.2, timingFunction: .easeInOut)
-                        }
-                    }
-
-                    // Save the subscription to an array
-                    collisions.append(beginSub)
-                    collisions.append(endSub)
-
-                }
-            }
-            if let goldenBox = anchor.goldenBox as? Entity & HasCollision {
-                let beginSub = scene.subscribe(to: CollisionEvents.Began.self, on: goldenBox) { [weak self]
-                    event in
-                    withAnimation(springAnimation) {
-                        self?.navigator.shouldScale.toggle()
-                    }
-                    print("\(event.entityA.name) collided with \(event.entityB.name)")
-                }
-
-                let endSub = scene.subscribe(to: CollisionEvents.Ended.self, on: goldenBox) { [weak self]
-                    event in
-                    withAnimation(springAnimation) {
-                        self?.navigator.shouldScale.toggle()
-                    }
-
-                    print("\(event.entityA.name)'s collision with \(event.entityB.name) ended")
-                }
-                collisions.append(beginSub)
-                collisions.append(endSub)
-                print("[CAMERA] Now subscriptions are added")
-            }
-
-
-        }
-
-        func addNotifications() {
-            anchor.actions.cardOperation1.onAction = { [weak self] (entity: Entity?) -> Void in
-                self?.handleShuffleEnd(entity: entity)
-            }
-            print("[NOTIFICATION] Notification handler for \(anchor.actions.cardOperation1.identifier) registered as \(String(describing: handleShuffleEnd))")
-        }
-
-        func addSession() {
-//            let config = ARWorldTrackingConfiguration()
-//            config.planeDetection = .horizontal
-//            session.run(config)
-//            started = true
-            session.delegate = self
-
-        }
-
-        func handleShuffleEnd(entity: Entity?) {
-            print("[NOTIFICATION] Notification from reality kit received")
-            withAnimation(springAnimation) {
-                navigator.cardsShuffled = true
-            }
-
-//             Don't drag around before you should OKAY???
-            addGestures()
-        }
-
-
-    }
-
     struct ARCameraInnerView: UIViewRepresentable {
         @Binding var navigator: ViewNavigation
 
@@ -412,13 +157,29 @@ import Combine
         }
 
         static func dismantleUIView(_ uiView: CustomARView, coordinator: ()) {
-//            uiView.session.pause()
-//            uiView.removeFromSuperview()
 
-//            uiView = nil
         }
     }
 
+
+    // MARK: This is some serious bug here so I guess I'll document it here
+    // Whether using self in animation is still to be discussed, should check later
+
+    // POSSIBLE MEMORY LEAK, DUE TO AUTOMATIC REFERENCE COUNT
+    // LEADING TO THE CUSTOMARVIEW NOT BEING DISMANTLED PROPERLY
+    // HOLDING THE TEXTURE/MATERIAL
+    // AND THE NEXT ARVIEW WILL NOT BE ALBE TO USE THOSE PROPERLY
+
+    // SOLUTION: USE WEAK SELF
+
+    // It's worth noting that, ARC will lead to possible memory reference loop
+    // Which is quite easy to happen in closure with reference to self if you're not careful
+    // Problem is, memory leak isn't just memory leak. Metal seems to handle textures in a way that
+    // Only one ARSession/ARView can reference it at the same time
+    // So if your old ARView is not destroyed properly, the next one will suffer!
+    // Leading to some extremely unsatisfying and "undebugable" senarios
+    // In my case, the APP crashes immediately in debug mode, and displays inproperly/
+    // refuses to handle gestures, without debugging.
     class CustomARView: ARView, ARCoachingOverlayViewDelegate, ARSessionDelegate {
         @Binding var navigator: ViewNavigation
         var anchor: BasicPlant.BasicPlantScene!
@@ -520,18 +281,10 @@ import Combine
 
         func sessionWasInterrupted(_ session: ARSession) {
             print("[SESSION] Interrupted")
-
-//            removeAnchor()
-            // MARK: BUG HERE, SHOULD WE DO ANYTHING HERE?
-//            started = true
-//            loaded = true
-//            firstTimeAnchored = false
         }
 
         func sessionInterruptionEnded(_ session: ARSession) {
             print("[SESSION] Interruption Ended")
-//            addAnchor()
-//            started = true
         }
 
 
@@ -769,10 +522,7 @@ import Combine
         }
 
         func addSession() {
-//            let config = ARWorldTrackingConfiguration()
-//            config.planeDetection = .horizontal
-//            session.run(config)
-//            started = true
+
             session.delegate = self
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
                 print("Should check darkness added to true")
