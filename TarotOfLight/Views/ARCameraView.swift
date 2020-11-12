@@ -37,12 +37,6 @@ import Combine
                                 profile.navigator.weAreInGlobal = .predictLight
                                 profile.navigator.weAreIn = .category
                                 // Shoul we change this?
-                                profile.navigator.shouldStartExperience = false
-                                profile.navigator.anchorAdded = false
-                                profile.navigator.cardsShuffled = false
-                                profile.navigator.shouldScale = false
-                                profile.navigator.anchorAttached = false
-                                profile.navigator.sceneTooDark = false
                             }
                         }) {
                             ZStack {
@@ -140,6 +134,15 @@ import Combine
                     Spacer()
                 }
 
+            }.onDisappear {
+                profile.navigator.shouldStartExperience = false
+                profile.navigator.anchorAttached = false
+                profile.navigator.cardsShuffled = false
+                profile.navigator.sceneTooDark = false
+                profile.navigator.anchorAdded = false
+                profile.navigator.shouldScale = false
+            }.onAppear {
+                print("[NAVIGATION] ??? \(profile.navigator)")
             }
         }
     }
@@ -148,8 +151,9 @@ import Combine
         @Binding var navigator: ViewNavigation
 
         func makeUIView(context: Context) -> CustomARView {
-            let arView = CustomARView(frame: .zero, navigator: $navigator, anchor: $navigator.anchor)
-//            arView.loadAnchor()
+            print("[ARVIEW] MAKEUIVIEW CALLED")
+            let arView = CustomARView(frame: .zero, navigator: $navigator)
+            arView.loadAnchor()
             return arView
         }
 
@@ -160,12 +164,19 @@ import Combine
                 arView.firstStarted = true
             }
         }
+        
+        static func dismantleUIView(_ uiView: CustomARView, coordinator: ()) {
+//            uiView.session.pause()
+//            uiView.removeFromSuperview()
+            
+//            uiView = nil
+        }
     }
 
     class CustomARView: ARView, ARCoachingOverlayViewDelegate, ARSessionDelegate {
         @Binding var navigator: ViewNavigation
-        @Binding var anchor: BasicPlant.BasicPlantScene
-        
+        var anchor: BasicPlant.BasicPlantScene!
+
         var collisions: [Cancellable] = []
         var notifications: [Cancellable] = []
         var firstStarted: Bool = false
@@ -179,6 +190,22 @@ import Combine
 
         var selectionCounter = 0
 
+        // MARK: CALL ME
+        func loadAnchor() {
+            do {
+                try anchor = BasicPlant.loadBasicPlantScene()
+
+                print("[NAME] anchor's ID: \(String(describing: anchor.anchorIdentifier))")
+                //                print("Information about anchor: \(anchor)")
+                for child in anchor.children {
+                    child.transform.rotation = simd_quatf(angle: .pi / 2, axis: SIMD3<Float>(0, 1, 0))
+//                    print("Getting child: \(child)")
+                }
+
+            } catch {
+                print("Ah... Something went wrong, I think you're getting a black screen now.")
+            }
+        }
         class GestureDelegate: NSObject, UIGestureRecognizerDelegate {
             func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
 //                if let arView = gestureRecognizer.view as? CustomARView, let otherArView = gestureRecognizer.view as? CustomARView {
@@ -202,9 +229,9 @@ import Combine
         }
 
         // MARK: Custom profile
-        init(frame frameRect: CGRect, navigator: Binding<ViewNavigation>, anchor: Binding<BasicPlant.BasicPlantScene>) {
+        init(frame frameRect: CGRect, navigator: Binding<ViewNavigation>) {
             self._navigator = navigator
-            self._anchor = anchor
+
             super.init(frame: frameRect)
             environment.sceneUnderstanding.options = [.occlusion]
         }
@@ -242,7 +269,8 @@ import Combine
 
         func sessionWasInterrupted(_ session: ARSession) {
             print("[SESSION] Interrupted")
-            removeAnchor()
+
+//            removeAnchor()
             // MARK: BUG HERE, SHOULD WE DO ANYTHING HERE?
 //            started = true
 //            loaded = true
@@ -251,9 +279,10 @@ import Combine
 
         func sessionInterruptionEnded(_ session: ARSession) {
             print("[SESSION] Interruption Ended")
-            addAnchor()
+//            addAnchor()
 //            started = true
         }
+
 
         var shouldCheckDarkness: Bool = false
 
@@ -285,14 +314,19 @@ import Combine
             if anchor.isAnchored {
                 if !firstTimeAnchored {
                     firstTimeAnchored = true
-                    print("[ANCHOR] now anchored")
-                    withAnimation(springAnimation) {
-                        navigator.anchorAttached = true
+                    if !navigator.anchorAttached {
+                        print("[ANCHOR] now anchored")
+                        withAnimation(springAnimation) {
+                            navigator.anchorAttached = true
+                        }
                     }
                 }
             } else {
-                firstTimeAnchored = false
                 navigator.anchorAttached = false
+                if self.scene.anchors.count == 0 && navigator.anchorAdded {
+                    print("[ANCHOR] Not attached, anchor count is zero")
+                }
+
             }
         }
 
