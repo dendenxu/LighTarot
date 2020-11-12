@@ -10,6 +10,7 @@ import Foundation
 import CoreHaptics
 import SwiftyJSON
 import SwiftUI
+import RealityKit
 
 struct ViewNavigation {
     // ARView sectoin
@@ -25,6 +26,24 @@ struct ViewNavigation {
     var weAreInGlobal: GlobalViewSelection = .debugger
     var weAreInCategory: CategorySelection = .love
     var weAreInSelector: SelectorSelection = .mainPage
+    
+    @State var anchor = BasicPlant.BasicPlantScene()
+    
+    func loadAnchor() {
+        do {
+            try anchor = BasicPlant.loadBasicPlantScene()
+
+            print("[NAME] anchor's ID: \(String(describing: anchor.anchorIdentifier))")
+//                print("Information about anchor: \(anchor)")
+            for child in anchor.children {
+                child.transform.rotation = simd_quatf(angle: .pi / 2, axis: SIMD3<Float>(0, 1, 0))
+                print("Getting child: \(child)")
+            }
+
+        } catch {
+            print("Ah... Something went wrong, I think you're getting a black screen now.")
+        }
+    }
 }
 
 class LighTarotModel: ObservableObject {
@@ -144,6 +163,7 @@ class LighTarotModel: ObservableObject {
         loadCardContentFromFile(filename: cardContentFileName)
         validateCardInfo(count: 5)
         prepareHaptics()
+        navigator.loadAnchor()
         prepareView()
     }
 

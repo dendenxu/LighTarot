@@ -37,12 +37,12 @@ import Combine
                                 profile.navigator.weAreInGlobal = .predictLight
                                 profile.navigator.weAreIn = .category
                                 // Shoul we change this?
-//                                profile.navigator.shouldStartExperience = false
-//                                profile.navigator.anchorAdded = false
-//                                profile.navigator.cardsShuffled = false
-//                                profile.navigator.shouldScale = false
-//                                profile.navigator.sceneLoaded = false
-//                                profile.navigator.tooDark = false
+                                profile.navigator.shouldStartExperience = false
+                                profile.navigator.anchorAdded = false
+                                profile.navigator.cardsShuffled = false
+                                profile.navigator.shouldScale = false
+                                profile.navigator.anchorAttached = false
+                                profile.navigator.sceneTooDark = false
                             }
                         }) {
                             ZStack {
@@ -148,8 +148,8 @@ import Combine
         @Binding var navigator: ViewNavigation
 
         func makeUIView(context: Context) -> CustomARView {
-            let arView = CustomARView(frame: .zero, navigator: $navigator)
-            arView.loadAnchor()
+            let arView = CustomARView(frame: .zero, navigator: $navigator, anchor: $navigator.anchor)
+//            arView.loadAnchor()
             return arView
         }
 
@@ -164,8 +164,8 @@ import Combine
 
     class CustomARView: ARView, ARCoachingOverlayViewDelegate, ARSessionDelegate {
         @Binding var navigator: ViewNavigation
-
-        var anchor = BasicPlant.BasicPlantScene()
+        @Binding var anchor: BasicPlant.BasicPlantScene
+        
         var collisions: [Cancellable] = []
         var notifications: [Cancellable] = []
         var firstStarted: Bool = false
@@ -202,8 +202,9 @@ import Combine
         }
 
         // MARK: Custom profile
-        init(frame frameRect: CGRect, navigator: Binding<ViewNavigation>) {
+        init(frame frameRect: CGRect, navigator: Binding<ViewNavigation>, anchor: Binding<BasicPlant.BasicPlantScene>) {
             self._navigator = navigator
+            self._anchor = anchor
             super.init(frame: frameRect)
             environment.sceneUnderstanding.options = [.occlusion]
         }
@@ -270,7 +271,7 @@ import Combine
                         // Don't add gestures yet since the user might be dragging things around... you know
                         navigator.anchorAdded = true // sceneLoaded indicates a different UI
                         navigator.sceneTooDark = false // But we still want to clean up things
-                        print("[AR] ExperienceStarted: \(loaded)")
+                        print("[AR] ExperienceStarted: \(navigator.anchorAdded)")
                     } else if shouldCheckDarkness {
                         withAnimation(springAnimation) {
                             navigator.sceneTooDark = true
@@ -303,22 +304,7 @@ import Combine
             scene.removeAnchor(anchor)
         }
 
-        func loadAnchor() {
-            do {
-                try anchor = BasicPlant.loadBasicPlantScene()
 
-                print("[NAME] anchor's ID: \(String(describing: anchor.anchorIdentifier))")
-//                print("Information about anchor: \(anchor)")
-                for child in anchor.children {
-                    child.transform.rotation = simd_quatf(angle: .pi / 2, axis: SIMD3<Float>(0, 1, 0))
-                    print("Getting child: \(child)")
-                }
-
-                print("[ARCoaching] The plant is successfully loaded to the anchor, \(self.scene.anchors.count) anchors in total")
-            } catch {
-                print("Ah... Something went wrong, I think you're getting a black screen now.")
-            }
-        }
 
         func addCoaching() {
             // Create a ARCoachingOverlayView object
