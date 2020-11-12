@@ -29,7 +29,7 @@ struct ThirdIntroPage: View {
             VStack(spacing: 30) {
                 Button(action: {
                     withAnimation(springAnimation) {
-                        profile.weAreInGlobal = .selector
+                        profile.navigator.weAreInGlobal = .selector
                     }
                 }) {
                     VStack {
@@ -58,8 +58,8 @@ struct ThirdIntroPage: View {
                     Button(action: {
                         withAnimation(springAnimation) {
                             profile.proficientUser = true
-                            profile.weAreInGlobal = .selector
-                            profile.weAreInSelector = .mainPage
+                            profile.navigator.weAreInGlobal = .selector
+                            profile.navigator.weAreInSelector = .mainPage
                         }
 
                     }) {
@@ -82,7 +82,7 @@ struct ThirdIntroPage: View {
                 if onMe {
                     Button(action: {
                         withAnimation(springAnimation) {
-                            profile.weAreInGlobal = .selector
+                            profile.navigator.weAreInGlobal = .selector
                         }
                     }) {
                         ShinyText(text: "进入卜光世界……", font: .SourceHanSansHeavy, size: 16, textColor: Color("MediumLime"), shadowColor: .white)
@@ -115,7 +115,7 @@ struct SecondIntroPage: View {
             VStack(spacing: 30) {
                 Button(action: {
                     withAnimation(springAnimation) {
-                        profile.weAreInGlobal = .selector
+                        profile.navigator.weAreInGlobal = .selector
                     }
                 }) {
                     VStack {
@@ -169,7 +169,7 @@ struct FirstIntroPage: View {
             VStack(spacing: 30) {
                 Button(action: {
                     withAnimation(springAnimation) {
-                        profile.weAreInGlobal = .selector
+                        profile.navigator.weAreInGlobal = .selector
                     }
                 }) {
                     VStack {

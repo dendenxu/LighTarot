@@ -54,8 +54,8 @@ struct Card: View {
             print("Give me some action upon hitting the button")
             profile.complexSuccess()
             withAnimation(springAnimation) {
-                if !cardContent.locked || locked { profile.weAreInGlobal = .arCamera }
-                else { profile.weAreIn = .animation }
+                if !cardContent.locked || locked { profile.navigator.weAreInGlobal = .arCamera }
+                else { profile.navigator.weAreIn = .animation }
             }
         }) {
             ZStack(alignment: .topLeading) {
@@ -105,11 +105,11 @@ struct CardPageView: View {
                             print("Getting back...")
                             profile.complexSuccess()
                             withAnimation(fasterSpringAnimation) {
-                                profile.weAreInGlobal = .selector;
+                                profile.navigator.weAreInGlobal = .selector;
                             }
                         }) {
                             ZStack(alignment: .topLeading) {
-                                ShinyText(text: "< " + profile.weAreInCategory.descriptionChinese, font: .DefaultChineseFont, size: 20, textColor: Color("LightGray"))
+                                ShinyText(text: "< " + profile.navigator.weAreInCategory.descriptionChinese, font: .DefaultChineseFont, size: 20, textColor: Color("LightGray"))
                             }
                         }
                             .padding(.top, 50)
@@ -124,25 +124,25 @@ struct CardPageView: View {
                             HStack(spacing: 30) {
                                 Button (action: {
                                     withAnimation(slowSpringAnimation) {
-                                        profile.lockingSelection = .unlocked
+                                        profile.navigator.lockingSelection = .unlocked
                                         currentIndex = 0
                                     }
                                     NotificationCenter.default.post(
                                         name: NSNotification.PagerTapped, object: nil, userInfo: ["uuid": uuid, "currentIndex": currentIndex])
                                 }
                                 ) {
-                                    ShinyText(text: LockingSelection.unlocked.description, font: .DefaultChineseFont, size: 16, textColor: profile.lockingSelection == .unlocked ? profile.lockingSelection.foregroundColor : Color("LightGray"), shadowColor: profile.lockingSelection == .unlocked ? profile.lockingSelection.foregroundColor : Color("LightGray"))
+                                    ShinyText(text: LockingSelection.unlocked.description, font: .DefaultChineseFont, size: 16, textColor: profile.navigator.lockingSelection == .unlocked ? profile.navigator.lockingSelection.foregroundColor : Color("LightGray"), shadowColor: profile.navigator.lockingSelection == .unlocked ? profile.navigator.lockingSelection.foregroundColor : Color("LightGray"))
                                 }
                                 Button (action: {
                                     withAnimation(slowSpringAnimation) {
-                                        profile.lockingSelection = .locked
+                                        profile.navigator.lockingSelection = .locked
                                         currentIndex = 1
                                     }
                                     NotificationCenter.default.post(
                                         name: NSNotification.PagerTapped, object: nil, userInfo: ["uuid": uuid, "currentIndex": currentIndex])
                                 }
                                 ) {
-                                    ShinyText(text: LockingSelection.locked.description, font: .DefaultChineseFont, size: 16, textColor: profile.lockingSelection == .locked ? profile.lockingSelection.foregroundColor : Color("LightGray"), shadowColor: profile.lockingSelection == .locked ? profile.lockingSelection.foregroundColor : Color("LightGray"))
+                                    ShinyText(text: LockingSelection.locked.description, font: .DefaultChineseFont, size: 16, textColor: profile.navigator.lockingSelection == .locked ? profile.navigator.lockingSelection.foregroundColor : Color("LightGray"), shadowColor: profile.navigator.lockingSelection == .locked ? profile.navigator.lockingSelection.foregroundColor : Color("LightGray"))
                                 }
                             }
                                 .padding(.bottom, 10)
@@ -152,10 +152,10 @@ struct CardPageView: View {
                                 VStack(alignment: .center) {
                                     HStack(spacing: 30) {
                                         Spacer()
-                                        (profile.lockingSelection == .unlocked ? profile.lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50, height: 2).offset(y: -3)
-                                        (profile.lockingSelection == .locked ? profile.lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50, height: 2).offset(y: -3)
+                                        (profile.navigator.lockingSelection == .unlocked ? profile.navigator.lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50, height: 2).offset(y: -3)
+                                        (profile.navigator.lockingSelection == .locked ? profile.navigator.lockingSelection.foregroundColor : Color("LightGray").opacity(0)).frame(width: 50, height: 2).offset(y: -3)
                                         Spacer()
-                                    }.background(profile.lockingSelection.backgroundColor)
+                                    }.background(profile.navigator.lockingSelection.backgroundColor)
                                         .frame(height: 3)
                                 }.frame(width: geo.size.width, height: geo.size.height)
                                     .offset(y: geo.size.height / 2)
@@ -173,9 +173,9 @@ struct CardPageView: View {
             ZStack {
                 PagerView(accentColor: .white, overlookColor: .gray, backgroundColor: Color.black.opacity(0.2), hasPageDot: false, pageCount: cardPageCount, uuid: uuid, currentIndex: $currentIndex, percentages: $percentatges, customEnd: {
                     withAnimation(springAnimation) {
-                        profile.lockingSelection = (currentIndex == 1) ? .locked : .unlocked
+                        profile.navigator.lockingSelection = (currentIndex == 1) ? .locked : .unlocked
                     }
-                    print("Changing locking state to \(profile.lockingSelection)")
+                    print("Changing locking state to \(profile.navigator.lockingSelection)")
                 }) {
                     FullScroll(texts: profile.cardContents, locked: false)
                         .frame(width: .ScreenWidth)

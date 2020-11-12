@@ -13,23 +13,23 @@ struct SelectorView: View {
     @EnvironmentObject var profile: LighTarotModel
     var body: some View {
         ZStack(alignment: .bottom) {
-//            if profile.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
-//            else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
-//            else if profile.weAreInSelector == .minePage { Color("LightGray") }
+//            if profile.navigator.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
+//            else if profile.navigator.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
+//            else if profile.navigator.weAreInSelector == .minePage { Color("LightGray") }
             // Background color: a small shade of grey, filling the whole screen
             // Adding background color for different page
             // We're defining pages after a background color so that they can use different transition when loading
             // The color block sits there without any transition animation to be applied
-            if (profile.weAreInSelector == .mainPage) {
+            if (profile.navigator.weAreInSelector == .mainPage) {
                 MainPageView(progress: $profile.energy)
                     .frame(width: .ScreenWidth, height: .ScreenHeight)
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
-            } else if (profile.weAreInSelector == .cardPage) {
+            } else if (profile.navigator.weAreInSelector == .cardPage) {
                 CategoryView()
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
                     .transition(.fly)
-            } else if (profile.weAreInSelector == .minePage) {
+            } else if (profile.navigator.weAreInSelector == .minePage) {
                 MinePageView()
                     .frame(width: .ScreenWidth, height: .ScreenHeight)
                     .clipShape(RoundedRectangle(cornerRadius: .ScreenCornerRadius))
@@ -75,17 +75,17 @@ struct PageSelectorButton: View {
         Button(action: {
             profile.complexSuccess()
             withAnimation(.spring(response: 0.2, dampingFraction: 2, blendDuration: 2)) {
-                profile.weAreInSelector = whoWeAre
+                profile.navigator.weAreInSelector = whoWeAre
             }
         }) {
             VStack
             {
-                Image.default(String(describing: whoWeAre) + ((profile.weAreInSelector == whoWeAre) ? "Material" : ""))
+                Image.default(String(describing: whoWeAre) + ((profile.navigator.weAreInSelector == whoWeAre) ? "Material" : ""))
                     .frame(height: profile.selectorIsChanged ? 50 : 40)
                     .shadow(radius: 10)
                 // MARK: Showing the description even if you're a proficient user
                 if !profile.selectorIsChanged {
-                    ShinyText(text: whoWeAre.descChinese, font: (profile.weAreInSelector == whoWeAre) ? .DefaultChineseFont : .SourceHanSansLight, size: 14, textColor: Color("MediumLime"), shadowColor: Color.black.opacity(0))
+                    ShinyText(text: whoWeAre.descChinese, font: (profile.navigator.weAreInSelector == whoWeAre) ? .DefaultChineseFont : .SourceHanSansLight, size: 14, textColor: Color("MediumLime"), shadowColor: Color.black.opacity(0))
                 }
             }
         }

@@ -42,9 +42,9 @@ struct NewCardView: View {
                     
                     withAnimation(springAnimation) {
                         profile.shouldShowNewCardView = false
-                        profile.weAreInSelector = .cardPage
-                        profile.weAreInGlobal = .predictLight
-                        profile.weAreIn = .category
+                        profile.navigator.weAreInSelector = .cardPage
+                        profile.navigator.weAreInGlobal = .predictLight
+                        profile.navigator.weAreIn = .category
                     }
 
                 }) {

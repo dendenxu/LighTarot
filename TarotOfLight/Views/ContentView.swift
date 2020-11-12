@@ -17,10 +17,10 @@ struct ContentView: View {
     @EnvironmentObject var profile: LighTarotModel
     var body: some View {
         ZStack(alignment: .bottom) {
-            if (profile.weAreInGlobal == .selector) {
-                if profile.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
-                else if profile.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
-                else if profile.weAreInSelector == .minePage { Color("LightGray") }
+            if (profile.navigator.weAreInGlobal == .selector) {
+                if profile.navigator.weAreInSelector == .mainPage { Color(profile.energy >= 100.0 ? "MediumDarkPurple" : "LightGray") }
+                else if profile.navigator.weAreInSelector == .cardPage { Color("MediumDarkPurple") }
+                else if profile.navigator.weAreInSelector == .minePage { Color("LightGray") }
                 SelectorView()
                     .transition(scaleTransition)
 
@@ -32,12 +32,12 @@ struct ContentView: View {
                     Spacer()
                 }
 
-            } else if (profile.weAreInGlobal == .predictLight) {
-                if (profile.weAreIn == .animation) { Color("MediumDarkPurple") }
-                else if (profile.weAreIn == .category) { Color("LightMediumDarkPurple") }
+            } else if (profile.navigator.weAreInGlobal == .predictLight) {
+                if (profile.navigator.weAreIn == .animation) { Color("MediumDarkPurple") }
+                else if (profile.navigator.weAreIn == .category) { Color("LightMediumDarkPurple") }
                 PredictLightView()
                     .transition(scaleTransition)
-            } else if (profile.weAreInGlobal == .arCamera) {
+            } else if (profile.navigator.weAreInGlobal == .arCamera) {
                 ARCameraView()
                     .transition(scaleTransition)
                     .onAppear {
@@ -46,12 +46,12 @@ struct ContentView: View {
                         // 1. add ARKit requirements in info.plist
                         // 2. add Privacy - ability to use camera to info.plist too
                 }
-            } else if (profile.weAreInGlobal == .introduction) {
+            } else if (profile.navigator.weAreInGlobal == .introduction) {
                 // Background Rectangle
                 RoundedRectangle(cornerRadius: .ScreenCornerRadius).foregroundColor(Color("LightGray"))
                 IntroPageView()
                     .transition(scaleTransition)
-            } else if (profile.weAreInGlobal == .debugger) {
+            } else if (profile.navigator.weAreInGlobal == .debugger) {
                 NewCardView()
             }
         }

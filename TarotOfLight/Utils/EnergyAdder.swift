@@ -19,7 +19,7 @@ struct EnergyAdderView: View {
     var strokeColor = Color("Lime")
     var fillColor = Color("LightGray")
     var shouldModify: Bool {
-        profile.weAreInGlobal != .introduction
+        profile.navigator.weAreInGlobal != .introduction
     }
     @State var shouldAppear: Bool = true
 

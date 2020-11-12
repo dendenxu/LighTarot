@@ -56,8 +56,8 @@ struct CategorySelectorView: View {
             Button(action: {
                 profile.complexSuccess()
                 withAnimation(springAnimation) {
-                    profile.weAreInGlobal = .predictLight
-                    profile.weAreInCategory = whoWeAre
+                    profile.navigator.weAreInGlobal = .predictLight
+                    profile.navigator.weAreInCategory = whoWeAre
                     isButtonReleased = true
                 }
             }) {

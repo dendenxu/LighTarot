@@ -113,8 +113,8 @@ struct textField: View {
                     print("PROFICIENT: And... NOT PROFICIENT ANYMORE")
                     withAnimation(springAnimation) {
                         profile.proficientUser = false
-                        profile.weAreInGlobal = .introduction
-                        profile.weAreInSelector = .mainPage
+                        profile.navigator.weAreInGlobal = .introduction
+                        profile.navigator.weAreInSelector = .mainPage
                     }
                 }) {
                     Image.default(imageName)

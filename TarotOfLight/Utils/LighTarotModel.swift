@@ -18,6 +18,12 @@ struct ViewNavigation {
     var cardsShuffled = false
     var tooDark = false
     var sceneLoaded = false
+    // Navigation data, updating the view by selecting different enum value for these
+    var lockingSelection: LockingSelection = .unlocked
+    var weAreIn: PredictLightViewSelection = .category
+    var weAreInGlobal: GlobalViewSelection = .debugger
+    var weAreInCategory: CategorySelection = .love
+    var weAreInSelector: SelectorSelection = .mainPage
 }
 
 class LighTarotModel: ObservableObject {
@@ -35,13 +41,6 @@ class LighTarotModel: ObservableObject {
     @Published var isLandScape: Bool = false
 
     var selectorIsChanged: Bool { proficientUser && selectorShouldChange }
-
-    // Navigation data, updating the view by selecting different enum value for these
-    @Published var lockingSelection: LockingSelection = .unlocked
-    @Published var weAreIn: PredictLightViewSelection = .category
-    @Published var weAreInGlobal: GlobalViewSelection = .debugger
-    @Published var weAreInCategory: CategorySelection = .love
-    @Published var weAreInSelector: SelectorSelection = .mainPage
 
 
     // Information about the current user
@@ -148,11 +147,11 @@ class LighTarotModel: ObservableObject {
     }
 
     func prepareView() {
-        lockingSelection = .unlocked
-        weAreIn = .category
-        weAreInGlobal = showDebuggerAtLaunch ? .debugger : (proficientUser ? .selector : .introduction)
-        weAreInCategory = .love
-        weAreInSelector = .mainPage
+        navigator.lockingSelection = .unlocked
+        navigator.weAreIn = .category
+        navigator.weAreInGlobal = showDebuggerAtLaunch ? .debugger : (proficientUser ? .selector : .introduction)
+        navigator.weAreInCategory = .love
+        navigator.weAreInSelector = .mainPage
     }
 
     func saveCardContentToFile(filename: String = "CardContent.json") {

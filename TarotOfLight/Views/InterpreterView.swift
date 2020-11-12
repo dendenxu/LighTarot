@@ -214,7 +214,7 @@ struct InterpreterView: View {
                 HStack(alignment: .center, spacing: 20) {
                     Button {
                         withAnimation(fasterSpringAnimation) {
-                            profile.weAreIn = .category
+                            profile.navigator.weAreIn = .category
                         }
                     } label: {
                         Image.default("getback")

@@ -36,8 +36,8 @@ import Combine
                     HStack {
                         Button(action: {
                             withAnimation(springAnimation) {
-                                profile.weAreInGlobal = .predictLight
-                                profile.weAreIn = .category
+                                profile.navigator.weAreInGlobal = .predictLight
+                                profile.navigator.weAreIn = .category
                                 profile.navigator.shouldStartExperience = false
                                 profile.navigator.anchorAdded = false
                                 profile.navigator.cardsShuffled = false
