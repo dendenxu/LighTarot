@@ -71,16 +71,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func windowScene(_ windowScene: UIWindowScene, didUpdate previousCoordinateSpace: UICoordinateSpace, interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation, traitCollection previousTraitCollection: UITraitCollection) {
-        let prevIsLandScape = userProfile.isLandScape
-        let currIsLandScape = windowScene.interfaceOrientation.isLandscape
-        userProfile.isLandScape = currIsLandScape // MARK: STUB
-        print("Getting landscape changing")
-        if currIsLandScape != prevIsLandScape {
-            let temp: CGFloat = .ScreenHeight
-            CGFloat.ScreenHeight = CGFloat.ScreenWidth
-            CGFloat.ScreenWidth = temp
-            print("IsLandScape Changed! Swapping, now .ScreenHeight is \(CGFloat.ScreenHeight) and .ScreenWidth is \(CGFloat.ScreenWidth)")
-        }
+//        let prevIsLandScape = userProfile.isLandScape
+//        let currIsLandScape = windowScene.interfaceOrientation.isLandscape
+//        userProfile.isLandScape = currIsLandScape // MARK: STUB
+//        print("Getting landscape changing")
+//        if currIsLandScape != prevIsLandScape {
+//            let temp: CGFloat = .ScreenHeight
+//            CGFloat.ScreenHeight = CGFloat.ScreenWidth
+//            CGFloat.ScreenWidth = temp
+//            print("IsLandScape Changed! Swapping, now .ScreenHeight is \(CGFloat.ScreenHeight) and .ScreenWidth is \(CGFloat.ScreenWidth)")
+//        }
         // MARK: STUB NOW, DISABLED LANDSCAPE IN BUILD SETTINGS
     }
 
