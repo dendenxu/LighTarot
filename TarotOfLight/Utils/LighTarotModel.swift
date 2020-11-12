@@ -12,12 +12,13 @@ import SwiftyJSON
 import SwiftUI
 
 struct ViewNavigation {
+    // ARView sectoin
     var shouldScale = false
     var shouldStartExperience = false
-    var anchorAdded = false
+    var anchorAttached = false
     var cardsShuffled = false
-    var tooDark = false
-    var sceneLoaded = false
+    var sceneTooDark = false
+    var anchorAdded = false
     // Navigation data, updating the view by selecting different enum value for these
     var lockingSelection: LockingSelection = .unlocked
     var weAreIn: PredictLightViewSelection = .category

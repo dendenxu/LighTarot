@@ -26,9 +26,7 @@ import Combine
 
                 ARCameraInnerView(navigator: $profile.navigator)
 
-//                .frame(width: .ScreenWidth, height: .ScreenHeight)
-
-                if !profile.navigator.anchorAdded {
+                if !profile.navigator.anchorAttached {
                     Color.black.opacity(0.8) // Black mask if not currently in an ARScene
                 }
 
@@ -38,12 +36,13 @@ import Combine
                             withAnimation(springAnimation) {
                                 profile.navigator.weAreInGlobal = .predictLight
                                 profile.navigator.weAreIn = .category
-                                profile.navigator.shouldStartExperience = false
-                                profile.navigator.anchorAdded = false
-                                profile.navigator.cardsShuffled = false
-                                profile.navigator.shouldScale = false
-                                profile.navigator.sceneLoaded = false
-                                profile.navigator.tooDark = false
+                                // Shoul we change this?
+//                                profile.navigator.shouldStartExperience = false
+//                                profile.navigator.anchorAdded = false
+//                                profile.navigator.cardsShuffled = false
+//                                profile.navigator.shouldScale = false
+//                                profile.navigator.sceneLoaded = false
+//                                profile.navigator.tooDark = false
                             }
                         }) {
                             ZStack {
@@ -88,18 +87,18 @@ import Combine
 
                 VStack {
                     // Don't place the words in the center plz...
-                    Spacer().frame(height: 300)
+                    Spacer().frame(height: 200)
 
                     // Centered text
                     if !profile.navigator.shouldStartExperience {
                         ShinyText(text: "点击屏幕下方按钮\n开始卜光体验", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                             .transition(scaleTransition)
-                    } else if !profile.navigator.anchorAdded && profile.navigator.shouldStartExperience {
-                        if profile.navigator.sceneLoaded {
+                    } else if !profile.navigator.anchorAttached && profile.navigator.shouldStartExperience {
+                        if profile.navigator.anchorAdded {
                             ShinyText(text: "即将进入AR塔罗世界……\n请继续缓慢平移设备……", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                                 .transition(scaleTransition)
                         } else {
-                            if profile.navigator.tooDark {
+                            if profile.navigator.sceneTooDark {
                                 ShinyText(text: "环境有些暗哦～\n可以试着走到阳光下\n或站在室内灯下", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                                     .transition(scaleTransition)
                             } else {
@@ -108,7 +107,7 @@ import Combine
                             }
                         }
 
-                    } else if profile.navigator.anchorAdded && !profile.navigator.cardsShuffled {
+                    } else if profile.navigator.anchorAttached && !profile.navigator.cardsShuffled {
                         // On appear, move to the lower right corner
                         // to not disturb the user
                         ShinyText(text: "触摸塔罗牌，开始洗牌", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
@@ -150,6 +149,7 @@ import Combine
 
         func makeUIView(context: Context) -> CustomARView {
             let arView = CustomARView(frame: .zero, navigator: $navigator)
+            arView.loadAnchor()
             return arView
         }
 
@@ -157,7 +157,6 @@ import Combine
             if navigator.shouldStartExperience && !arView.started {
                 print("View updated, session should start!")
                 arView.addSession()
-
             }
         }
     }
@@ -169,10 +168,9 @@ import Combine
         var collisions: [Cancellable] = []
         var notifications: [Cancellable] = []
         var started: Bool = false
-        var anchored: Bool = false
+        var firstTimeAnchored: Bool = false
         var loaded: Bool = false
 
-        var shouldCapture: Bool = false
         let maxSelection = 3
         let targetLuminence: CGFloat = 1050
 
@@ -188,6 +186,7 @@ import Combine
         init(frame frameRect: CGRect, navigator: Binding<ViewNavigation>) {
             self._navigator = navigator
             super.init(frame: frameRect)
+            environment.sceneUnderstanding.options = [.occlusion]
         }
 
         // MARK: Is this OK?
@@ -203,8 +202,8 @@ import Combine
                 return
             }
 
-            print("Getting hitEntity: \(hitEntity)")
-            print("Getting State: \(String(describing: sender?.state))")
+            print("[TOUCH] Getting hitEntity: \(hitEntity)")
+            print("[TOUCH] Getting State: \(String(describing: sender?.state))")
         }
 
         @objc required dynamic init(frame frameRect: CGRect) {
@@ -216,15 +215,17 @@ import Combine
         }
 
         func sessionWasInterrupted(_ session: ARSession) {
-            // MARK: BUG HERE
-            started = true
-            loaded = true
-            anchored = false
+            print("[SESSION] Interrupted")
+            // MARK: BUG HERE, SHOULD WE DO ANYTHING HERE?
+//            started = true
+//            loaded = true
+//            firstTimeAnchored = false
         }
 
-//        func sessionInterruptionEnded(_ session: ARSession) {
+        func sessionInterruptionEnded(_ session: ARSession) {
+            print("[SESSION] Interruption Ended")
 //            started = true
-//        }
+        }
 
         var shouldCheckDarkness: Bool = false
 
@@ -232,44 +233,50 @@ import Combine
         // MARK: Kind of like the unity equavalancy?
         // Update? FixedUpdate?
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
-
-
-            if let currentLight = frame.lightEstimate?.ambientIntensity {
-                if currentLight >= targetLuminence {
-                    if navigator.shouldStartExperience && !loaded {
+            if navigator.shouldStartExperience && !navigator.anchorAdded {
+                if let currentLight = frame.lightEstimate?.ambientIntensity {
+                    if currentLight >= targetLuminence {
                         print("Target lunimance reached, started capturing anchor")
                         addAnchor()
                         addNotifications()
                         addCollisions()
                         // Don't add gestures yet since the user might be dragging things around... you know
-                        loaded = true
-                        navigator.sceneLoaded = true
+                        navigator.anchorAdded = true // sceneLoaded indicates a different UI
+                        navigator.sceneTooDark = false // But we still want to clean up things
                         print("[AR] ExperienceStarted: \(loaded)")
-                    }
-                } else if shouldCheckDarkness {
-                    if !navigator.tooDark {
+                    } else if shouldCheckDarkness {
                         withAnimation(springAnimation) {
-                            navigator.tooDark = true
+                            navigator.sceneTooDark = true
                         }
                     }
                 } else {
                     print("Da! This is convenient: \(String(describing: frame.lightEstimate?.ambientIntensity))")
                 }
             }
+
             if anchor.isAnchored {
-                if !anchored {
-                    anchored = true
+                if !firstTimeAnchored {
+                    firstTimeAnchored = true
                     print("[ANCHOR] now anchored")
                     withAnimation(springAnimation) {
-                        navigator.anchorAdded = true
+                        navigator.anchorAttached = true
                     }
                 }
             } else {
-                anchored = false
+                firstTimeAnchored = false
+                navigator.anchorAttached = false
             }
         }
 
         func addAnchor() {
+            scene.addAnchor(anchor)
+        }
+
+        func removeAnchor() {
+            scene.removeAnchor(anchor)
+        }
+
+        func loadAnchor() {
             do {
                 try anchor = BasicPlant.loadBasicPlantScene()
 
@@ -279,11 +286,7 @@ import Combine
                     child.transform.rotation = simd_quatf(angle: .pi / 2, axis: SIMD3<Float>(0, 1, 0))
                     print("Getting child: \(child)")
                 }
-                self.environment.sceneUnderstanding.options = [.occlusion]
 
-                self.scene.anchors.append(anchor)
-
-                self.session.delegate = self
                 print("[ARCoaching] The plant is successfully loaded to the anchor, \(self.scene.anchors.count) anchors in total")
             } catch {
                 print("Ah... Something went wrong, I think you're getting a black screen now.")
