@@ -228,9 +228,9 @@ import Combine
             print("[NAVIGATION] Checking navigation: \(selectionCounter)/\(maxSelection)")
             if selectionCounter == maxSelection {
                 print("[NAVIGATION] User has set all three cards, should navigate to interpretation")
-                withAnimation(springAnimation) { [weak self] in
-                    self?.navigator.weAreInGlobal = .predictLight
-                    self?.navigator.weAreIn = .animation
+                withAnimation(springAnimation) {
+                    navigator.weAreInGlobal = .predictLight
+                    navigator.weAreIn = .animation
                 }
             }
         }
@@ -304,14 +304,14 @@ import Combine
                         // MARK: Possible BUG
                         addCollisions()
                         // Don't add gestures yet since the user might be dragging things around... you know
-                        withAnimation(springAnimation) { [weak self] in
-                            self?.navigator.anchorAdded = true // sceneLoaded indicates a different UI
-                            self?.navigator.sceneTooDark = false // But we still want to clean up things
+                        withAnimation(springAnimation) {
+                            navigator.anchorAdded = true // sceneLoaded indicates a different UI
+                            navigator.sceneTooDark = false // But we still want to clean up things
                         }
                         print("[AR] ExperienceStarted: \(navigator.anchorAdded)")
                     } else if shouldCheckDarkness {
-                        withAnimation(springAnimation) { [weak self] in
-                            self?.navigator.sceneTooDark = true
+                        withAnimation(springAnimation) {
+                            navigator.sceneTooDark = true
                         }
                     }
                 } else {
@@ -324,8 +324,8 @@ import Combine
                     firstTimeAnchored = true
                     if !navigator.anchorAttached {
                         print("[ANCHOR] now anchored")
-                        withAnimation(springAnimation) { [weak self] in
-                            self?.navigator.anchorAttached = true
+                        withAnimation(springAnimation) {
+                            navigator.anchorAttached = true
                         }
                     }
                 }

@@ -90,7 +90,7 @@ struct Card: View {
 
 struct CardPageView: View {
     @EnvironmentObject var profile: LighTarotModel
-    @State var currentIndex = 0
+    var currentIndex: Int { profile.navigator.lockingSelection == .unlocked ? 0 : 1 }
     @State var percentatges: [CGFloat] = [0, 1]
     let cardPageCount = 2
     let uuid = UUID()
@@ -125,7 +125,6 @@ struct CardPageView: View {
                                 Button (action: {
                                     withAnimation(slowSpringAnimation) {
                                         profile.navigator.lockingSelection = .unlocked
-                                        currentIndex = 0
                                     }
                                     NotificationCenter.default.post(
                                         name: NSNotification.PagerTapped, object: nil, userInfo: ["uuid": uuid, "currentIndex": currentIndex])
@@ -136,7 +135,6 @@ struct CardPageView: View {
                                 Button (action: {
                                     withAnimation(slowSpringAnimation) {
                                         profile.navigator.lockingSelection = .locked
-                                        currentIndex = 1
                                     }
                                     NotificationCenter.default.post(
                                         name: NSNotification.PagerTapped, object: nil, userInfo: ["uuid": uuid, "currentIndex": currentIndex])
@@ -171,7 +169,15 @@ struct CardPageView: View {
                 .zIndex(1)
 
             ZStack {
-                PagerView(accentColor: .white, overlookColor: .gray, backgroundColor: Color.black.opacity(0.2), hasPageDot: false, pageCount: cardPageCount, uuid: uuid, currentIndex: $currentIndex, percentages: $percentatges, customEnd: {
+                PagerView(accentColor: .white, overlookColor: .gray, backgroundColor: Color.black.opacity(0.2), hasPageDot: false, pageCount: cardPageCount, uuid: uuid, currentIndex: Binding<Int>.init(get: { currentIndex }, set:
+                    { switch $0 {
+                        case 0:
+                            profile.navigator.lockingSelection = .unlocked
+                        case 1:
+                            profile.navigator.lockingSelection = .locked
+                        default:
+                            profile.navigator.lockingSelection = .unlocked
+                    } }), percentages: $percentatges, customEnd: {
                     withAnimation(springAnimation) {
                         profile.navigator.lockingSelection = (currentIndex == 1) ? .locked : .unlocked
                     }
