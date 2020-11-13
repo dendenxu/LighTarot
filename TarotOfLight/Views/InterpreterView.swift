@@ -10,6 +10,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 import CoreHaptics
 struct OuterInterpreterView: View {
+    @EnvironmentObject var profile: LighTarotModel
     @State var plantFullAnimating: Bool = true
     @State var placerHolderDelay: Bool = false // STUB: should communicate with backend instead
     var body: some View {
@@ -33,7 +34,7 @@ struct OuterInterpreterView: View {
                 }
             } else {
                 // MARK: We've made sure that arbitrary number of pages are available in this Small Pager View
-                InterpreterView(currentIndex: 0, pageCount: 3)
+                InterpreterView(currentIndex: 0, pageCount: 3, cardInfos: profile.cardInfos.shuffled())
                     .transition(fromBottomToTop)
             }
 
@@ -192,12 +193,15 @@ struct InterpreterView: View {
     @EnvironmentObject var profile: LighTarotModel
     @State var percentages: [CGFloat] = [CGFloat]()
     @State var currentIndex: Int = 0
+    var cardInfos: [CardInfo] = []
     var pageCount: Int
-    init(currentIndex: Int = 0, pageCount: Int = 3) {
+    init(currentIndex: Int = 0, pageCount: Int = 3, cardInfos: [CardInfo] = []) {
         self._currentIndex = State(initialValue: currentIndex)
         self.pageCount = pageCount
+        self.cardInfos = cardInfos
         print("Getting currentIndex: \(currentIndex) and pageCount: \(pageCount)")
         var thePercentages = [CGFloat]()
+//        profile.cardInfos.shuffle()
         for i in 0..<pageCount {
             print("CurrentValue: \(CGFloat(i))")
             thePercentages.append(CGFloat(i))
@@ -252,7 +256,7 @@ struct InterpreterView: View {
             ZStack {
                 PagerView(pageCount: pageCount, currentIndex: $currentIndex, percentages: $percentages) {
                     ForEach(0..<pageCount) { index in
-                        WrapScroll(card: profile.cardInfos[index], percentage: percentages[index])
+                        WrapScroll(card: cardInfos[index], percentage: percentages[index])
                     }
                 }.background(TravelingBackground(nStroke: 20, nFill: 20))
             }
@@ -263,6 +267,7 @@ struct InterpreterView: View {
             profile.shouldShowEnergy = true
         }
     }
+
 }
 
 struct WrapComb: View {

@@ -41,12 +41,14 @@ struct NewCardView: View {
                     profile.cardContents[profile.firstLocked].locked = false
                     
                     withAnimation(springAnimation) {
+                        profile.proficientUser = true
                         profile.shouldShowNewCardView = false
                         profile.navigator.weAreInSelector = .cardPage
                         profile.navigator.weAreInGlobal = .predictLight
                         profile.navigator.weAreIn = .category
                     }
-
+                    
+                    profile.saveUserInfoToFile()
                 }) {
                     ZStack {
                         Circle()

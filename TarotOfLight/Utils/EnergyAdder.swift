@@ -36,6 +36,7 @@ struct EnergyAdderView: View {
                         withAnimation(springAnimation) {
                             if shouldModify { // Don't modify the model if in the introduction page
                                 profile.energy += energy
+                                profile.saveUserInfoToFile()
                             }
                             // Make this view disappear
                             shouldAppear = false

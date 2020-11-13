@@ -13,7 +13,6 @@ import SwiftUI
 
 struct ViewNavigation {
     // ARView sectoin
-    
     var shouldStartExperience = false
     var anchorAttached = false
     var cardsShuffled = false
@@ -21,6 +20,7 @@ struct ViewNavigation {
     var anchorAdded = false
     var shouldScale = false
     // Navigation data, updating the view by selecting different enum value for these
+    
     var lockingSelection: LockingSelection = .unlocked
     var weAreIn: PredictLightViewSelection = .category
     var weAreInGlobal: GlobalViewSelection = .debugger
@@ -28,7 +28,9 @@ struct ViewNavigation {
     var weAreInSelector: SelectorSelection = .mainPage
     
     
-
+    var shouldUseCardInfos: [CardInfo] = []
+    var copyCardInfos: [CardInfo] = []
+    var invariableCardInfos: [CardInfo] = []
 }
 
 class LighTarotModel: ObservableObject {
@@ -72,6 +74,7 @@ class LighTarotModel: ObservableObject {
             else if newValue < 0 { actualEnergy = 0 }
             else {
                 actualEnergy = newValue
+                // MARK: Update the user profile
 //                shouldShowNewCardView = false
             }
         }
@@ -236,6 +239,9 @@ class LighTarotModel: ObservableObject {
                 )
             )
         }
+        
+        navigator.invariableCardInfos = cardInfos
+        
     }
 
     // Make sure that the number of cards available is at least 3 or other value
@@ -275,6 +281,10 @@ class LighTarotModel: ObservableObject {
     // User might have already made change to the profile, save it to profile.json under document directory
     // which will get deleted when APP is deleted
     func saveUserInfoToFile(filename: String = "profile.json") {
+        // MARK: USER
+
+        
+        
         let fileURL = LighTarotModel.getDocumentDirectory.appendingPathComponent(filename)
         let json = JSON([
             "name": name,

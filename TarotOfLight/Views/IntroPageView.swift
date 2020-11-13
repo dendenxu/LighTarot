@@ -83,6 +83,8 @@ struct ThirdIntroPage: View {
                     Button(action: {
                         withAnimation(springAnimation) {
                             profile.navigator.weAreInGlobal = .selector
+                            profile.shouldShowEnergy = false
+//                            profile.saveUserInfoToFile()
                         }
                     }) {
                         ShinyText(text: "进入卜光世界……", font: .SourceHanSansHeavy, size: 16, textColor: Color("MediumLime"), shadowColor: .white)

@@ -1,68 +1,8 @@
 [
   {
-    "libraryIdentifier" : "06e3e191c239a6631b8a3c90f0b78b89",
-    "format" : "model",
-    "displayName" : "gem.usdz"
-  },
-  {
-    "libraryIdentifier" : "4e767bf71585aa0ef023d9b09a97dde3",
-    "format" : "model",
-    "displayName" : "场景调角度.usdz"
-  },
-  {
-    "libraryIdentifier" : "a9f9ceb45514ac7218eff446f1eeb824",
-    "format" : "model",
-    "displayName" : "场景调角度.usdz"
-  },
-  {
-    "libraryIdentifier" : "c82793277fd05a2cb9233c3b42d8de53",
-    "format" : "model",
-    "displayName" : "zhuobu.usdz"
-  },
-  {
-    "libraryIdentifier" : "c6a395898d5f86e0a6813224d5f901b4",
-    "format" : "model",
-    "displayName" : "evileye.usdz"
-  },
-  {
-    "libraryIdentifier" : "16bee2b38fc95cd1868b9f13dff591b2",
-    "format" : "model",
-    "displayName" : "songguo.usdz"
-  },
-  {
-    "libraryIdentifier" : "c5ad49a856ac24e273e3dfeabe303867",
-    "format" : "model",
-    "displayName" : "songguo.usdz"
-  },
-  {
-    "libraryIdentifier" : "ab03f9bae325324efc45dfb34bab03e7",
-    "format" : "model",
-    "displayName" : "songguo.usdz"
-  },
-  {
-    "libraryIdentifier" : "e3a739d00e363245fe84374f247ac1fa",
-    "format" : "model",
-    "displayName" : "songguo.usdz"
-  },
-  {
     "libraryIdentifier" : "7d2d6ff6f2b84e139c39bc0ea518de8b",
     "format" : "model",
     "displayName" : "songguo.usdz"
-  },
-  {
-    "libraryIdentifier" : "8e7d77c77cbac6fc22e8833c778e736b",
-    "format" : "model",
-    "displayName" : "songguo.usdz"
-  },
-  {
-    "libraryIdentifier" : "ac5793ce0fa2f637258bd54ed56a30d0",
-    "format" : "model",
-    "displayName" : "ball.usdz"
-  },
-  {
-    "libraryIdentifier" : "10e4bbeb64728d223b7e82efa06d9a31",
-    "format" : "model",
-    "displayName" : "ball.usdz"
   },
   {
     "libraryIdentifier" : "5634207cb3d60ef8ee51d4f2aec2b3df",
@@ -70,34 +10,9 @@
     "displayName" : "ball.usdz"
   },
   {
-    "libraryIdentifier" : "01418b1303a8b115c66fa3291b992334",
-    "format" : "model",
-    "displayName" : "book.usdz"
-  },
-  {
-    "libraryIdentifier" : "ab4e60dc9f7b60cc46b7e3810920b752",
-    "format" : "model",
-    "displayName" : "book.usdz"
-  },
-  {
-    "libraryIdentifier" : "54b7127b59af4df6650f017580e9c476",
-    "format" : "model",
-    "displayName" : "book.usdz"
-  },
-  {
     "libraryIdentifier" : "259ef4d36bd313e07756823a435943e1",
     "format" : "model",
     "displayName" : "book.usdz"
-  },
-  {
-    "libraryIdentifier" : "c23dda3ac178ea08ffcd4cae0f01d9f7",
-    "format" : "model",
-    "displayName" : "card.usdz"
-  },
-  {
-    "libraryIdentifier" : "3931c4dd56932ff33189d56c04809fac",
-    "format" : "model",
-    "displayName" : "card.usdz"
   },
   {
     "libraryIdentifier" : "6e4a3da2ed234b14b06bf69de33e1fb5",
@@ -105,33 +20,13 @@
     "displayName" : "card.usdz"
   },
   {
-    "libraryIdentifier" : "5b0ac8db4e4ea0b8b68f02ea6823f383",
-    "format" : "model",
-    "displayName" : "zhuobu.usdz"
-  },
-  {
     "libraryIdentifier" : "6dd3efbda6e90c0aa63670251a761d79",
     "format" : "model",
     "displayName" : "zhuobu.usdz"
   },
   {
-    "libraryIdentifier" : "3476f494129312264975dfea44a4bdc2",
-    "format" : "model",
-    "displayName" : "candle.usdz"
-  },
-  {
     "libraryIdentifier" : "dc065805f3732a12940f9b46e8e57e0b",
     "format" : "model",
     "displayName" : "candle.usdz"
-  },
-  {
-    "libraryIdentifier" : "23dd1b3f6d4a6c90c9f9e2fb8a23ef4f",
-    "format" : "model",
-    "displayName" : "牌面.usdz"
-  },
-  {
-    "libraryIdentifier" : "9774300ca52e1942308cfbd44484ada1",
-    "format" : "model",
-    "displayName" : "牌面.usdz"
   }
 ]

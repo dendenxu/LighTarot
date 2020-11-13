@@ -54,8 +54,9 @@ struct Card: View {
             print("Give me some action upon hitting the button")
             profile.complexSuccess()
             withAnimation(springAnimation) {
-                if !cardContent.locked || locked { profile.navigator.weAreInGlobal = .arCamera }
-                else { profile.navigator.weAreIn = .animation }
+                
+                if !cardContent.locked { profile.navigator.weAreInGlobal = .arCamera }
+                else { print("Nasty") }
             }
         }) {
             ZStack(alignment: .topLeading) {

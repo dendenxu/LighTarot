@@ -89,7 +89,7 @@ import Combine
                             .transition(scaleTransition)
                     } else if !profile.navigator.anchorAttached && profile.navigator.shouldStartExperience {
                         if profile.navigator.anchorAdded {
-                            ShinyText(text: "即将进入AR塔罗世界……\n请继续缓慢平移设备……", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
+                            ShinyText(text: "即将进入AR塔罗世界……\n请在有光的平面\n继续缓慢平移设备……", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                                 .transition(scaleTransition)
                         } else {
                             if profile.navigator.sceneTooDark {
@@ -106,20 +106,20 @@ import Combine
                         // to not disturb the user
                         ShinyText(text: "触摸塔罗牌，开始洗牌", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                             .transition(scaleTransition)
-                        .onAppear {
-                            withAnimation(springAnimation) {
-                                animationFinished = true
-                            }
+                            .onAppear {
+                                withAnimation(springAnimation) {
+                                    animationFinished = true
+                                }
 
                         }
                     } else if profile.navigator.cardsShuffled {
                         ShinyText(text: "凝神静气，选择三张塔罗牌\n拖动到紫色圆圈内\n", font: .DefaultChineseFont, size: 20, textColor: .white, shadowColor: Color.black.opacity(0))
                             .transition(scaleTransition)
-                        .onAppear {
-                            animationFinished = false
-                            withAnimation(springAnimation) {
-                                animationFinished = true
-                            }
+                            .onAppear {
+                                animationFinished = false
+                                withAnimation(springAnimation) {
+                                    animationFinished = true
+                                }
                         }
                     }
 
@@ -193,7 +193,7 @@ import Combine
         let uuid = UUID()
 
         let maxSelection = 3
-        let targetLuminence: CGFloat = 1050
+        let targetLuminance: CGFloat = 1100
 
         var selectionCounter = 0
 
@@ -241,6 +241,10 @@ import Combine
 
             super.init(frame: frameRect)
             environment.sceneUnderstanding.options = [.occlusion]
+
+            // MARK: COPY
+            self.navigator.copyCardInfos = self.navigator.invariableCardInfos
+
             loadAnchor()
             // MARK: DEBUG
 //            addAnchor()
@@ -268,9 +272,24 @@ import Combine
                     checkSelectionCount()
                 }
             }
-
+//            for index in 0..<touched.count {
+//                if touched[index] && !released[index] {
+//                    { [weak self] () -> Void in
+//                        // MARK: MARK MARK MARK
+//                        if let count = self?.navigator.copyCardInfos.count, let index = (0..<count).randomElement(), let theCardInfo = self?.navigator.copyCardInfos[index], let shouldUseCount = self?.navigator.shouldUseCardInfos.count {
+//                            self?.navigator.shouldUseCardInfos.append(theCardInfo)
+//                            self?.navigator.copyCardInfos.remove(at: index)
+//
+//                            print("[CARDINFO] Getting index: \(index), and cardInfo: \(theCardInfo), before count for copyCardInfos: \(count), current shouldUseCount: \(shouldUseCount)")
+//                        }
+//                    }()
+//                }
+//            }
         }
 
+        var touched = [Bool]()
+        var released = [Bool]()
+        
         @objc required dynamic init(frame frameRect: CGRect) {
             fatalError("init(frame:) has not been implemented")
         }
@@ -296,10 +315,10 @@ import Combine
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
             if navigator.shouldStartExperience && !navigator.anchorAdded {
                 if let currentLight = frame.lightEstimate?.ambientIntensity {
-                    if currentLight >= targetLuminence {
+                    if currentLight >= targetLuminance {
                         print("Target lunimance reached, started capturing anchor")
                         addAnchor()
-                        
+
                         addNotifications()
                         // MARK: Possible BUG
                         addCollisions()
@@ -470,7 +489,7 @@ import Combine
                             theCard.move(to: scaleTransform, relativeTo: theCard, duration: 0.2, timingFunction: .easeInOut)
                         }
                     }
-
+                    // MARK: BUG SHOWCASE
                     let endSub = scene.subscribe(to: CollisionEvents.Ended.self, on: theBox) { [weak self]
                         event in
                         print("[BOX] The box: \(event.entityA.name)'s collision with \(event.entityB.name) ended")
